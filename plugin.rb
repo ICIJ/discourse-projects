@@ -11,4 +11,9 @@ after_initialize do
   Discourse::Application.routes.append do
     get "/new-subcategory/:parent" => "categories#show", :constraints => { format: "html" }
   end
+  
+  add_to_serializer(:current_user, :can_create_category) do 
+    guardian = Guardian.new(scope.user)
+    guardian.is_admin? || (SiteSetting.moderators_manage_categories_and_groups && guardian.is_moderator?)
+  end
 end
