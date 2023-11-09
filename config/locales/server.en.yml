@@ -1,1 +1,4 @@
 en:
+  site_settings:
+    projects_enabled: Activate projects
+    projects_category_requires_parent: New category requires a parent

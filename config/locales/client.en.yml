@@ -1,9 +1,6 @@
 en:
-  admin_js:
-    admin:
-      site_settings:
-        categories:
-          TODO_plugin_name: "Plugin Name"
   js:
-    discourse_plugin_name:
-      placeholder: placeholder
+    subcategory:
+      new: New category
+      errors:
+        parent: You must select a parent category.
