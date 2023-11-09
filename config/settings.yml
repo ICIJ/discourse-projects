@@ -1,4 +1,7 @@
-TODO_plugin_name:
-  plugin_name_enabled:
-    default: false
+plugins:
+  projects_enabled:
+    default: true
+    client: false
+  projects_category_requires_parent:
+    default: true
     client: true
