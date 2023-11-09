@@ -1,5 +1,5 @@
 import Component from "@glimmer/component";
-import { action } from "@ember/object";
+import { action, computed } from "@ember/object";
 import { tracked } from "@glimmer/tracking";
 import { on } from "@ember/modifier";
 import DModal from "discourse/components/d-modal";
@@ -11,7 +11,7 @@ export default class ParentCategoryChooser extends Component {
     return I18n.t("js.parent_category_chooser.title");
   }
 
-  @computed
+  @computed('value')
   get isInvalid() {
     return this.value === "" || this.value === null || typeof this.value === "undefined"
   }
@@ -38,7 +38,7 @@ export default class ParentCategoryChooser extends Component {
           <DButton
             @action={{this.submit}}
             @disabled={{this.isInvalid}}
-            @label="Continue"
+            @label="parent_category_chooser.continue"
             class="btn-primary"
           />
         </:footer>
