@@ -14,7 +14,6 @@ function initialize(api) {
 
     @on("init")
     _initPanels() {
-      console.log(api.getCurrentUser())
       this._super(...arguments);
       this.actions.registerValidator.call(this, this.validateParentCategory.bind(this));
     },

@@ -1,5 +1,7 @@
 en:
   js:
+    parent_category_chooser:
+      title: Choose a parent category
     subcategory:
       new: New category
       errors:
