@@ -1,1 +1,3 @@
-{{mount-widget widget="new-subcategory-button"}}
+{{#if currentUser.can_create_category}}
+  {{mount-widget widget="new-subcategory-button"}}
+{{/if}}
