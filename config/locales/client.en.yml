@@ -1,7 +1,7 @@
 en:
   js:
     parent_category_chooser:
-      title: Choose a parent category
+      title: Select a project
       continue: Continue
     subcategory:
       new: New category

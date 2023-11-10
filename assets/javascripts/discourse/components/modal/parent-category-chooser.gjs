@@ -1,12 +1,16 @@
 import Component from "@glimmer/component";
 import { action, computed } from "@ember/object";
+import { inject as service } from "@ember/service";
 import { tracked } from "@glimmer/tracking";
 import { on } from "@ember/modifier";
+import { hash } from "@ember/helper";
 import DModal from "discourse/components/d-modal";
 import DButton from "discourse/components/d-button";
-import CategoryChooser from "select-kit/components/category-chooser";
+import ProjectChooser from "../project-chooser";
 
 export default class ParentCategoryChooser extends Component {
+  @service service
+
   get modalTitle() {
     return I18n.t("js.parent_category_chooser.title");
   }
@@ -29,10 +33,7 @@ export default class ParentCategoryChooser extends Component {
         @title={{this.modalTitle}}
       >
         <:body>
-          <CategoryChooser
-            @value={{this.value}}
-            @class="small"
-          />
+          <ProjectChooser @value={{this.value}} />
         </:body>
         <:footer>
           <DButton
