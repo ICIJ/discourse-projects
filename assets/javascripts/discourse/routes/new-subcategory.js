@@ -1,4 +1,5 @@
 import NewCategory from "discourse/routes/new-category";
+import { action, computed } from "@ember/object";
 
 
 export default class NewSubcategory extends NewCategory { 
@@ -8,7 +9,6 @@ export default class NewSubcategory extends NewCategory {
     model.set('parent_category_id', this.getParentCategoryId(params));
     return model;
   }
-
   defaultGroupPermissions() {
     return [];
   }

@@ -44,7 +44,7 @@ export default class NewSubcategoryButton extends Component {
   }
 
   get label() {
-    return I18n.t('js.subcategory.new')
+    return I18n.t('js.subcategory.button.label')
   }
 
 
