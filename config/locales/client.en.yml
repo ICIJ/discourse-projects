@@ -4,6 +4,8 @@ en:
       title: Select a project
       continue: Continue
     subcategory:
-      new: New category
+      create: New Category in Project %{category}
+      button:
+        label: New Project Category
       errors:
         parent: You must select a parent category.

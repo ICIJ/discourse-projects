@@ -1,5 +1,6 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
 import { observes, on } from "discourse-common/utils/decorators";
+import { computed } from "@ember/object";
 import { ajax } from "discourse/lib/ajax";
 
 function initialize(api) {
@@ -46,6 +47,22 @@ function initialize(api) {
 
     get currentUserIsAdmin() {
       return api.getCurrentUser().admin;
+    },
+    
+    @computed('model.parent_category_id')
+    get title() {
+      return this.hasParentCategory ? this.titleWithCategory : I18n.t("js.category.create")
+    },
+
+    @computed('model.parent_category_id')
+    get titleWithCategory() {
+      const { name: category } = this.parentCategory
+      return I18n.t('js.subcategory.create', { category })
+    },  
+
+    @computed('model.parent_category_id')
+    get parentCategory() {
+      return this.site.categories.findBy('id', this.model.parent_category_id)
     },
 
     validateParentCategory() {
