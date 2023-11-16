@@ -1,3 +1,4 @@
+import Category from "discourse/models/category";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import { observes, on } from "discourse-common/utils/decorators";
 import { computed } from "@ember/object";
@@ -33,12 +34,8 @@ function initialize(api) {
       }
     },
 
-    get site() {
-      return api.container.lookup("site:main");
-    },
-
     get hasParentCategory() {
-      return this.categoryExists(this.model.parent_category_id);
+      return !!this.parentCategory
     },
 
     get hasParentValidation() {
@@ -62,7 +59,7 @@ function initialize(api) {
 
     @computed('model.parent_category_id')
     get parentCategory() {
-      return this.site.categories.findBy('id', this.model.parent_category_id)
+      return Category.findById(this.model.parent_category_id)
     },
 
     validateParentCategory() {
@@ -73,16 +70,12 @@ function initialize(api) {
       // This invalid
       this.dialog.alert(I18n.t('js.subcategory.errors.parent'));
       return true;
-    },
-
-    categoryExists(categoryId) {
-      return this.site.categories.some(({ id }) => id === categoryId);
     }
   });
 }
 
 export default {
-  name: 'category-permissions',
+  name: 'new-category-permissions',
   initialize() {
     withPluginApi("1.8.0", initialize);
   },
