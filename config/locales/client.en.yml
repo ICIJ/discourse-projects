@@ -3,6 +3,8 @@ en:
     parent_category_chooser:
       title: Select a project
       continue: Continue
+    project_banner:
+      label: You're in Project
     subcategory:
       create: New Category in Project %{category}
       button:
