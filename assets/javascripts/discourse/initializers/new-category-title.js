@@ -1,8 +1,7 @@
 import Category from "discourse/models/category";
 import { withPluginApi } from "discourse/lib/plugin-api";
-import { observes, on } from "discourse-common/utils/decorators";
+import { observes } from "discourse-common/utils/decorators";
 import { computed } from "@ember/object";
-import { ajax } from "discourse/lib/ajax";
 
 function initialize(api) {
 
