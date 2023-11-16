@@ -9,6 +9,7 @@ export default class NewSubcategory extends NewCategory {
     model.set('parent_category_id', this.getParentCategoryId(params));
     return model;
   }
+  
   defaultGroupPermissions() {
     return [];
   }
