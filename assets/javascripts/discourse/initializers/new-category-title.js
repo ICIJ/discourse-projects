@@ -1,32 +1,14 @@
 import Category from "discourse/models/category";
 import { withPluginApi } from "discourse/lib/plugin-api";
-import { observes } from "discourse-common/utils/decorators";
 import { computed } from "@ember/object";
 
 function initialize(api) {
 
-
   api.modifyClass("controller:edit-category-tabs", {
-    pluginId: 'projects',
-
-    @observes("model.parent_category_id")
-    async onParentCategoryChange() {
-      if(this.model.parent_category_id) {
-        const groupPermissions = await getCategoryGroupPermissions(this.model.parent_category_id);
-        // This ensure we do not cumulate new permissions with the existing one
-        this.model.permissions.clear();
-        // Then we add each permission one by one to ensure
-        // the set is used correctly
-        groupPermissions.forEach((permission) => {
-          this.model.addPermission(permission);
-        });
-      }
-    },
 
     get hasParentCategory() {
       return !!this.parentCategory
     },
-
     
     @computed('model.parent_category_id')
     get title() {
@@ -36,9 +18,14 @@ function initialize(api) {
     @computed('model.parent_category_id')
     get titleWithCategory() {
       const { name: category } = this.parentCategory
-      const project = this.project
       return I18n.t('js.subcategory.create', { category })
     },  
+
+    @computed('model.parent_category_id')
+    get titleWithProject() {
+      const { name: project } = this.project
+      return I18n.t('js.subcategory.create_in_project', { project })
+    },
 
     @computed('model.parent_category_id')
     get parentCategory() {
