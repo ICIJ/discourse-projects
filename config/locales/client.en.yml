@@ -6,7 +6,8 @@ en:
     project_banner:
       label: You're in Project
     subcategory:
-      create: New Category in Project %{category}
+      create: New Category in "%{category}" (%{project})
+      create_in_project: New Category in Project "%{project}"
       button:
         label: New Project Category
       errors:
