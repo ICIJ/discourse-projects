@@ -14,7 +14,7 @@ export default class ProjectBanner extends Component {
       .project-banner__head{
           display:block;
           padding: 10px 0px;
-          margin:20px 0px;
+          margin: 0 0 20px;
           background: var(--primary-200);
           text-align: center;
           z-index: 10;
