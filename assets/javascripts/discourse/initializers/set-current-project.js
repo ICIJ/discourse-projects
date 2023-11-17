@@ -19,6 +19,7 @@ function initialize(api, container) {
 
     setupComponent(args, component) {
       api.onPageChange(async (url, title) => {
+        let currentProject = null
         const currentPath = container.lookup("router:main")?.currentPath
         //project banner should only appear on pages related to a project: categories or topics
         if (isTopicOrCategory(currentPath)) {
@@ -39,12 +40,10 @@ function initialize(api, container) {
           if (isDefined(category) && isRelatedToProjectCategory(category)) {
             // a category always have an ancestor (itself at least)
             // so the first ancestor is the top category
-            const topCategory = category.ancestors[0]; 
-            component.set("topCategory", topCategory);
-            return;
+            currentProject = category.ancestors[0]; 
           }
         }
-        component.set("topCategory", null);
+        component.set("currentProject", currentProject);
       });
     },
   });
