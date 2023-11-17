@@ -10,8 +10,6 @@ export default CategoryChooserComponent.extend({
   },
 
   get content(){
-    return this.site.categories.filter((category) => {
-      return category.read_restricted && (!category.parent_category_id || category.parent_category_id === 0)
-    })
+    return this.site.categories.filter((category) => category.is_project)
   }
 });
