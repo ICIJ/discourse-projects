@@ -7,13 +7,31 @@
 
 enabled_site_setting :projects_enabled
 
+module ::Projects
+  PLUGIN_NAME = "projects"
+end
+
+require_relative "lib/projects/engine"
+
 after_initialize do
   Discourse::Application.routes.append do
     get "/new-subcategory/:parent" => "categories#show", :constraints => { format: "html" }
   end
-  
+
+  reloadable_patch do |plugin|
+    Category.prepend Projects::CategoryExtension
+  end
+
   add_to_serializer(:current_user, :can_create_category) do 
     guardian = Guardian.new(scope.user)
     guardian.is_admin? || (SiteSetting.moderators_manage_categories_and_groups && guardian.is_moderator?)
+  end
+
+  add_to_serializer(:basic_category, :is_project) do 
+    object.is_project?
+  end
+
+  add_to_serializer(:basic_category, :project) do 
+    object.project
   end
 end
