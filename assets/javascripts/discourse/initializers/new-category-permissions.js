@@ -11,6 +11,7 @@ function initialize(api) {
   }
 
   api.modifyClass("controller:edit-category-tabs", {
+    pluginId: "projects",
 
     @on("init")
     _initPanels() {
