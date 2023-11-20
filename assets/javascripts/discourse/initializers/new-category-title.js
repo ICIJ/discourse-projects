@@ -5,6 +5,7 @@ import { computed } from "@ember/object";
 function initialize(api) {
 
   api.modifyClass("controller:edit-category-tabs", {
+    pluginId: "projects",
 
     get hasParentCategory() {
       return !!this.parentCategory
