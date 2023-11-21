@@ -11,7 +11,7 @@ export default class ProjectsController extends Controller {
   @filterBy('categories', 'is_project') projects;
   @sort('projects', 'sortByFields') sortedProjects;
 
-  @computed('sortedProjects', 'searchTerm')
+  @computed('sortBy', 'searchTerm')
   get filteredProjects() {
     const searchTerm = this.searchTerm.toLowerCase();
     return this.sortedProjects.filter(({ name, description, slug }) => {
