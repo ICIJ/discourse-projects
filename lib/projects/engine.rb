@@ -1,4 +1,8 @@
+# frozen_string_literal: true
+
 module ::Projects
+  # This engine regroups all extensions made to support
+  # the concept of "project" within Discourse.
   class Engine < ::Rails::Engine
     engine_name PLUGIN_NAME
     isolate_namespace Projects
