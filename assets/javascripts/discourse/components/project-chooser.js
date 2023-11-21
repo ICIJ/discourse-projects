@@ -9,9 +9,9 @@ export default CategoryChooserComponent.extend({
   selectKitOptions: {
     displayCategoryDescription: true,
     caretDownIcon: "caret-down",
-    caretUpIcon: "caret-up"
+    caretUpIcon: "caret-up",
   },
-  get content(){
-    return Category.list().filter(c => c.is_project)
-  }
+  get content() {
+    return Category.list().filter((c) => c.is_project);
+  },
 });
