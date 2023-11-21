@@ -9,8 +9,8 @@ const ALL_PROJECTS_ID = "ALL_PROJECTS_ID"
 
 export default CategoryDrop.extend({
 
-  pluginApiIdentifiers: ["group-category-dropdown"],
-  classNames: "group-category-dropdown",
+  pluginApiIdentifiers: ["project-dropdown"],
+  classNames: "project-dropdown",
 
   content: computed(function() {
     const all = {
