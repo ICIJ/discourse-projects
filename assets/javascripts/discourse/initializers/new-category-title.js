@@ -1,6 +1,7 @@
 import { computed } from "@ember/object";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import Category from "discourse/models/category";
+import I18n from "I18n";
 
 function initialize(api) {
 

@@ -14,7 +14,7 @@ function initialize(api, container) {
     pluginId: "projects",
 
     setupComponent(args, component) {
-      api.onPageChange(async (url, title) => {
+      api.onPageChange(async () => {
         let currentProject = null;
         const currentPath = container.lookup("router:main")?.currentPath;
         // Project banner should only appear on pages related to a project: categories or topics

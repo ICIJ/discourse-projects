@@ -1,4 +1,3 @@
-import { action, computed } from "@ember/object";
 import NewCategoryRoute from "discourse/routes/new-category";
 
 
