@@ -1,6 +1,6 @@
-import Category from "discourse/models/category";
-import { withPluginApi } from "discourse/lib/plugin-api";
 import { computed } from "@ember/object";
+import { withPluginApi } from "discourse/lib/plugin-api";
+import Category from "discourse/models/category";
 
 function initialize(api) {
 
@@ -8,43 +8,43 @@ function initialize(api) {
     pluginId: "projects",
 
     get hasParentCategory() {
-      return !!this.parentCategory
+      return !!this.parentCategory;
     },
-    
+
     @computed('model.parent_category_id')
     get title() {
       if (!this.project) {
-        return I18n.t("js.category.create")
+        return I18n.t("js.category.create");
       }
       if (this.project.id === this.parentCategory.id) {
-        return this.titleWithProject
+        return this.titleWithProject;
       }
-      return this.titleWithCategory
+      return this.titleWithCategory;
     },
 
     @computed('model.parent_category_id')
     get titleWithCategory() {
-      const { name: category, project: { name: project } } = this.parentCategory
-      return I18n.t('js.subcategory.create', { category, project })
-    },  
+      const { name: category, project: { name: project } } = this.parentCategory;
+      return I18n.t('js.subcategory.create', { category, project });
+    },
 
     @computed('model.parent_category_id')
     get titleWithProject() {
-      const { name: project } = this.project
-      return I18n.t('js.subcategory.create_in_project', { project })
+      const { name: project } = this.project;
+      return I18n.t('js.subcategory.create_in_project', { project });
     },
 
     @computed('model.parent_category_id')
     get parentCategory() {
-      return Category.findById(this.model.parent_category_id)
+      return Category.findById(this.model.parent_category_id);
     },
 
     @computed('model.parent_category_id')
     get project() {
       if (this.parentCategory?.is_project) {
-        return this.parentCategory
+        return this.parentCategory;
       }
-      return this.parentCategory?.project
+      return this.parentCategory?.project;
     },
 
   });

@@ -1,9 +1,8 @@
-import DiscourseRoute from "discourse/routes/discourse";
 import CategoriesOnly from "discourse/components/categories-only";
-
 import { defaultHomepage } from "discourse/lib/utilities";
+import DiscourseRoute from "discourse/routes/discourse";
 
-export default class ProjectsRoute extends DiscourseRoute { 
+export default class ProjectsRoute extends DiscourseRoute {
 
   templateName = "projects";
   controllerName = "projects";
