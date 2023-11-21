@@ -1,11 +1,9 @@
 import NewCategoryRoute from "discourse/routes/new-category";
 
-
 export default class NewSubcategoryRoute extends NewCategoryRoute {
-
   async model(params) {
     const model = await super.model(...arguments);
-    model.set('parent_category_id', this.getParentCategoryId(params));
+    model.set("parent_category_id", this.getParentCategoryId(params));
     return model;
   }
 
