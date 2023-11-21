@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # name: projects
 # about: A plugin for using groups to separate and organize categories and topics.
 # version: 0.0.0
@@ -31,7 +33,7 @@ after_initialize do
   end
 
   add_to_serializer(:basic_category, :is_project) do
-    object.is_project?
+    object.project?
   end
 
   add_to_serializer(:basic_category, :project) do
