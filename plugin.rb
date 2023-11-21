@@ -25,16 +25,16 @@ after_initialize do
     Category.prepend Projects::CategoryExtension
   end
 
-  add_to_serializer(:current_user, :can_create_category) do 
+  add_to_serializer(:current_user, :can_create_category) do
     guardian = Guardian.new(scope.user)
     guardian.is_admin? || (SiteSetting.moderators_manage_categories_and_groups && guardian.is_moderator?)
   end
 
-  add_to_serializer(:basic_category, :is_project) do 
+  add_to_serializer(:basic_category, :is_project) do
     object.is_project?
   end
 
-  add_to_serializer(:basic_category, :project) do 
+  add_to_serializer(:basic_category, :project) do
     object.project
   end
 end
