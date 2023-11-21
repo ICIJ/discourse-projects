@@ -1,8 +1,8 @@
-import NewCategory from "discourse/routes/new-category";
+import NewCategoryRoute from "discourse/routes/new-category";
 import { action, computed } from "@ember/object";
 
 
-export default class NewSubcategory extends NewCategory { 
+export default class NewSubcategoryRoute extends NewCategoryRoute { 
 
   async model(params) {
     const model = await super.model(...arguments);
