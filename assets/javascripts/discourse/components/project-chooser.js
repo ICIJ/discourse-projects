@@ -1,4 +1,5 @@
 import CategoryChooserComponent from "select-kit/components/category-chooser";
+import Category from "discourse/models/category";
 
 export default CategoryChooserComponent.extend({
   pluginApiIdentifiers: ["project-chooser"],
@@ -7,9 +8,11 @@ export default CategoryChooserComponent.extend({
 
   selectKitOptions: {
     displayCategoryDescription: true,
+    caretDownIcon: "caret-down",
+    caretUpIcon: "caret-up"
   },
+  get content(){
+    return Category.list().filter(c=>c.is_project)
+  }
 
-  get content() {
-    return this.site.categories.filter((category) => category.is_project);
-  },
 });
