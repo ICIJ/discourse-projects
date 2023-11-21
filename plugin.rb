@@ -7,6 +7,8 @@
 
 enabled_site_setting :projects_enabled
 
+register_asset "stylesheets/common/index.scss"
+
 module ::Projects
   PLUGIN_NAME = "projects"
 end
@@ -16,6 +18,7 @@ require_relative "lib/projects/engine"
 after_initialize do
   Discourse::Application.routes.append do
     get "/new-subcategory/:parent" => "categories#show", :constraints => { format: "html" }
+    get "/projects" => "categories#index", :constraints => { format: "html" }
   end
 
   reloadable_patch do |plugin|

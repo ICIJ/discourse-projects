@@ -1,5 +1,17 @@
 en:
   js:
+    projects: 
+      title: Projects
+      all: All projects
+      empty: No projects found.
+      matches: 
+        one: 1 match
+        other: '%{count} matches'
+      sort_by:
+        name: Name
+        name_reverse: Name (reverse)
+        post_count: Number of posts
+        post_count_reverse: Number of posts (reverse)
     parent_category_chooser:
       title: Select a project
       continue: Continue
