@@ -12,7 +12,6 @@ export default CategoryChooserComponent.extend({
     caretUpIcon: "caret-up"
   },
   get content(){
-    return Category.list().filter(c=>c.is_project)
+    return Category.list().filter(c => c.is_project)
   }
-
 });
