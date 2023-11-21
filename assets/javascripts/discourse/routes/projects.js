@@ -1,6 +1,6 @@
-import CategoriesOnly from "discourse/components/categories-only";
 import { defaultHomepage } from "discourse/lib/utilities";
 import DiscourseRoute from "discourse/routes/discourse";
+import I18n from "I18n";
 
 export default class ProjectsRoute extends DiscourseRoute {
 

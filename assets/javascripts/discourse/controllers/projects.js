@@ -2,6 +2,7 @@ import Controller from "@ember/controller";
 import { computed } from '@ember/object';
 import { filterBy, sort } from '@ember/object/computed';
 import Category from "discourse/models/category";
+import I18n from "I18n";
 
 export default class ProjectsController extends Controller {
   categories = Category.list();

@@ -1,7 +1,9 @@
 import { computed } from "@ember/object";
 import { ajax } from "discourse/lib/ajax";
 import { withPluginApi } from "discourse/lib/plugin-api";
+import Category from "discourse/models/category";
 import { observes, on } from "discourse-common/utils/decorators";
+import I18n from "I18n";
 
 function initialize(api) {
 

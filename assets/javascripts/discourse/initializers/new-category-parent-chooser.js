@@ -3,7 +3,7 @@ import { not } from "@ember/object/computed";
 import  EditCategoryGeneral from 'discourse/components/edit-category-general';
 import { withPluginApi } from "discourse/lib/plugin-api";
 
-function initialize(api) {
+function initialize() {
   EditCategoryGeneral.reopen({
     get canSelectParentCategory() {
       return !this.isNewSubcategory && not("category.isUncategorizedCategory");
