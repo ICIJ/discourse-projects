@@ -1,5 +1,9 @@
 {
-  "private": true,
+  "name": "projects",
+  "version": "0.0.0",
+  "repository": "https://github.com/ICIJ/icij-discourse-projects-next/",
+  "author": "ICIJ",
+  "license": "MIT",
   "devDependencies": {
     "@discourse/lint-configs": "2.32.0",
     "ember-template-lint": "7.9.1",
