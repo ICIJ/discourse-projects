@@ -1,7 +1,7 @@
 import Controller from "@ember/controller";
-import Category from "discourse/models/category";
-import { filterBy, sort } from '@ember/object/computed';
 import { computed } from '@ember/object';
+import { filterBy, sort } from '@ember/object/computed';
+import Category from "discourse/models/category";
 
 export default class ProjectsController extends Controller {
   categories = Category.list();
@@ -16,7 +16,7 @@ export default class ProjectsController extends Controller {
     const searchTerm = this.searchTerm.toLowerCase();
     return this.sortedProjects.filter(({ name, description, slug }) => {
       // No search term, no filter
-      if (!searchTerm) return true;
+      if (!searchTerm) {return true;}
       // We search in the name, the description and the slug
       return [name, description, slug].some(value => value.toLowerCase().includes(searchTerm));
     });

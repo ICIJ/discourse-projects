@@ -10,6 +10,6 @@ export default CategoryChooserComponent.extend({
   },
 
   get content(){
-    return this.site.categories.filter((category) => category.is_project)
+    return this.site.categories.filter((category) => category.is_project);
   }
 });

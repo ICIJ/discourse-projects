@@ -15,14 +15,14 @@ function initialize(api, container) {
 
     setupComponent(args, component) {
       api.onPageChange(async (url, title) => {
-        let currentProject = null
-        const currentPath = container.lookup("router:main")?.currentPath
+        let currentProject = null;
+        const currentPath = container.lookup("router:main")?.currentPath;
         // Project banner should only appear on pages related to a project: categories or topics
         if (isTopicOrCategory(currentPath)) {
           // Check if we are on a category page
           let category = container.lookup("controller:navigation/category")?.category;
-          
-          // If the category is not defined 
+
+          // If the category is not defined
           // it means that we may be on a topic page
           if (!isDefined(category)) {
             const topic = container.lookup("controller:topic")?.get("model");
@@ -40,7 +40,7 @@ function initialize(api, container) {
             // Check the retrieved category is related to a project
             } else if (isDefined(category.project)) {
               currentProject = category.project;
-            }           
+            }
           }
         }
         component.set("currentProject", currentProject);
