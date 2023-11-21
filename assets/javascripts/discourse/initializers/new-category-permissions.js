@@ -6,7 +6,6 @@ import { observes, on } from "discourse-common/utils/decorators";
 import I18n from "I18n";
 
 function initialize(api) {
-
   async function getCategoryGroupPermissions(categoryId) {
     const { category } = await ajax(`/c/${categoryId}/show.json`);
     return category.group_permissions;
@@ -18,13 +17,18 @@ function initialize(api) {
     @on("init")
     _initPanels() {
       this._super(...arguments);
-      this.actions.registerValidator.call(this, this.validateParentCategory.bind(this));
+      this.actions.registerValidator.call(
+        this,
+        this.validateParentCategory.bind(this)
+      );
     },
 
     @observes("model.parent_category_id")
     async onParentCategoryChange() {
-      if(this.model.parent_category_id) {
-        const groupPermissions = await getCategoryGroupPermissions(this.model.parent_category_id);
+      if (this.model.parent_category_id) {
+        const groupPermissions = await getCategoryGroupPermissions(
+          this.model.parent_category_id
+        );
         // This ensure we do not cumulate new permissions with the existing one
         this.model.permissions.clear();
         // Then we add each permission one by one to ensure
@@ -47,27 +51,30 @@ function initialize(api) {
       return api.getCurrentUser().admin;
     },
 
-    @computed('model.parent_category_id')
+    @computed("model.parent_category_id")
     get parentCategory() {
       return Category.findById(this.model.parent_category_id);
     },
 
     validateParentCategory() {
       // This valid
-      if (!this.hasParentValidation || this.hasParentCategory || this.currentUserIsAdmin) {
+      if (
+        !this.hasParentValidation ||
+        this.hasParentCategory ||
+        this.currentUserIsAdmin
+      ) {
         return false;
       }
       // This invalid
-      this.dialog.alert(I18n.t('js.subcategory.errors.parent'));
+      this.dialog.alert(I18n.t("js.subcategory.errors.parent"));
       return true;
-    }
+    },
   });
 }
 
 export default {
-  name: 'new-category-permissions',
+  name: "new-category-permissions",
   initialize() {
     withPluginApi("1.8.0", initialize);
   },
 };
-

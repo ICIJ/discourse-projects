@@ -20,7 +20,9 @@ function initialize(api, container) {
         // Project banner should only appear on pages related to a project: categories or topics
         if (isTopicOrCategory(currentPath)) {
           // Check if we are on a category page
-          let category = container.lookup("controller:navigation/category")?.category;
+          let category = container.lookup(
+            "controller:navigation/category"
+          )?.category;
 
           // If the category is not defined
           // it means that we may be on a topic page
@@ -37,7 +39,7 @@ function initialize(api, container) {
             // Check if the category itself is a project
             if (category.is_project) {
               currentProject = category;
-            // Check the retrieved category is related to a project
+              // Check the retrieved category is related to a project
             } else if (isDefined(category.project)) {
               currentProject = category.project;
             }

@@ -3,13 +3,13 @@ import CategoryChooserComponent from "select-kit/components/category-chooser";
 export default CategoryChooserComponent.extend({
   pluginApiIdentifiers: ["project-chooser"],
   classNames: ["project-chooser"],
-  services: ['site'],
+  services: ["site"],
 
   selectKitOptions: {
-    displayCategoryDescription: true
+    displayCategoryDescription: true,
   },
 
-  get content(){
+  get content() {
     return this.site.categories.filter((category) => category.is_project);
-  }
+  },
 });
