@@ -1,17 +1,13 @@
 {
-  "private": true,
+  "name": "projects",
+  "version": "0.0.0",
+  "repository": "https://github.com/ICIJ/icij-discourse-projects-next/",
+  "author": "ICIJ",
+  "license": "MIT",
   "devDependencies": {
-    "@discourse/lint-configs": "2.21.0",
-    "ember-template-lint": "7.7.0",
-    "eslint": "9.27.0",
-    "prettier": "3.5.3",
-    "stylelint": "16.19.1"
-  },
-  "engines": {
-    "node": ">= 22",
-    "npm": "please-use-pnpm",
-    "yarn": "please-use-pnpm",
-    "pnpm": "9.x"
-  },
-  "packageManager": "pnpm@9.15.5"
+    "@discourse/lint-configs": "^1.0.0",
+    "ember-template-lint": "^5.11.2",
+    "eslint": "^8.52.0",
+    "prettier": "^2.8.8"
+  }
 }
