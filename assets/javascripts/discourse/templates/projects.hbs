@@ -1,0 +1,26 @@
+<div class="projects">
+  <div class="projects-header">
+    <SearchTextField 
+      @placeholder={{i18n 'js.projects.all'}} 
+      @value={{this.searchTerm}} />
+    {{#if this.showMatches}}
+      <div class="projects-header-matches">
+        {{i18n 'js.projects.matches' count=this.filteredProjects.length}}
+      </div>
+    {{/if}}
+    <div class="projects-header-sort-by">
+      Sort by&nbsp;
+      <ComboBox 
+        @right={{true}}
+        @value={{this.sortBy}} 
+        @content={{this.sortByOptions}} 
+        @nameProperty="name" 
+        @valueProperty="value" />
+    </div>
+  </div>
+  {{#if this.hasProjects}}
+    <CategoriesOnly class="projects-list" @categories={{this.filteredProjects}} />
+  {{else}}
+    <EmptyState class="projects-empty" @title="{{i18n 'js.projects.empty' }}" />
+  {{/if}}
+</div>
