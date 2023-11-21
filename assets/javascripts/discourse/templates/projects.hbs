@@ -9,9 +9,8 @@
       </div>
     {{/if}}
     <div class="projects-header-sort-by">
-      Sort by&nbsp;
+      {{i18n 'js.projects.sortBy'}}&nbsp;
       <ComboBox 
-        @right={{true}}
         @value={{this.sortBy}} 
         @content={{this.sortByOptions}} 
         @nameProperty="name" 
