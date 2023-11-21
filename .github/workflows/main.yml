@@ -5,5 +5,5 @@ on:
     branches: [ main ]
 
 jobs:
-  ci:
+  discourse:
     uses: discourse/.github/.github/workflows/discourse-plugin.yml@v1
