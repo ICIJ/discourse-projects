@@ -11,6 +11,6 @@ ember:
 		yarn run ember
 
 prettier:
-		yarn run prettify
+		yarn run prettier:assets
 
 lint: eslint prettier ember rubocop 
