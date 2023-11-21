@@ -49,7 +49,7 @@ export default class NewSubcategoryButton extends Component {
 
 
   <template>
-    <button class="btn btn-default" {{on "click" this.click}}>
+    <button class="btn btn-default" {{on "click" this.click}} type="button">
       {{~icon 'plus'}}
       {{this.label}}
     </button>
