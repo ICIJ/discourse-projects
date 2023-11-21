@@ -4,6 +4,7 @@ en:
       title: Projects
       all: All projects
       empty: No projects found.
+      sortBy: Sort by
       matches: 
         one: 1 match
         other: '%{count} matches'
