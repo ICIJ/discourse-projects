@@ -1,2 +1,6 @@
 @import "project-banner";
 @import "projects";
+/*hide all categorie breadcrumb for now*/
+li.project-dropdown+li+li {
+    display: none;
+  }
