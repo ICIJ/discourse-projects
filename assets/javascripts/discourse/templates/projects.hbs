@@ -20,6 +20,6 @@
   {{#if this.hasProjects}}
     <CategoriesOnly class="projects-list" @categories={{this.filteredProjects}} />
   {{else}}
-    <EmptyState class="projects-empty" @title="{{i18n 'js.projects.empty' }}" />
+    <EmptyState class="projects-empty" @title={{i18n 'js.projects.empty' }} />
   {{/if}}
 </div>
