@@ -95,7 +95,6 @@ PLATFORMS
 
 DEPENDENCIES
   rubocop-discourse
-  syntax_tree
 
 BUNDLED WITH
    2.7.2
