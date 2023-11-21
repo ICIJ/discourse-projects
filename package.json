@@ -4,6 +4,10 @@
   "repository": "https://github.com/ICIJ/icij-discourse-projects-next/",
   "author": "ICIJ",
   "license": "MIT",
+  "scripts": {
+    "lint": "yarn eslint --ext .js,.js.es6 --no-error-on-unmatched-pattern {test,assets,admin/assets}/javascripts",
+    "prettify": "yarn prettier -v"
+  },
   "devDependencies": {
     "@discourse/lint-configs": "2.32.0",
     "ember-template-lint": "7.9.1",
