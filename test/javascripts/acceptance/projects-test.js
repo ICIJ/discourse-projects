@@ -48,12 +48,4 @@ acceptance("Projects", function (needs) {
     assert.strictEqual(names[0].innerText, "blog");
     assert.strictEqual(names[1].innerText, "faq");
   });
-
-  test("Projects page list projects sorted by name desc", async function (assert) {
-    await visit("/projects");
-    await fillIn(".projects-header-sort-by select", "name:desc");
-    await pauseTest();
-    assert.strictEqual(names[0].innerText, "fag");
-    assert.strictEqual(names[1].innerText, "blog");
-  });
 });
