@@ -1,23 +1,29 @@
 import { fillIn, visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import discoveryFixtures from "discourse/tests/fixtures/discovery-fixtures";
-import { acceptance, count, exists,queryAll } from "discourse/tests/helpers/qunit-helpers";
+import {
+  acceptance,
+  count,
+  exists,
+  queryAll,
+} from "discourse/tests/helpers/qunit-helpers";
 import { cloneJSON } from "discourse-common/lib/object";
 
 acceptance("Projects", function (needs) {
-
   // Use Discourse's ficture for categories
   // @see https://github.com/discourse/discourse/blob/main/app/assets/javascripts/discourse/tests/fixtures/discovery-fixtures.js
-  const categories = discoveryFixtures["/categories.json"].category_list.categories.map((cat) => {
+  const categories = discoveryFixtures[
+    "/categories.json"
+  ].category_list.categories.map((cat) => {
     // We ensure that only "blog" and "faq" are treated as project.
     // That also means the projects page will only show those 2 categories if
     // the filter by project works as expected.
-    return { ...cat, is_project: ['blog', 'faq'].includes(cat.slug) };
+    return { ...cat, is_project: ["blog", "faq"].includes(cat.slug) };
   });
+
   needs.site(cloneJSON({ categories }));
   needs.user();
   needs.settings({ projects_enabled: true });
-
 
   test("Projects page exists", async function (assert) {
     await visit("/projects");
@@ -32,7 +38,7 @@ acceptance("Projects", function (needs) {
 
   test("Projects page should filter projects by name", async function (assert) {
     await visit("/projects");
-    await fillIn('.projects-header input[type=text]', 'log');
+    await fillIn(".projects-header input[type=text]", "log");
     assert.strictEqual(count(".projects .category-list tbody tr"), 1);
   });
 
@@ -41,5 +47,13 @@ acceptance("Projects", function (needs) {
     const names = queryAll(".projects .category-list .category-name");
     assert.strictEqual(names[0].innerText, "blog");
     assert.strictEqual(names[1].innerText, "faq");
+  });
+
+  test("Projects page list projects sorted by name desc", async function (assert) {
+    await visit("/projects");
+    await fillIn(".projects-header-sort-by select", "name:desc");
+    await pauseTest();
+    assert.strictEqual(names[0].innerText, "fag");
+    assert.strictEqual(names[1].innerText, "blog");
   });
 });
