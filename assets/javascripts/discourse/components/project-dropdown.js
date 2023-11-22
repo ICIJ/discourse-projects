@@ -17,14 +17,14 @@ export default CategoryDrop.extend({
       value: NO_PROJECTS,
       label: this.noneLabel,
     };
-    const projects = Category.list().filter((c) => c.is_project)
-    return this.hasSelectedCategory ?  [none,...projects]: projects
+    const projects = Category.list().filter((c) => c.is_project);
+    return this.hasSelectedCategory ? [none, ...projects] : projects;
   }),
   selectKitOptions: {
     none: "project_dropdown.none",
   },
-  get hasSelectedCategory(){
-    return this.category !== null && typeof this.category !== "undefined" 
+  get hasSelectedCategory() {
+    return this.category !== null && typeof this.category !== "undefined";
   },
 
   allCategoriesLabel: computed(
@@ -42,9 +42,12 @@ export default CategoryDrop.extend({
       return this.noneLabel;
     }
   ),
-  
-  get noneLabel() {
-    return I18n.t(this.hasSelectedCategory ? "js.project_dropdown.none" : "js.project_dropdown.select")
-  },
 
+  get noneLabel() {
+    return I18n.t(
+      this.hasSelectedCategory
+        ? "js.project_dropdown.none"
+        : "js.project_dropdown.select"
+    );
+  },
 });
