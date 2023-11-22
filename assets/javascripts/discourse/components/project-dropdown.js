@@ -1,28 +1,30 @@
 import { computed } from "@ember/object";
-import { htmlSafe } from "@ember/template";
-import DiscourseURL from "discourse/lib/url";
 import Category from "discourse/models/category";
 import I18n from "I18n";
 import CategoryDrop from "select-kit/components/category-drop";
 
-const ALL_PROJECTS_ID = "ALL_PROJECTS_ID";
+const NO_PROJECTS = "no-projects";
 
 export default CategoryDrop.extend({
   pluginApiIdentifiers: ["project-dropdown"],
   classNames: "project-dropdown",
 
   content: computed(function () {
-    const all = {
-      id: ALL_PROJECTS_ID,
+    const none = {
+      id: NO_PROJECTS,
       name: this.noneLabel,
       title: this.noneLabel,
-      value: ALL_PROJECTS_ID,
-      label: htmlSafe(`<b>${this.noneLabel}</b>`),
+      value: NO_PROJECTS,
+      label: this.noneLabel,
     };
-    return [all, ...Category.list().filter((c) => c.is_project)];
+    const projects = Category.list().filter((c) => c.is_project)
+    return this.hasSelectedCategory ?  [none,...projects]: projects
   }),
   selectKitOptions: {
-    none: "project_drop.all_projects",
+    none: "project_dropdown.none",
+  },
+  get hasSelectedCategory(){
+    return this.category !== null && typeof this.category !== "undefined" 
   },
 
   allCategoriesLabel: computed(
@@ -40,18 +42,9 @@ export default CategoryDrop.extend({
       return this.noneLabel;
     }
   ),
-
+  
   get noneLabel() {
-    return I18n.t(this.selectKit.options.none);
+    return I18n.t(this.hasSelectedCategory ? "js.project_dropdown.none" : "js.project_dropdown.select")
   },
 
-  actions: {
-    onChange(categoryId) {
-      if (categoryId === ALL_PROJECTS_ID) {
-        DiscourseURL.routeToUrl("/projects");
-      } else {
-        this._super(categoryId);
-      }
-    },
-  },
 });

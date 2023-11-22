@@ -13,8 +13,9 @@ en:
         name_reverse: Name (reverse)
         post_count: Number of posts
         post_count_reverse: Number of posts (reverse)
-    project_drop:
-      all_projects: All projects
+    project_dropdown:
+      none: none
+      select: Select a project
     parent_category_chooser:
       title: Select a project
       continue: Continue

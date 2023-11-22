@@ -1,0 +1,12 @@
+/*hide all categorie breadcrumb for now*/
+.category-breadcrumb 
+{
+    li.project-dropdown + li.bread-crumbs-left-outlet + li {
+      display: none;
+    }
+
+     .select-kit.combo-box.category-drop .select-kit-row[data-value="no-projects"]{
+        color: var(--tertiary);
+        font-weight: 700
+     }
+}
