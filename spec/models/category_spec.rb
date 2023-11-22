@@ -27,8 +27,10 @@ RSpec.describe Category do
       end
 
       context "when category a parent and read restriction" do
-        subject(:parent_category) { Fabricate.build(:category) }
         subject(:category) { Fabricate.build(:category, read_restricted: true, parent_category:) }
+
+        let(:parent_category) { Fabricate.build(:category) }
+
 
         it "returns false" do
           expect(category.project?).to be_falsy
