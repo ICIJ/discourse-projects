@@ -9,7 +9,7 @@ import { cloneJSON } from "discourse-common/lib/object";
 acceptance("New subcategory button", function (needs) {
   // Use Discourse's ficture for categories
   // @see https://github.com/discourse/discourse/blob/main/app/assets/javascripts/discourse/tests/fixtures/discovery-fixtures.js
-  const fixture = discoveryFixtures["/categories.json"]
+  const fixture = discoveryFixtures["/categories.json"];
   const categories = fixture.category_list.categories.map((cat) => {
     // We ensure that only "blog" and "faq" are treated as project.
     // That also means the projects page will only show those 2 categories if
@@ -27,7 +27,7 @@ acceptance("New subcategory button", function (needs) {
     });
 
     server.get("/c/:category-id/show.json", () => {
-      return helper.response(cloneJSON(categoryFixtures["/c/1/show.json"]))
+      return helper.response(cloneJSON(categoryFixtures["/c/1/show.json"]));
     });
   });
 
@@ -35,23 +35,29 @@ acceptance("New subcategory button", function (needs) {
     await visit("/");
     assert.dom("button.new-subcategory-button").exists("it shows the button");
   });
-  
+
   test("Open a modal to select a project on the homepage", async function (assert) {
     await visit("/");
-    await click("button.new-subcategory-button")
+    await click("button.new-subcategory-button");
     assert.dom(".d-modal").exists("it shows a modal");
   });
 
   test("Show the button on the `faq` category page", async function (assert) {
     await visit("/c/faq");
-    assert.dom("button.new-subcategory-button").exists("it shows the button on the homepage");
+    assert
+      .dom("button.new-subcategory-button")
+      .exists("it shows the button on the homepage");
   });
-  
+
   test("Don't open a modal to select a project on the `faq` category page", async function (assert) {
     await visit("/c/faq");
     await click("button.new-subcategory-button");
     assert.dom(".d-modal").doesNotExist("it shows a modal");
     const router = getOwner(this).lookup("service:router");
-    assert.strictEqual(router.currentRouteName, "newSubcategory", "is on new sub category route");
+    assert.strictEqual(
+      router.currentRouteName,
+      "newSubcategory",
+      "is on new sub category route"
+    );
   });
 });
