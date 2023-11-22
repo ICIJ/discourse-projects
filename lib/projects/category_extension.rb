@@ -28,8 +28,8 @@ module Projects
       ancestors.select(&:project?).first
     end
 
-    def project?
-      read_restricted and parent_category.blank?
+    def project?    
+      (!SiteSetting.projects_private? or read_restricted) and parent_category.blank?
     end
   end
 end

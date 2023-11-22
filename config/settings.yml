@@ -2,6 +2,9 @@ plugins:
   projects_enabled:
     default: true
     client: false
+  projects_private:
+    default: true
+    client: false
   projects_category_requires_parent:
     default: true
     client: true
