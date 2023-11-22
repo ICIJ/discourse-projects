@@ -12,7 +12,7 @@ import { cloneJSON } from "discourse-common/lib/object";
 acceptance("Projects", function (needs) {
   // Use Discourse's ficture for categories
   // @see https://github.com/discourse/discourse/blob/main/app/assets/javascripts/discourse/tests/fixtures/discovery-fixtures.js
-  const fixture = discoveryFixtures["/categories.json"]
+  const fixture = discoveryFixtures["/categories.json"];
   const categories = fixture.category_list.categories.map((cat) => {
     // We ensure that only "blog" and "faq" are treated as project.
     // That also means the projects page will only show those 2 categories if
