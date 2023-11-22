@@ -7,9 +7,13 @@ export default class ProjectBanner extends Component {
     return I18n.t('js.project_banner.label')
   }
 
+  get href() {
+    return `/c/${this.args.category.slug}/${this.args.category.id}`
+  }
+
   <template>
-    <div class="project-banner__head">
-        {{this.label}} <a href{{@category.url}} class="project-banner__link">{{@category.name}}</a>
+    <div class="project-banner__wrapper">
+      {{this.label}} <a href={{this.href}} class="project-banner__wrapper__link">{{@category.name}}</a>
     </div>
   </template>
 }
