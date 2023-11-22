@@ -11,7 +11,6 @@ import ParentCategoryChooser from './modal/parent-category-chooser'
 
 export default class NewSubcategoryButton extends Component {
   @service modal;
-  @service site;
   
   @action
   async click() {
@@ -50,7 +49,7 @@ export default class NewSubcategoryButton extends Component {
 
 
   <template>
-    <button class="btn btn-default" {{on "click" this.click}} type="button">
+    <button class="btn btn-default new-subcategory-button" {{on "click" this.click}} type="button">
       {{~icon 'plus'}}
       {{this.label}}
     </button>
