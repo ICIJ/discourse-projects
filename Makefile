@@ -1,5 +1,10 @@
-install:
+install_yarn: 
+		yarn install
+
+install_bundle:
 		bundle install
+
+install: install_yarn install_bundle
 
 rubocop: 
 		bundle exec rubocop
