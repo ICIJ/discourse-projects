@@ -5,6 +5,7 @@ import { on } from "@ember/modifier";
 import Component from "@glimmer/component";
 import DiscourseURL from "discourse/lib/url";
 import icon from "discourse-common/helpers/d-icon";
+import I18n from "I18n";
 
 import ParentCategoryChooser from './modal/parent-category-chooser'
 

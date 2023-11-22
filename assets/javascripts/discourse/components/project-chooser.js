@@ -1,5 +1,5 @@
-import CategoryChooserComponent from "select-kit/components/category-chooser";
 import Category from "discourse/models/category";
+import CategoryChooserComponent from "select-kit/components/category-chooser";
 
 export default CategoryChooserComponent.extend({
   pluginApiIdentifiers: ["project-chooser"],

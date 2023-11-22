@@ -2,6 +2,7 @@ import { computed } from "@ember/object";
 import { htmlSafe } from "@ember/template";
 import DiscourseURL from "discourse/lib/url";
 import Category from "discourse/models/category";
+import I18n from "I18n";
 import CategoryDrop from "select-kit/components/category-drop";
 
 const ALL_PROJECTS_ID = "ALL_PROJECTS_ID";
@@ -46,7 +47,7 @@ export default CategoryDrop.extend({
 
   actions: {
     onChange(categoryId) {
-      if (categoryId == ALL_PROJECTS_ID) {
+      if (categoryId === ALL_PROJECTS_ID) {
         DiscourseURL.routeToUrl("/projects");
       } else {
         this._super(categoryId);
