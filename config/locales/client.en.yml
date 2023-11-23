@@ -28,8 +28,8 @@ en:
     project_banner:
       label: You're in Project
     subcategory:
-      create: New %{category} Category (%{project})
-      create_in_project: New %{project} Category 
+      create: New %{categoryName} Category (%{projectName})
+      create_in_project: New %{projectName} Category 
       button:
         label: New Project Category
       errors:

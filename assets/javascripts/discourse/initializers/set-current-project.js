@@ -11,7 +11,7 @@ function isTopicOrCategory(path) {
 
 function initialize(api, container) {
   api.registerConnectorClass("above-main-container", "project-banner", {
-    pluginId: "projects",
+    pluginId: "set-current-project",
 
     setupComponent(args, component) {
       api.onPageChange(async () => {

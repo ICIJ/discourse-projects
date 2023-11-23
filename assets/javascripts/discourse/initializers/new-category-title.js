@@ -5,7 +5,7 @@ import I18n from "I18n";
 
 function initialize(api) {
   api.modifyClass("controller:edit-category-tabs", {
-    pluginId: "projects",
+    pluginId: "new-category-title",
 
     get hasParentCategory() {
       return !!this.parentCategory;
@@ -25,16 +25,16 @@ function initialize(api) {
     @computed("model.parent_category_id")
     get titleWithCategory() {
       const {
-        name: category,
-        project: { name: project },
+        name: categoryName,
+        project: { name: projectName },
       } = this.parentCategory;
-      return I18n.t("js.subcategory.create", { category, project });
+      return I18n.t("js.subcategory.create", { categoryName, projectName });
     },
 
     @computed("model.parent_category_id")
     get titleWithProject() {
-      const { name: project } = this.project;
-      return I18n.t("js.subcategory.create_in_project", { project });
+      const { name: projectName } = this.project;
+      return I18n.t("js.subcategory.create_in_project", { projectName });
     },
 
     @computed("model.parent_category_id")
