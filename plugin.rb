@@ -19,7 +19,8 @@ require_relative 'lib/projects/engine'
 
 after_initialize do
   Discourse::Application.routes.append do
-    get '/new-subcategory/:parent' => 'categories#show', :constraints => { format: 'html' }
+    get '/new-subcategory/:parent' => 'categories#show', :constraints => { format: 'html' }, as: "subcategory_new"
+    get '/categories/:parent' => 'categories#show', :constraints => { format: 'html' }, as: "subcategories_index"
     get '/projects' => 'categories#index', :constraints => { format: 'html' }
   end
 
