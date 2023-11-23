@@ -32,9 +32,11 @@ acceptance("Project categories link in top menu", function (needs) {
 
   test("Don't show the link on the homepage", async function (assert) {
     await visit("/");
-    assert.dom("li.link-to-project-categories").doesNotExist("it doesn't show the link");
+    assert
+      .dom("li.link-to-project-categories")
+      .doesNotExist("it doesn't show the link");
   });
-  
+
   test("Show the link the `faq` category page", async function (assert) {
     await visit("/c/faq");
     assert.dom("li.link-to-project-categories").exist("it shows the link");
