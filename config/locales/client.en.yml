@@ -1,5 +1,10 @@
 en:
   js:
+    top_menu:
+      subcategories: Categories
+    subcategories:
+      title: '%{categoryName} Categories'
+      empty: No categories found.
     projects: 
       title: Projects
       all: All projects
@@ -22,8 +27,8 @@ en:
     project_banner:
       label: You're in Project
     subcategory:
-      create: New Category in "%{category}" (%{project})
-      create_in_project: New Category in Project "%{project}"
+      create: New %{category} Category (%{project})
+      create_in_project: New "%{project}" Category 
       button:
         label: New Project Category
       errors:
