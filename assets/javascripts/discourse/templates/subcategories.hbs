@@ -1,6 +1,6 @@
 <div class="subcategories">
   <section class="navigation-container">
-    <DNavigation 
+    <DNavigation
       @category={{this.category}}
       @showCategoryAdmin={{false}}
       @createTopic={{false}}
@@ -9,12 +9,19 @@
       @editCategory={{this.editCategory}}
       @createCategory={{this.createCategory}}
       @hasDraft={{false}}
-      @skipCategoriesNavItem={{true}} />
+      @skipCategoriesNavItem={{true}}
+    />
   </section>
 
   {{#if this.hasSubcategories}}
-    <CategoriesOnly class="subcategories-list" @categories={{this.subcategories}} />
+    <CategoriesOnly
+      class="subcategories-list"
+      @categories={{this.subcategories}}
+    />
   {{else}}
-    <EmptyState class="subcategories-empty" @title={{i18n "js.projects.subcategories.empty" }} />
+    <EmptyState
+      class="subcategories-empty"
+      @title={{i18n "js.projects.subcategories.empty"}}
+    />
   {{/if}}
 </div>

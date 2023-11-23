@@ -6,16 +6,20 @@ function initialize(api) {
     name: "link-to-subcategories",
     displayName: I18n.t("top_menu.subcategories"),
     before: "posted",
-    customFilter (category, args, router) { 
-      return category !== null && typeof category !== "undefined" && category.has_children
+    customFilter(category) {
+      return (
+        category !== null &&
+        typeof category !== "undefined" &&
+        category.has_children
+      );
     },
-    customHref (category, args, router) {  
-      return `/categories/${category.id}`; 
+    customHref(category) {
+      return `/categories/${category.id}`;
     },
-    forceActive (category, args, router) {
-      return  router.currentURL === `/categories/${category.id}`
-    }
-  })
+    forceActive(category, _args, router) {
+      return router.currentURL === `/categories/${category.id}`;
+    },
+  });
 }
 
 export default {

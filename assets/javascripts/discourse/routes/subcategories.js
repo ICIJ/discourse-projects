@@ -1,6 +1,6 @@
-import DiscourseRoute from "discourse/routes/discourse";
-import Category from "discourse/models/category";
 import { inject as service } from "@ember/service";
+import Category from "discourse/models/category";
+import DiscourseRoute from "discourse/routes/discourse";
 import I18n from "I18n";
 
 export default class SubcategoriesRoute extends DiscourseRoute {
@@ -18,7 +18,7 @@ export default class SubcategoriesRoute extends DiscourseRoute {
   }
 
   titleToken() {
-    const { name: categoryName } = this.currentModel
+    const { name: categoryName } = this.currentModel;
     return I18n.t("subcategories.title", { categoryName });
   }
 }
