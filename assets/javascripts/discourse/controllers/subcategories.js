@@ -7,24 +7,20 @@ import NavItem from "discourse/models/nav-item";
 
 export default class SubcategoriesController extends Controller {
   @service router;
-  @service modal;
-  categories = Category.list();
 
-  @computed("categories", "category")
+  @computed("model")
+  get category() {
+    return this.model.category ?? null;
+  }
+
+  @computed("model")
   get subcategories() {
-    return this.categories.filter(({ parent_category_id: parent }) => {
-      return parent === this.category?.id;
-    });
+    return this.model.subcategories ?? [];
   }
 
   @computed("subcategories")
   get hasSubcategories() {
     return this.subcategories.length > 0;
-  }
-
-  @computed("model")
-  get category() {
-    return this.model ?? null;
   }
 
   @computed("category")

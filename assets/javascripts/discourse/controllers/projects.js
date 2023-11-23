@@ -1,16 +1,19 @@
 import Controller from "@ember/controller";
 import { computed } from "@ember/object";
 import { filterBy, sort } from "@ember/object/computed";
-import Category from "discourse/models/category";
 import I18n from "I18n";
 
 export default class ProjectsController extends Controller {
-  categories = Category.list();
   searchTerm = "";
   sortBy = "name:asc";
 
   @filterBy("categories", "is_project") projects;
   @sort("projects", "sortByFields") sortedProjects;
+
+  @computed("model")
+  get categories() {
+    return this.model.categories ?? [];
+  }
 
   @computed("sortBy", "searchTerm")
   get filteredProjects() {
