@@ -4,6 +4,7 @@ en:
       subcategories: Categories
     subcategories:
       title: '%{categoryName} Categories'
+      title_in_project: '%{categoryName} Categories ("%{projectName})'
       empty: No categories found.
     projects: 
       title: Projects
@@ -28,7 +29,7 @@ en:
       label: You're in Project
     subcategory:
       create: New %{category} Category (%{project})
-      create_in_project: New "%{project}" Category 
+      create_in_project: New %{project} Category 
       button:
         label: New Project Category
       errors:

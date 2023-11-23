@@ -1,13 +1,20 @@
 import { inject as service } from "@ember/service";
 import Category from "discourse/models/category";
+import CategoryList from "discourse/models/category-list";
 import DiscourseRoute from "discourse/routes/discourse";
 import I18n from "I18n";
 
 export default class SubcategoriesRoute extends DiscourseRoute {
   @service router;
+  @service store;
 
-  model(params) {
-    return Category.list().findBy("id", parseInt(params.parent, 10));
+  async model(params) {
+    const category = Category.findById(parseInt(params.parent, 10));
+    const { categories: subcategories } = await CategoryList.listForParent(
+      this.store,
+      category
+    );
+    return { subcategories, category };
   }
 
   afterModel(model) {
@@ -18,7 +25,18 @@ export default class SubcategoriesRoute extends DiscourseRoute {
   }
 
   titleToken() {
-    const { name: categoryName } = this.currentModel;
+    const { category } = this.currentModel;
+    const { name: categoryName } = category;
+    // If the current category is within a project
+    if (category.project) {
+      // We use a different title
+      // that display the project name
+      const { name: projectName } = category.project;
+      return I18n.t("subcategories.title_in_project", {
+        categoryName,
+        projectName,
+      });
+    }
     return I18n.t("subcategories.title", { categoryName });
   }
 }
