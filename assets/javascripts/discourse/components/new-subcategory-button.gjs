@@ -11,6 +11,7 @@ import ParentCategoryChooser from './modal/parent-category-chooser'
 
 export default class NewSubcategoryButton extends Component {
   @service modal;
+  @service site;
   
   @action
   async click() {
@@ -37,6 +38,10 @@ export default class NewSubcategoryButton extends Component {
     return getOwner(this).lookup("controller:discovery").get('category')
   }
 
+  get currentCategoryLevel() {
+    return this.currentCategory.level
+  }
+
   get href() {
     if (this.currentCategory) {
       return this.getHref(this.currentCategory.id)
@@ -47,11 +52,20 @@ export default class NewSubcategoryButton extends Component {
     return I18n.t('js.subcategory.button.label')
   }
 
+  get canCreateSubcategory() {
+    return !this.currentCategory || this.maxCategoryNesting > this.currentCategoryLevel + 1
+  }
+
+  get maxCategoryNesting() {
+    return this.site.siteSettings.max_category_nesting 
+  }
 
   <template>
-    <button class="btn btn-default new-subcategory-button" {{on "click" this.click}} type="button">
-      {{~icon 'plus'}}
-      {{this.label}}
-    </button>
+    {{#if this.canCreateSubcategory }}
+      <button class="btn btn-default new-subcategory-button" {{on "click" this.click}} type="button">
+        {{~icon 'plus'}}
+        {{this.label}}
+      </button>
+    {{/if}}
   </template>
 }
