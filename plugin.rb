@@ -12,10 +12,10 @@ enabled_site_setting :projects_enabled
 register_asset 'stylesheets/common/index.scss'
 
 module ::DiscourseProjects
-  PLUGIN_NAME = 'discourse-projects'
+  PLUGIN_NAME = "discourse_projects".freeze
 end
 
-require_relative 'lib/projects/engine'
+require_relative 'lib/discourse-projects/engine'
 
 after_initialize do
   Discourse::Application.routes.append do
