@@ -15,7 +15,7 @@ module ::DiscourseProjects
   PLUGIN_NAME = "discourse_projects".freeze
 end
 
-require_relative 'lib/discourse-projects/engine'
+require_relative 'lib/discourse_projects/engine'
 
 after_initialize do
   Discourse::Application.routes.append do
