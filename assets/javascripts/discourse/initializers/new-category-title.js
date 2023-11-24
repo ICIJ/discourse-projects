@@ -14,7 +14,11 @@ function initialize(api) {
     @computed("model.parent_category_id")
     get title() {
       if (!this.project) {
-        return I18n.t("js.category.create");
+        const categoryName = this.model.name;
+        const localeMessage = categoryName
+          ? "js.category.edit"
+          : "js.category.create";
+        return I18n.t(localeMessage, { categoryName, });
       }
       if (this.project.id === this.parentCategory.id) {
         return this.titleWithProject;
