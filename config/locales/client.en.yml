@@ -1,20 +1,34 @@
 en:
   js:
     top_menu:
+      members: Members
       subcategories: Categories
+    members:
+      title: '%{projectName} Members'
+      filter: type to filter by username, name...
+      matches:
+        one: 1 member match
+        other: '%{count} members match'
+      total: 
+        one: 1 member
+        other: '%{count} members'
+      empty: No members found.
     subcategories:
       title: '%{categoryName} Categories'
       title_in_project: '%{categoryName} Categories ("%{projectName})'
       empty: No categories found.
     projects: 
       title: Projects
-      all: All projects
+      filter: type to filter...
       empty: No projects found.
       sortBy: Sort by
       showSubcategories: Show subcategories
       matches: 
-        one: 1 match
-        other: '%{count} matches'
+        one: 1 projects match
+        other: '%{count} projects match'
+      total: 
+        one: 1 project
+        other: '%{count} projects'
       sort_by:
         name: Name
         name_reverse: Name (reverse)

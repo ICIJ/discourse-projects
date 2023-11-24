@@ -21,6 +21,7 @@ after_initialize do
   Discourse::Application.routes.prepend do
     get '/new-subcategory/:parent' => 'categories#show', :constraints => { format: 'html' }, as: "subcategory_new"
     get '/c/*category_slug/categories' => "categories#find_by_slug", :constraints => { format: 'html' }, as: "subcategories_index"
+    get '/c/*category_slug/members' => "categories#find_by_slug", :constraints => { format: 'html' }, as: "members_index"
     get '/projects' => 'categories#index', :constraints => { format: 'html' }
   end
 
