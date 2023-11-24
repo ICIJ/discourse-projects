@@ -1,11 +1,7 @@
 import { visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import discoveryFixtures from "discourse/tests/fixtures/discovery-fixtures";
-import {
-  acceptance,
-  count,
-  exists,
-} from "discourse/tests/helpers/qunit-helpers";
+import { acceptance, exists } from "discourse/tests/helpers/qunit-helpers";
 import { cloneJSON } from "discourse-common/lib/object";
 
 acceptance("Subcategories", function (needs) {
