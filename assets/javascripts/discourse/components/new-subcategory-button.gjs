@@ -1,5 +1,4 @@
 import { action } from "@ember/object";
-import { getOwner } from "@ember/application";
 import { inject as service } from "@ember/service";
 import { on } from "@ember/modifier";
 import Component from "@glimmer/component";
@@ -35,11 +34,11 @@ export default class NewSubcategoryButton extends Component {
   }
 
   get currentCategory() {
-    return getOwner(this).lookup("controller:discovery").get('category')
+    return this.args.category ?? null
   }
 
   get currentCategoryLevel() {
-    return this.currentCategory.level
+    return this.currentCategory?.level
   }
 
   get href() {
