@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# name: projects
+# name: discourse-projects
 # about: A plugin for using groups to separate and organize categories and topics.
 # version: 0.0.0
 # authors: ICIJ <engineering@icij.org>
@@ -11,7 +11,7 @@ enabled_site_setting :projects_enabled
 
 register_asset 'stylesheets/common/index.scss'
 
-module ::Projects
+module ::DiscourseProjects
   PLUGIN_NAME = 'discourse-projects'
 end
 
