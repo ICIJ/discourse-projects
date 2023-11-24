@@ -25,7 +25,7 @@ after_initialize do
   end
 
   reloadable_patch do |_plugin|
-    Category.prepend Projects::CategoryExtension
+    Category.prepend DiscourseProjects::CategoryExtension
   end
 
   add_to_serializer(:current_user, :can_create_category) do
