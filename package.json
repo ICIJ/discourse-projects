@@ -1,7 +1,7 @@
 {
-  "name": "projects",
+  "name": "discourse-projects",
   "version": "0.0.0",
-  "repository": "https://github.com/ICIJ/icij-discourse-projects-next/",
+  "repository": "https://github.com/ICIJ/discourse-projects/",
   "author": "ICIJ",
   "license": "MIT",
   "scripts": {
