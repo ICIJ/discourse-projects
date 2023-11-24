@@ -8,8 +8,8 @@ export default class SubcategoriesRoute extends DiscourseRoute {
   @service router;
   @service store;
 
-  async model(params) {
-    const category = Category.findSingleBySlug(params.slug);
+  async model({ slug }) {
+    const category = Category.findSingleBySlug(slug);
     const { categories: subcategories } = await CategoryList.listForParent(
       this.store,
       category

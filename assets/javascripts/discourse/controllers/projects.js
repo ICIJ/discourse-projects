@@ -7,7 +7,7 @@ import I18n from "I18n";
 export default class ProjectsController extends Controller {
   @tracked searchTerm = "";
   @tracked sortBy = "name:asc";
-  @tracked showSubcategories = true;
+  @tracked showSubcategories = false;
 
   @filterBy("categories", "is_project") projects;
   @sort("projects", "sortByFields") sortedProjects;

@@ -1,5 +1,5 @@
-import Category from "discourse/models/category";
 import { withPluginApi } from "discourse/lib/plugin-api";
+import Category from "discourse/models/category";
 import I18n from "I18n";
 
 function initialize(api) {
@@ -18,7 +18,9 @@ function initialize(api) {
       return `/c/${Category.slugFor(category)}/categories`;
     },
     forceActive(category, _args, router) {
-      return router.currentURL === `/c/${Category.slugFor(category)}/categories`;
+      return (
+        router.currentURL === `/c/${Category.slugFor(category)}/categories`
+      );
     },
   });
 }

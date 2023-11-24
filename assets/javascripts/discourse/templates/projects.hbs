@@ -1,12 +1,16 @@
 <div class="projects">
   <div class="projects-header">
     <SearchTextField
-      @placeholder={{i18n "js.projects.all"}}
+      @placeholder={{i18n "js.projects.filter"}}
       @value={{this.searchTerm}}
     />
     {{#if this.showMatches}}
       <div class="projects-header-matches">
-        {{i18n "js.projects.matches" count=this.filteredProjects.length}}
+        {{#if this.searchTerm}}
+          {{i18n "js.projects.matches" count=this.filteredProjects.length}}
+        {{else}}
+          {{i18n "js.projects.total" count=this.filteredProjects.length}}
+        {{/if}}
       </div>
     {{/if}}
     <div class="projects-header-show-subcategories">
