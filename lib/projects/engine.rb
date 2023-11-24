@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module ::Projects
+module ::DiscourseProjects
   # This engine regroups all extensions made to support
   # the concept of "project" within Discourse.
   class Engine < ::Rails::Engine
