@@ -1,6 +1,12 @@
 name: Discourse Projects Plugin - CI
 
 on:
+  workflow_call:
+    inputs:
+      name:
+        default: 'projects'
+        required: false
+        type: string
   push:
     branches: [ main ]
 
