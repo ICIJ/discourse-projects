@@ -12,7 +12,7 @@ enabled_site_setting :projects_enabled
 register_asset 'stylesheets/common/index.scss'
 
 module ::Projects
-  PLUGIN_NAME = 'projects'
+  PLUGIN_NAME = 'discourse-projects'
 end
 
 require_relative 'lib/projects/engine'
