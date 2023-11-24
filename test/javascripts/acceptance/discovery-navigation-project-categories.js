@@ -1,5 +1,4 @@
-import { getOwner } from "@ember/application";
-import { click, visit } from "@ember/test-helpers";
+import { visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import categoryFixtures from "discourse/tests/fixtures/category-fixtures";
 import discoveryFixtures from "discourse/tests/fixtures/discovery-fixtures";
