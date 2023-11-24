@@ -9,7 +9,7 @@ export default class SubcategoriesRoute extends DiscourseRoute {
   @service store;
 
   async model(params) {
-    const category = Category.findById(parseInt(params.parent, 10));
+    const category = Category.findSingleBySlug(params.slug);
     const { categories: subcategories } = await CategoryList.listForParent(
       this.store,
       category
