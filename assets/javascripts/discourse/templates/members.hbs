@@ -1,0 +1,121 @@
+<div class="members">
+  <section class="navigation-container">
+    <DNavigation
+      @category={{this.category}}
+      @showCategoryAdmin={{false}}
+      @createTopic={{false}}
+      @noSubcategories={{false}}
+      @toggleInfo={{false}}
+      @editCategory={{this.editCategory}}
+      @createCategory={{this.createCategory}}
+      @hasDraft={{false}}
+      @skipCategoriesNavItem={{true}}
+    />
+  </section>
+
+  <div class="members-header">
+    <SearchTextField
+      @class="members-header-search"
+      @placeholder={{i18n "js.members.filter"}}
+      @value={{this.searchTerm}}
+    />
+
+    {{#if this.showMatches}}
+      <div class="members-header-matches">
+        {{#if this.searchTerm}}
+          {{i18n "js.members.matches" count=this.filteredMembersCount}}
+        {{else}}
+          {{i18n "js.members.total" count=this.filteredMembersCount}}
+        {{/if}}
+      </div>
+    {{/if}}
+  </div>
+
+  {{#if this.hasFilteredMembers}}
+    <ResponsiveTable @className="members-list group-members">
+      <:header>
+        <TableHeaderToggle
+          @field="username"
+          @labelKey="username"
+          @class="directory-table__column-header--username username"
+          @order={{this.order}}
+          @asc={{this.asc}}
+          @automatic={{true}}
+        />
+
+        <TableHeaderToggle
+          @class="directory-table__column-header--added"
+          @order={{this.order}}
+          @asc={{this.asc}}
+          @field="added_at"
+          @labelKey="groups.member_added"
+          @automatic={{true}}
+        />
+
+        <TableHeaderToggle
+          @class="directory-table__column-header--last-posted"
+          @order={{this.order}}
+          @asc={{this.asc}}
+          @field="last_posted_at"
+          @labelKey="last_post"
+          @automatic={{true}}
+        />
+
+        <TableHeaderToggle
+          @class="directory-table__column-header--last-seen"
+          @order={{this.order}}
+          @asc={{this.asc}}
+          @field="last_seen_at"
+          @labelKey="last_seen"
+          @automatic={{true}}
+        />
+      </:header>
+      <:body>
+        {{#each this.filteredMembers as |m|}}
+          <div class="directory-table__row">
+            <div
+              class="directory-table__cell member-list__cell--username group-member"
+              colspan="2"
+            >
+              <UserInfo
+                @user={{m}}
+                @showStatus={{true}}
+                @showStatusTooltip={{true}}
+              />
+            </div>
+            <div class="directory-table__cell member-list__cell--added">
+              <span class="directory-table__label">
+                <span>{{i18n "groups.member_added"}}</span>
+              </span>
+              <span class="directory-table__value">
+                {{bound-date m.added_at}}
+              </span>
+            </div>
+            <div class="directory-table__cell member-list__cell--last-posted">
+              {{#if m.last_posted_at}}
+                <span class="directory-table__label">
+                  <span>{{i18n "last_post"}}</span>
+                </span>
+              {{/if}}
+              <span class="directory-table__value">
+                {{bound-date m.last_posted_at}}
+              </span>
+            </div>
+            <div class="directory-table__cell member-list__cell--last-seen">
+              {{#if m.last_seen_at}}
+                <span class="directory-table__label">
+                  <span>{{i18n "last_seen"}}</span>
+                </span>
+              {{/if}}
+              <span class="directory-table__value">
+                {{bound-date m.last_seen_at}}
+              </span>
+            </div>
+          </div>
+        {{/each}}
+      </:body>
+    </ResponsiveTable>
+  {{else}}
+    <EmptyState class="members-empty" @title={{i18n "js.members.empty"}} />
+  {{/if}}
+</div>
