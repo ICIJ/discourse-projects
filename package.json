@@ -5,8 +5,8 @@
   "author": "ICIJ",
   "license": "MIT",
   "scripts": {
-    "lint": "yarn eslint --ext .js,.js.es6 --no-error-on-unmatched-pattern testjavascripts assets/javascripts",
-    "lint:fix": "yarn eslint --fix --ext .js,.js.es6 --no-error-on-unmatched-pattern testjavascripts assets/javascripts",
+    "lint": "yarn eslint --ext .js,.js.es6 --no-error-on-unmatched-pattern test/javascripts assets/javascripts",
+    "lint:fix": "yarn eslint --fix --ext .js,.js.es6 --no-error-on-unmatched-pattern test/javascripts assets/javascripts",
     "ember": "yarn ember-template-lint --no-error-on-unmatched-pattern assets/javascripts",
     "prettier:assets": "yarn prettier --list-different 'assets/**/*.{scss,js,es6,hbs}'",
     "prettier:assets:fix": "yarn prettier --write 'assets/**/*.{scss,js,es6,hbs}'",
