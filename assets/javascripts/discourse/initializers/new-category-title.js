@@ -18,7 +18,7 @@ function initialize(api) {
         const localeMessage = categoryName
           ? "js.category.edit"
           : "js.category.create";
-        return I18n.t(localeMessage, { categoryName, });
+        return I18n.t(localeMessage, { categoryName });
       }
       if (this.project.id === this.parentCategory.id) {
         return this.titleWithProject;
