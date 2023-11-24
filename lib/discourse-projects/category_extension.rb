@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Projects
+module DiscourseProjects
   # Extends the Category model to support the "project"
   # concept within discourse.
   module CategoryExtension

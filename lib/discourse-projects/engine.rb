@@ -5,7 +5,7 @@ module ::DiscourseProjects
   # the concept of "project" within Discourse.
   class Engine < ::Rails::Engine
     engine_name PLUGIN_NAME
-    isolate_namespace Projects
+    isolate_namespace DiscourseProjects
     config.autoload_paths << File.join(config.root, 'lib')
   end
 end
