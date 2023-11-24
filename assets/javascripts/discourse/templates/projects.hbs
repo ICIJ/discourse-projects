@@ -9,6 +9,13 @@
         {{i18n "js.projects.matches" count=this.filteredProjects.length}}
       </div>
     {{/if}}
+    <div class="projects-header-show-subcategories">
+      <DToggleSwitch
+        @label={{"projects.showSubcategories"}}
+        @state={{this.showSubcategories}}
+        {{on "click" this.toggleSubcategories}}
+      />
+    </div>
     <div class="projects-header-sort-by">
       {{i18n "js.projects.sortBy"}}&nbsp;
       <ComboBox
@@ -20,10 +27,9 @@
     </div>
   </div>
   {{#if this.hasProjects}}
-    <CategoriesOnly
-      class="projects-list"
-      @categories={{this.filteredProjects}}
-    />
+    <div class="projects-list" style={{htmlSafe this.projectsListStyle}}>
+      <CategoriesOnly @categories={{this.filteredProjects}} />
+    </div>
   {{else}}
     <EmptyState class="projects-empty" @title={{i18n "js.projects.empty"}} />
   {{/if}}

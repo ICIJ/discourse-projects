@@ -14,12 +14,35 @@
       font-size: var(--font-down-1);
     }
 
-    &-sort-by {
+    &-show-subcategories {
+      display: flex;
+      align-items: center;
       margin-left: auto;
+
+      &:after {
+        margin: 0 0.5rem;
+        color: var(--primary-med-or-secondary-high);
+        content: "|";
+      }
+    }
+
+    &-sort-by {
+      display: flex;
+      align-items: center;
     }
   }
 
   &-empty .empty-state {
     padding: 0.5em 0;
+  }
+
+  &-list thead tr th.category {
+    &:after {
+      content: var(--projects-list-th, "Project");
+    }
+
+    span {
+      display: none;
+    }
   }
 }

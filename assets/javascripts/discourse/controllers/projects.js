@@ -1,21 +1,34 @@
+import { tracked } from "@glimmer/tracking";
 import Controller from "@ember/controller";
-import { computed } from "@ember/object";
+import { action, computed, set } from "@ember/object";
 import { filterBy, sort } from "@ember/object/computed";
 import I18n from "I18n";
 
 export default class ProjectsController extends Controller {
-  searchTerm = "";
-  sortBy = "name:asc";
+  @tracked searchTerm = "";
+  @tracked sortBy = "name:asc";
+  @tracked showSubcategories = true;
 
   @filterBy("categories", "is_project") projects;
   @sort("projects", "sortByFields") sortedProjects;
 
-  @computed("model")
+  @computed("model", "showSubcategories")
   get categories() {
-    return this.model.categories ?? [];
+    return (this.model.categories ?? []).map((category) => {
+      if (!this.showSubcategories) {
+        // We store a copy of the subcategories to be able restore them
+        set(category, "subcategories_copy", category.subcategories);
+        set(category, "subcategories", []);
+        // A copy of the subcategories exists
+      } else if (category.subcategories_copy) {
+        // We restore the subcategories from the copy
+        set(category, "subcategories", category.subcategories_copy);
+      }
+      return category;
+    });
   }
 
-  @computed("sortBy", "searchTerm")
+  @computed("sortBy", "searchTerm", "showSubcategories")
   get filteredProjects() {
     const searchTerm = this.searchTerm.toLowerCase();
     return this.sortedProjects.filter(({ name, description, slug }) => {
@@ -55,5 +68,15 @@ export default class ProjectsController extends Controller {
         name: I18n.t("projects.sort_by.post_count_reverse"),
       },
     ];
+  }
+
+  get projectsListStyle() {
+    const th = I18n.t("projects.list.th");
+    return `--projects-list-th: '${th}'`;
+  }
+
+  @action
+  toggleSubcategories() {
+    this.showSubcategories = !this.showSubcategories;
   }
 }

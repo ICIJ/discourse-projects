@@ -11,6 +11,7 @@ en:
       all: All projects
       empty: No projects found.
       sortBy: Sort by
+      showSubcategories: Show subcategories
       matches: 
         one: 1 match
         other: '%{count} matches'
@@ -19,6 +20,8 @@ en:
         name_reverse: Name (reverse)
         post_count: Number of posts
         post_count_reverse: Number of posts (reverse)
+      list:
+        th: Project
     project_dropdown:
       none: none
       select: Select a project
