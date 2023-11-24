@@ -20,7 +20,7 @@ acceptance("Subcategories", function (needs) {
   needs.settings({ projects_enabled: true });
 
   test("Subcategories page exists", async function (assert) {
-    await visit("/categories/13");
+    await visit("/c/faq/categories");
     assert.ok(exists(".subcategories"), "it shows a subcategories page");
   });
 });
