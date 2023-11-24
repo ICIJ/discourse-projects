@@ -36,6 +36,8 @@ en:
         post_count_reverse: Number of posts (reverse)
       list:
         th: Project
+    category:
+      edit: 'Edit: %{categoryName}'
     project_dropdown:
       none: none
       select: Select a project
@@ -48,6 +50,6 @@ en:
       create: New %{categoryName} Category (%{projectName})
       create_in_project: New %{projectName} Category 
       button:
-        label: New Project Category
+        label: New Category
       errors:
         parent: You must select a parent category.
