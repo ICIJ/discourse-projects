@@ -24,12 +24,12 @@ acceptance("Search avdanced options with a project filter", function (needs) {
 
   test("Show a project filter with the faq project selected", async function (assert) {
     await visit("/search?q=%23faq");
-    assert.dom("#search-in-project .category-name").includesText('faq');
+    assert.dom("#search-in-project .category-name").includesText("faq");
   });
 
   test("Show an empty project filter with the dev category selected", async function (assert) {
     await visit("/search?q=%23dev");
     assert.dom("#search-in-project .category-name").doesNotExist();
-    assert.dom("#search-in-category .category-name").includesText('dev');
+    assert.dom("#search-in-category .category-name").includesText("dev");
   });
 });
