@@ -1,0 +1,12 @@
+<div class="control-group advanced-search-project">
+  <label class="control-label">{{i18n
+      "search.advanced.in_project.label"
+    }}</label>
+  <div class="controls">
+    <SearchAdvancedProjectChooser
+      @id="search-in-project"
+      @value={{@outletArgs.searchedTerms.project.id}}
+      @onChangeSearchedTermField={{@outletArgs.onChangeSearchedTermField}}
+    />
+  </div>
+</div>
