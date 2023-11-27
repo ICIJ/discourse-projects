@@ -15,6 +15,12 @@ acceptance("Search avdanced options with a project filter", function (needs) {
     // the filter by project works as expected.
     return { ...cat, is_project: ["blog", "faq"].includes(cat.slug) };
   });
+  const blogCategory = categories.find(c => c.name === "blog");
+  const supportCategory = categories.find(c => c.name === "support");
+  // Make the support category a children of the blog category
+  supportCategory.project = blogCategory;
+  supportCategory.parent_category_id = blogCategory.id;
+
   needs.site(cloneJSON({ categories }));
   needs.settings({ projects_enabled: true });
 
@@ -54,6 +60,65 @@ acceptance("Search avdanced options with a project filter", function (needs) {
       query(".search-query").value,
       "none #dev",
       'has updated search term to "none #dev"'
+    );
+  });
+
+
+  test("Show a filter with the dev category selected then back to blog", async function (assert) {
+    await visit("/search");
+    await click(".advanced-filters > summary");
+    await fillIn(".search-query", "none");
+    const categoryChooser = selectKit("#search-in-category");
+    const projectChooser = selectKit("#search-in-project");
+
+    await categoryChooser.expand();
+    await categoryChooser.fillInFilter("dev");
+    await categoryChooser.selectRowByValue(7);
+
+    assert.strictEqual(
+      query(".search-query").value,
+      "none #dev",
+      'has updated search term to "none #dev"'
+    );
+
+    await projectChooser.expand();
+    await projectChooser.fillInFilter("blog");
+    await projectChooser.selectRowByValue(13);
+
+    assert.strictEqual(
+      query(".search-query").value,
+      "none #blog",
+      'has updated search term to "none #blog"'
+    );
+  });
+
+  test("Show a filter with the support category selected", async function (assert) {
+    await visit("/search");
+    await click(".advanced-filters > summary");
+    await fillIn(".search-query", "none");
+    const categoryChooser = selectKit("#search-in-category");
+    const projectChooser = selectKit("#search-in-project");
+
+    await categoryChooser.expand();
+    await categoryChooser.fillInFilter("support");
+    await categoryChooser.selectRowByValue(6);
+
+    assert.strictEqual(
+      query(".search-query").value,
+      "none #blog:support",
+      'has updated search term to "none #blog:support"'
+    );
+
+    assert.strictEqual(
+      projectChooser.header().value(),
+      "13",
+      'has updated project filter to 13'
+    );
+
+    assert.strictEqual(
+      categoryChooser.header().value(),
+      "6",
+      'has updated category filter to 6'
     );
   });
 });
