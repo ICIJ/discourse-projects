@@ -5,6 +5,9 @@ plugins:
   projects_private:
     default: true
     client: false
+  projects_banner:
+    default: true
+    client: true
   projects_category_requires_parent:
     default: true
     client: true
