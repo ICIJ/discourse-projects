@@ -25,6 +25,10 @@
         color: var(--primary-med-or-secondary-high);
         content: "|";
       }
+
+      .d-toggle-switch--label {
+        margin-bottom: 0;
+      }
     }
 
     &-sort-by {
