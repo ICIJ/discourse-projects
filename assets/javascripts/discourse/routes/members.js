@@ -10,7 +10,7 @@ export default class MembersRoute extends DiscourseRoute {
   @service router;
   @service store;
 
-  async model({ slug }) {
+  async model({ category_slug: slug }) {
     // Load the category by its slug.
     const category = Category.findSingleBySlug(slug);
     // Reload it from the backend to get its groups permissions
