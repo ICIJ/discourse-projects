@@ -1,7 +1,7 @@
-import { click, visit } from "@ember/test-helpers";
+import { click, fillIn, visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import discoveryFixtures from "discourse/tests/fixtures/discovery-fixtures";
-import { acceptance } from "discourse/tests/helpers/qunit-helpers";
+import { acceptance, query } from "discourse/tests/helpers/qunit-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 import { cloneJSON } from "discourse-common/lib/object";
 
@@ -23,17 +23,37 @@ acceptance("Search avdanced options with a project filter", function (needs) {
     assert.dom("#search-in-project").exists("it shows the filter");
   });
 
-  test("Show a project filter with the faq project selected", async function (assert) {
-    await visit("/search?q=%23faq");
+  test("Show a filter with the faq project selected", async function (assert) {
+    await visit("/search");
     await click(".advanced-filters > summary");
+    await fillIn(".search-query", "none");
     const projectChooser = selectKit("#search-in-project");
-    assert.strictEqual(projectChooser.header().value(), "4");
+
+    await projectChooser.expand();
+    await projectChooser.fillInFilter("faq");
+    await projectChooser.selectRowByValue(4);
+
+    assert.strictEqual(
+      query(".search-query").value,
+      "none #faq",
+      'has updated search term to "none #faq"'
+    );
   });
 
-  test("Show an empty project filter with the dev category selected", async function (assert) {
-    await visit("/search?q=%23dev");
+  test("Show a filter with the dev category selected", async function (assert) {
+    await visit("/search");
     await click(".advanced-filters > summary");
-    const projectChooser = selectKit("#search-in-project");
-    assert.strictEqual(projectChooser.header().value(), null);
+    await fillIn(".search-query", "none");
+    const categoryChooser = selectKit("#search-in-category");
+
+    await categoryChooser.expand();
+    await categoryChooser.fillInFilter("dev");
+    await categoryChooser.selectRowByValue(7);
+
+    assert.strictEqual(
+      query(".search-query").value,
+      "none #dev",
+      'has updated search term to "none #dev"'
+    );
   });
 });
