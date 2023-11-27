@@ -1,4 +1,11 @@
 .project-banner {
+  @media screen and (min-width: 925px) {
+    position: sticky;
+    left: 0;
+    top: var(--header-offset);
+    z-index: 900;
+  }
+
   &__wrapper {
     display: block;
     padding: 10px 0px;
