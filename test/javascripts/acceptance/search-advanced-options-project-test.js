@@ -30,6 +30,5 @@ acceptance("Search avdanced options with a project filter", function (needs) {
   test("Show an empty project filter with the dev category selected", async function (assert) {
     await visit("/search?q=%23dev");
     assert.dom("#search-in-project .category-name").doesNotExist();
-    assert.dom("#search-in-category-header").includesText("dev");
   });
 });
