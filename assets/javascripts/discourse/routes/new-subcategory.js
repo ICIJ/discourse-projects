@@ -1,4 +1,5 @@
 import NewCategoryRoute from "discourse/routes/new-category";
+import matches from "../helpers/matches";
 
 export default class NewSubcategoryRoute extends NewCategoryRoute {
   async model(params) {
@@ -11,8 +12,8 @@ export default class NewSubcategoryRoute extends NewCategoryRoute {
     return [];
   }
 
-  categoryExists(categoryId) {
-    return this.site.categories.some(({ id }) => id === categoryId);
+  categoryExists(id) {
+    return this.site.categories.some(matches({ id }));
   }
 
   getParentCategoryId({ category_id: id }) {
