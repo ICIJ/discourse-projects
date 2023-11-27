@@ -1,7 +1,8 @@
-import { visit } from "@ember/test-helpers";
+import { click, visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import discoveryFixtures from "discourse/tests/fixtures/discovery-fixtures";
 import { acceptance } from "discourse/tests/helpers/qunit-helpers";
+import selectKit from "discourse/tests/helpers/select-kit-helper";
 import { cloneJSON } from "discourse-common/lib/object";
 
 acceptance("Search avdanced options with a project filter", function (needs) {
@@ -24,11 +25,15 @@ acceptance("Search avdanced options with a project filter", function (needs) {
 
   test("Show a project filter with the faq project selected", async function (assert) {
     await visit("/search?q=%23faq");
-    assert.dom("#search-in-project .category-name").includesText("faq");
+    await click(".advanced-filters > summary");
+    const projectChooser = selectKit("#search-in-project");
+    assert.strictEqual(projectChooser.header().value(), "4");
   });
 
   test("Show an empty project filter with the dev category selected", async function (assert) {
     await visit("/search?q=%23dev");
-    assert.dom("#search-in-project .category-name").doesNotExist();
+    await click(".advanced-filters > summary");
+    const projectChooser = selectKit("#search-in-project");
+    assert.strictEqual(projectChooser.header().value(), null);
   });
 });
