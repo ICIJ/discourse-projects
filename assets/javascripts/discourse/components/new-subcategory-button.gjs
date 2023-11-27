@@ -15,11 +15,11 @@ export default class NewSubcategoryButton extends Component {
   @action
   async click() {
     if (this.currentCategory) {
-      return DiscourseURL.routeTo(this.href)
+      return DiscourseURL.routeTo(this.href);
     }
-    const { categoryId = null } = await this.modal.show(ParentCategoryChooser)
+    const { categoryId = null } = await this.modal.show(ParentCategoryChooser);
     if (categoryId) {
-      return DiscourseURL.routeTo(this.getHref(categoryId))
+      return DiscourseURL.routeTo(this.getHref(categoryId));
     }
   }
 
@@ -30,33 +30,33 @@ export default class NewSubcategoryButton extends Component {
   }
 
   getHref(parentCategoryId) {
-    return `/new-subcategory/${parentCategoryId}`
+    return `/new-subcategory/${parentCategoryId}`;
   }
 
   get currentCategory() {
-    return this.args.category ?? null
+    return this.args.category ?? null;
   }
 
   get currentCategoryLevel() {
-    return this.currentCategory?.level
+    return this.currentCategory?.level;
   }
 
   get href() {
     if (this.currentCategory) {
-      return this.getHref(this.currentCategory.id)
+      return this.getHref(this.currentCategory.id);
     }
   }
 
   get label() {
-    return I18n.t('js.subcategory.button.label')
+    return I18n.t('js.subcategory.button.label');
   }
 
   get canCreateSubcategory() {
-    return !this.currentCategory || this.maxCategoryNesting > this.currentCategoryLevel + 1
+    return !this.currentCategory || this.maxCategoryNesting > this.currentCategoryLevel + 1;
   }
 
   get maxCategoryNesting() {
-    return this.site.siteSettings.max_category_nesting 
+    return this.site.siteSettings.max_category_nesting;
   }
 
   <template>
