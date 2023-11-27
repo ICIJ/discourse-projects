@@ -1,5 +1,6 @@
 import Category from "discourse/models/category";
 import CategoryChooserComponent from "select-kit/components/category-chooser";
+import iteratee from "../helpers/iteratee";
 
 export default CategoryChooserComponent.extend({
   pluginApiIdentifiers: ["project-chooser"],
@@ -11,7 +12,8 @@ export default CategoryChooserComponent.extend({
     caretDownIcon: "caret-down",
     caretUpIcon: "caret-up",
   },
+
   get content() {
-    return Category.list().filter((c) => c.is_project);
+    return Category.list().filter(iteratee("is_project"));
   },
 });

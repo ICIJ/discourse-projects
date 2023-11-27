@@ -53,3 +53,9 @@ en:
         label: New Category
       errors:
         parent: You must select a parent category.
+    search:
+      advanced:
+        in_project:
+          label: Project
+          all: All projects
+
