@@ -15,8 +15,8 @@ export default class NewSubcategoryRoute extends NewCategoryRoute {
     return this.site.categories.some(({ id }) => id === categoryId);
   }
 
-  getParentCategoryId(params) {
-    const parentCategoryId = parseInt(params.parent, 10);
+  getParentCategoryId({ category_id: id }) {
+    const parentCategoryId = parseInt(id, 10);
     return this.categoryExists(parentCategoryId) ? parentCategoryId : null;
   }
 }
