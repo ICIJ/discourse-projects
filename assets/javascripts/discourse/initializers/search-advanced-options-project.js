@@ -2,6 +2,7 @@ import SearchAdvancedOptions from "discourse/components/search-advanced-options"
 import { withPluginApi } from "discourse/lib/plugin-api";
 import Category from "discourse/models/category";
 import SearchAdvancedCategoryChooser from "select-kit/components/search-advanced-category-chooser";
+import matches from "../helpers/matches";
 
 // For the sake of simplificy, project prefix can only be "#" and not "category:"
 // like the category filter.
@@ -58,7 +59,7 @@ function initialize() {
 
   SearchAdvancedCategoryChooser.reopen({
     get content() {
-      return Category.list().filter((c) => !c.is_project);
+      return Category.list().filter(matches({ is_project: false }));
     },
   });
 }
