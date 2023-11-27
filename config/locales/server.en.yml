@@ -1,5 +1,6 @@
 en:
   site_settings:
     projects_enabled: Activate projects
+    projects_banner: Activate a banner on project's pages
     projects_private: Categories must have read restriction to be considered as a project
     projects_category_requires_parent: New category requires a parent
