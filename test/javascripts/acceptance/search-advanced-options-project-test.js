@@ -15,8 +15,8 @@ acceptance("Search avdanced options with a project filter", function (needs) {
     // the filter by project works as expected.
     return { ...cat, is_project: ["blog", "faq"].includes(cat.slug) };
   });
-  const blogCategory = categories.find(c => c.name === "blog");
-  const supportCategory = categories.find(c => c.name === "support");
+  const blogCategory = categories.find((c) => c.name === "blog");
+  const supportCategory = categories.find((c) => c.name === "support");
   // Make the support category a children of the blog category
   supportCategory.project = blogCategory;
   supportCategory.parent_category_id = blogCategory.id;
@@ -62,7 +62,6 @@ acceptance("Search avdanced options with a project filter", function (needs) {
       'has updated search term to "none #dev"'
     );
   });
-
 
   test("Show a filter with the dev category selected then back to blog", async function (assert) {
     await visit("/search");
@@ -112,13 +111,13 @@ acceptance("Search avdanced options with a project filter", function (needs) {
     assert.strictEqual(
       projectChooser.header().value(),
       "13",
-      'has updated project filter to 13'
+      "has updated project filter to 13"
     );
 
     assert.strictEqual(
       categoryChooser.header().value(),
       "6",
-      'has updated category filter to 6'
+      "has updated category filter to 6"
     );
   });
 });
