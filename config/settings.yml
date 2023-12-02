@@ -8,6 +8,23 @@ plugins:
   projects_banner:
     default: true
     client: true
+  projects_banner_sticky:
+    default: true
+    client: true
+  projects_banner_min_level:
+    default: 0
+    min: 0
+    max: 4
+    client: true
+  projects_banner_max_level:
+    default: 4
+    min: 0
+    max: 4
+    client: true
+  projects_banner_routes:
+    default: "discovery|subcategories|members|topic!"
+    type: list
+    client: true
   projects_category_requires_parent:
     default: true
     client: true

@@ -11,6 +11,7 @@ import ParentCategoryChooser from './modal/parent-category-chooser'
 export default class NewSubcategoryButton extends Component {
   @service modal;
   @service site;
+  @service siteSettings;
   
   @action
   async click() {
@@ -56,7 +57,7 @@ export default class NewSubcategoryButton extends Component {
   }
 
   get maxCategoryNesting() {
-    return this.site.siteSettings.max_category_nesting;
+    return this.siteSettings.max_category_nesting;
   }
 
   <template>

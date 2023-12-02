@@ -2,5 +2,9 @@ en:
   site_settings:
     projects_enabled: Activate projects
     projects_banner: Activate a banner on project's pages
+    projects_banner_sticky: Make the project banner sticky
+    projects_banner_min_level: Set a minimum level on nested route (such as discovery)
+    projects_banner_max_level: Set a maximum level on nested route (such as discovery)
+    projects_banner_routes: On which routes the project banner is shown. If you suffix the route name with a "!" it will alsways show the banner, regardless of the nesting level of the route.
     projects_private: Categories must have read restriction to be considered as a project
     projects_category_requires_parent: New category requires a parent
