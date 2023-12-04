@@ -15,12 +15,9 @@
     background: var(--primary-low);
     text-align: center;
     z-index: 10;
-  }
 
-  a.project-banner__wrapper__link {
-    text-decoration: underline;
-    text-decoration-color: var(--tertiary);
-    font-weight: bold;
-    color: var(--primary);
+    &__link {
+      font-size: 1em;
+    }
   }
 }

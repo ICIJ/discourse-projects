@@ -12,7 +12,7 @@ export default class NewSubcategoryButton extends Component {
   @service modal;
   @service site;
   @service siteSettings;
-  
+
   @action
   async click() {
     if (this.currentCategory) {

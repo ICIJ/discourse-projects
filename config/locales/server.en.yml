@@ -1,6 +1,7 @@
 en:
   site_settings:
     projects_enabled: Activate projects
+    projects_addon: Activate a project addon next to the category on the topic list
     projects_banner: Activate a banner on project's pages
     projects_banner_sticky: Make the project banner sticky
     projects_banner_min_level: Set a minimum level on nested route (such as discovery)

@@ -1,11 +1,14 @@
 import { getOwner } from "@ember/application";
+import { htmlSafe } from "@ember/template";
 import { inject as service } from "@ember/service";
 import Component from "@glimmer/component";
 import I18n from "I18n";
 
+import { projectLinkHTML } from "../helpers/project-link";
 import ary from "../helpers/ary";
 import inRange from "../helpers/in-range";
 import trim from "../helpers/trim";
+
 
 
 export default class ProjectBanner extends Component {
@@ -28,15 +31,6 @@ export default class ProjectBanner extends Component {
     return I18n.t('js.project_banner.label');
   }
 
-  get href() {
-    const { id, slug } = this.project.current ?? {};
-    return `/c/${slug}/${id}`;
-  }
-
-  get name() {
-    return this.project?.current?.name;
-  }
-
   get displayProjectBanner() {
     return this.hasProject && this.hasValidRoute;
   }
@@ -46,16 +40,16 @@ export default class ProjectBanner extends Component {
   }
 
   get hasValidRoute() {
-    return !!this.activeRoutes.length && (this.withoutLevel || this.hasValidLevel);
+    return !!this.activeRoutes.length && (this.noLevelValidation || this.hasValidLevel);
   }
 
   get hasValidLevel() {
     const min = this.siteSettings.projects_banner_min_level ?? 0;
-    const max = this.siteSettings.projects_banner_min_level ?? 4;
+    const max = this.siteSettings.projects_banner_max_level ?? 4;
     return inRange(this.project?.category?.level, min, max);
   }
 
-  get withoutLevel() {
+  get noLevelValidation() {
     return this.activeRoutes.some(name => name.endsWith('!'));
   }
 
@@ -69,10 +63,15 @@ export default class ProjectBanner extends Component {
     });
   }
 
+  get safeProjectLink() {
+    const options = { extraClasses: "project-banner__wrapper__link" };
+    return htmlSafe(projectLinkHTML(this.project.current, options));
+  }
+
   <template>
     {{#if this.displayProjectBanner}}
       <div class="project-banner__wrapper {{this.safeClass}}">
-        {{this.label}} <a href={{this.href}} class="project-banner__wrapper__link">{{this.name}}</a>
+        {{this.label}} {{this.safeProjectLink}}
       </div>
     {{/if}}
   </template>
