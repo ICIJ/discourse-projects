@@ -1,7 +1,9 @@
 import { computed } from "@ember/object";
+import { htmlSafe } from "@ember/template";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import Category from "discourse/models/category";
 import I18n from "I18n";
+import { projectLinkHTML } from "../helpers/project-link";
 
 function initialize(api) {
   api.modifyClass("controller:edit-category-tabs", {
@@ -28,17 +30,20 @@ function initialize(api) {
 
     @computed("model.parent_category_id")
     get titleWithCategory() {
-      const {
-        name: categoryName,
-        project: { name: projectName },
-      } = this.parentCategory;
-      return I18n.t("js.subcategory.create", { categoryName, projectName });
+      const { name: categoryName } = this.parentCategory;
+      const projectLink = projectLinkHTML(this.project);
+      return htmlSafe(
+        I18n.t("js.subcategory.create", { categoryName, projectLink })
+      );
     },
 
     @computed("model.parent_category_id")
     get titleWithProject() {
       const { name: projectName } = this.project;
-      return I18n.t("js.subcategory.create_in_project", { projectName });
+      const projectLink = projectLinkHTML(this.project);
+      return htmlSafe(
+        I18n.t("js.subcategory.create_in_project", { projectName, projectLink })
+      );
     },
 
     @computed("model.parent_category_id")
