@@ -20,7 +20,7 @@ acceptance("Project addon", function (needs) {
   needs.user({ can_create_category: true });
   needs.settings({
     projects_enabled: true,
-    projects_addon: true
+    projects_addon: true,
   });
 
   needs.pretender((server, helper) => {
