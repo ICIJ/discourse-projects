@@ -5,6 +5,9 @@ plugins:
   projects_private:
     default: true
     client: false
+  projects_addon:
+    default: true
+    client: true
   projects_banner:
     default: true
     client: true

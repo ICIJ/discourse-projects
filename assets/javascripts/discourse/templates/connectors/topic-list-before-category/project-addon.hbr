@@ -1,0 +1,7 @@
+{{#if context.siteSettings.projects_addon}}
+  {{#if context.topic.category.project}}
+    {{project-link context.topic.category.project}}
+  {{else if context.topic.category.is_project}}
+    {{project-link context.topic.category extraClasses="project-link--hide-sibling"}}
+  {{/if}}
+{{/if}}
