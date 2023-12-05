@@ -14,9 +14,9 @@
     "prettier:test:fix": "yarn prettier --write 'test/**/*.{js,es6}'"
   },
   "devDependencies": {
-    "@discourse/lint-configs": "^1.0.0",
-    "ember-template-lint": "^5.11.2",
-    "eslint": "^8.52.0",
+    "@discourse/lint-configs": "^1.2.0",
+    "ember-template-lint": "^5.13.0",
+    "eslint": "^8.54.0",
     "prettier": "^2.8.8"
   }
 }
