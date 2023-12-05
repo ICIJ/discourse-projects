@@ -1,5 +1,6 @@
 .category-breadcrumb {
-  li.project-dropdown + li.bread-crumbs-left-outlet + li {
+  li.project-dropdown + li.bread-crumbs-left-outlet + li,
+  li.bread-crumbs-left-outlet.project-dropdown + li {
     display: none;
   }
 
