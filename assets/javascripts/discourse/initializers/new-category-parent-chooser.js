@@ -10,8 +10,7 @@ function initialize() {
     },
     get isNewSubcategory() {
       return (
-        getOwner(this).lookup("router:main")?.currentRoute?.name ===
-        "newSubcategory"
+        getOwner(this).lookup("router")?.currentRoute?.name === "newSubcategory"
       );
     },
   });
