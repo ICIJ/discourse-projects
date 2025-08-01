@@ -1,12 +1,11 @@
-import { action } from "@ember/object";
-import { inject as service } from "@ember/service";
-import { on } from "@ember/modifier";
 import Component from "@glimmer/component";
+import { on } from "@ember/modifier";
+import { action } from "@ember/object";
+import { service } from "@ember/service";
+import icon from "discourse/helpers/d-icon";
 import DiscourseURL from "discourse/lib/url";
-import icon from "discourse-common/helpers/d-icon";
-import I18n from "I18n";
-
-import ParentCategoryChooser from './modal/parent-category-chooser'
+import { i18n } from "discourse-i18n";
+import ParentCategoryChooser from "./modal/parent-category-chooser";
 
 export default class NewSubcategoryButton extends Component {
   @service modal;
@@ -49,11 +48,14 @@ export default class NewSubcategoryButton extends Component {
   }
 
   get label() {
-    return I18n.t('js.subcategory.button.label');
+    return i18n("js.subcategory.button.label");
   }
 
   get canCreateSubcategory() {
-    return !this.currentCategory || this.maxCategoryNesting > this.currentCategoryLevel + 1;
+    return (
+      !this.currentCategory ||
+      this.maxCategoryNesting > this.currentCategoryLevel + 1
+    );
   }
 
   get maxCategoryNesting() {
@@ -61,9 +63,13 @@ export default class NewSubcategoryButton extends Component {
   }
 
   <template>
-    {{#if this.canCreateSubcategory }}
-      <button class="btn btn-default new-subcategory-button" {{on "click" this.click}} type="button">
-        {{~icon 'plus'}}
+    {{#if this.canCreateSubcategory}}
+      <button
+        class="btn btn-default new-subcategory-button"
+        {{on "click" this.click}}
+        type="button"
+      >
+        {{~icon "plus"}}
         {{this.label}}
       </button>
     {{/if}}

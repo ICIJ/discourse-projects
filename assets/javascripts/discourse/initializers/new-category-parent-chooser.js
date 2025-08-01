@@ -9,9 +9,8 @@ function initialize() {
       return !this.isNewSubcategory && not("category.isUncategorizedCategory");
     },
     get isNewSubcategory() {
-      return (
-        getOwner(this).lookup("router")?.currentRoute?.name === "newSubcategory"
-      );
+      const router = getOwner(this).lookup("service:router")
+      return router?.currentRoute?.name === "newSubcategory"
     },
   });
 }

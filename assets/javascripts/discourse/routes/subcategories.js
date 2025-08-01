@@ -1,8 +1,8 @@
-import { inject as service } from "@ember/service";
+import { service } from "@ember/service";
 import Category from "discourse/models/category";
 import CategoryList from "discourse/models/category-list";
 import DiscourseRoute from "discourse/routes/discourse";
-import I18n from "I18n";
+import { i18n } from "discourse-i18n";
 
 export default class SubcategoriesRoute extends DiscourseRoute {
   @service router;
@@ -32,11 +32,11 @@ export default class SubcategoriesRoute extends DiscourseRoute {
       // We use a different title
       // that display the project name
       const { name: projectName } = category.project;
-      return I18n.t("subcategories.title_in_project", {
+      return i18n("subcategories.title_in_project", {
         categoryName,
         projectName,
       });
     }
-    return I18n.t("subcategories.title", { categoryName });
+    return i18n("subcategories.title", { categoryName });
   }
 }

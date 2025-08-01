@@ -1,5 +1,5 @@
 import { getOwner } from "@ember/application";
-import Service, { inject as service } from "@ember/service";
+import Service, { service } from "@ember/service";
 import { disableImplicitInjections } from "discourse/lib/implicit-injections";
 import Category from "discourse/models/category";
 import isDefined from "../helpers/is-defined";

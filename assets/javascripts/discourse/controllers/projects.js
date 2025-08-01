@@ -2,7 +2,7 @@ import { tracked } from "@glimmer/tracking";
 import Controller from "@ember/controller";
 import { action, computed, set } from "@ember/object";
 import { filterBy, sort } from "@ember/object/computed";
-import I18n from "I18n";
+import { i18n } from "discourse-i18n";
 
 export default class ProjectsController extends Controller {
   @tracked searchTerm = "";
@@ -60,18 +60,18 @@ export default class ProjectsController extends Controller {
 
   get sortByOptions() {
     return [
-      { value: "name:asc", name: I18n.t("projects.sort_by.name") },
-      { value: "name:desc", name: I18n.t("projects.sort_by.name_reverse") },
-      { value: "post_count:asc", name: I18n.t("projects.sort_by.post_count") },
+      { value: "name:asc", name: i18n("projects.sort_by.name") },
+      { value: "name:desc", name: i18n("projects.sort_by.name_reverse") },
+      { value: "post_count:asc", name: i18n("projects.sort_by.post_count") },
       {
         value: "post_count:desc",
-        name: I18n.t("projects.sort_by.post_count_reverse"),
+        name: i18n("projects.sort_by.post_count_reverse"),
       },
     ];
   }
 
   get projectsListStyle() {
-    const th = I18n.t("projects.list.th");
+    const th = i18n("projects.list.th");
     return `--projects-list-th: '${th}'`;
   }
 

@@ -1,11 +1,11 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
 import Category from "discourse/models/category";
-import I18n from "I18n";
+import { i18n } from "discourse-i18n";
 
 function initialize(api) {
   api.addNavigationBarItem({
     name: "link-to-members",
-    displayName: I18n.t("top_menu.members"),
+    displayName: i18n("top_menu.members"),
     customFilter(category) {
       return category && category.is_project;
     },
