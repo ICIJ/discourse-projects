@@ -1,5 +1,4 @@
 import { categoryLinkHTML } from "discourse/helpers/category-link";
-import { registerUnbound } from "discourse-common/lib/helpers";
 
 export function projectLinkHTML(project, options = {}) {
   const { extraClasses = "" } = options;
@@ -10,4 +9,4 @@ export function projectLinkHTML(project, options = {}) {
   });
 }
 
-registerUnbound("project-link", projectLinkHTML);
+export default projectLinkHTML;

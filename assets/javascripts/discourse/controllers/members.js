@@ -2,13 +2,14 @@ import { tracked } from "@glimmer/tracking";
 import Controller from "@ember/controller";
 import { action, computed } from "@ember/object";
 import { sort } from "@ember/object/computed";
-import { inject as service } from "@ember/service";
+import { service } from "@ember/service";
 import DiscourseURL from "discourse/lib/url";
 import Category from "discourse/models/category";
 import NavItem from "discourse/models/nav-item";
 
 export default class MembersController extends Controller {
   @service router;
+
   @tracked searchTerm = "";
   @tracked order = "username";
   @tracked asc = true;

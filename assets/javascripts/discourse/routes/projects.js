@@ -1,8 +1,8 @@
-import { inject as service } from "@ember/service";
+import { service } from "@ember/service";
 import { defaultHomepage } from "discourse/lib/utilities";
 import CategoryList from "discourse/models/category-list";
 import DiscourseRoute from "discourse/routes/discourse";
-import I18n from "I18n";
+import { i18n } from "discourse-i18n";
 
 export default class ProjectsRoute extends DiscourseRoute {
   @service store;
@@ -15,6 +15,6 @@ export default class ProjectsRoute extends DiscourseRoute {
     if (defaultHomepage() === "projects") {
       return;
     }
-    return I18n.t("projects.title");
+    return i18n("projects.title");
   }
 }

@@ -1,19 +1,16 @@
-import { getOwner } from "@ember/application";
-import { htmlSafe } from "@ember/template";
-import { inject as service } from "@ember/service";
 import Component from "@glimmer/component";
-import I18n from "I18n";
-
-import { projectLinkHTML } from "../helpers/project-link";
+import { service } from "@ember/service";
+import { htmlSafe } from "@ember/template";
+import { i18n } from "discourse-i18n";
 import ary from "../helpers/ary";
 import inRange from "../helpers/in-range";
+import { projectLinkHTML } from "../helpers/project-link";
 import trim from "../helpers/trim";
-
-
 
 export default class ProjectBanner extends Component {
   @service project;
   @service siteSettings;
+  @service router;
 
   routeNames(route) {
     if (route) {
@@ -23,12 +20,11 @@ export default class ProjectBanner extends Component {
   }
 
   get currentRoute() {
-    const { currentRoute } = getOwner(this).lookup("router:main");
-    return this.routeNames(currentRoute);
+    return this.routeNames(this.router.currentRoute);
   }
 
   get label() {
-    return I18n.t('js.project_banner.label');
+    return i18n("js.project_banner.label");
   }
 
   get displayProjectBanner() {
@@ -40,7 +36,10 @@ export default class ProjectBanner extends Component {
   }
 
   get hasValidRoute() {
-    return !!this.activeRoutes.length && (this.noLevelValidation || this.hasValidLevel);
+    return (
+      !!this.activeRoutes.length &&
+      (this.noLevelValidation || this.hasValidLevel)
+    );
   }
 
   get hasValidLevel() {
@@ -50,16 +49,16 @@ export default class ProjectBanner extends Component {
   }
 
   get noLevelValidation() {
-    return this.activeRoutes.some(name => name.endsWith('!'));
+    return this.activeRoutes.some((name) => name.endsWith("!"));
   }
 
   get routes() {
-    return this.siteSettings.projects_banner_routes.split('|').map(ary(trim));
+    return this.siteSettings.projects_banner_routes.split("|").map(ary(trim));
   }
 
   get activeRoutes() {
     return this.routes.filter((name) => {
-      return this.currentRoute.includes(trim(name, '!'));
+      return this.currentRoute.includes(trim(name, "!"));
     });
   }
 
@@ -71,7 +70,8 @@ export default class ProjectBanner extends Component {
   <template>
     {{#if this.displayProjectBanner}}
       <div class="project-banner__wrapper {{this.safeClass}}">
-        {{this.label}} {{this.safeProjectLink}}
+        {{this.label}}
+        {{this.safeProjectLink}}
       </div>
     {{/if}}
   </template>

@@ -1,5 +1,6 @@
 import { fillIn, visit } from "@ember/test-helpers";
 import { test } from "qunit";
+import { cloneJSON } from "discourse/lib/object";
 import discoveryFixtures from "discourse/tests/fixtures/discovery-fixtures";
 import {
   acceptance,
@@ -7,7 +8,6 @@ import {
   exists,
   queryAll,
 } from "discourse/tests/helpers/qunit-helpers";
-import { cloneJSON } from "discourse-common/lib/object";
 
 acceptance("Projects", function (needs) {
   // Use Discourse's ficture for categories

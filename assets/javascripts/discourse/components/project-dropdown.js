@@ -1,6 +1,6 @@
 import { computed } from "@ember/object";
 import Category from "discourse/models/category";
-import I18n from "I18n";
+import { i18n } from "discourse-i18n";
 import CategoryDrop from "select-kit/components/category-drop";
 
 const NO_PROJECTS = "no-projects";
@@ -35,7 +35,7 @@ export default CategoryDrop.extend({
         return this.noCategoriesLabel;
       }
       if (this.selectKit.options.subCategory) {
-        return I18n.t("categories.all_subcategories", {
+        return i18n("categories.all_subcategories", {
           categoryName: this.parentCategoryName,
         });
       }
@@ -44,7 +44,7 @@ export default CategoryDrop.extend({
   ),
 
   get noneLabel() {
-    return I18n.t(
+    return i18n(
       this.hasSelectedCategory
         ? "js.project_dropdown.none"
         : "js.project_dropdown.select"

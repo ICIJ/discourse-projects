@@ -1,8 +1,8 @@
-import { inject as service } from "@ember/service";
+import { service } from "@ember/service";
 import Category from "discourse/models/category";
 import Group from "discourse/models/group";
 import DiscourseRoute from "discourse/routes/discourse";
-import I18n from "I18n";
+import { i18n } from "discourse-i18n";
 import iteratee from "../helpers/iteratee";
 import uniqueBy from "../helpers/unique-by";
 
@@ -38,6 +38,6 @@ export default class MembersRoute extends DiscourseRoute {
   titleToken() {
     const { category } = this.currentModel;
     const { name: projectName } = category;
-    return I18n.t("members.title", { projectName });
+    return i18n("members.title", { projectName });
   }
 }
