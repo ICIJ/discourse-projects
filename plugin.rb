@@ -39,6 +39,6 @@ after_initialize do
   end
 
   add_to_serializer(:basic_category, :project) do
-    object.project
+    object.project.as_json(only: [:id, :name, :slug, :color, :text_color])
   end
 end
