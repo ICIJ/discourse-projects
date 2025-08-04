@@ -3,7 +3,8 @@
   position: relative;
   font-weight: bold;
 
-  &--hide-sibling ~ * {
+  &--hide-sibling ~ *, 
+  *:has(&.project-link--hide-sibling) ~ .badge-category__wrapper{
     display: none;
   }
 
