@@ -28,7 +28,7 @@ export default RouteTemplate(
       <div class="members-header">
         <SearchTextField
           @class="members-header-search"
-          @placeholder={{i18n "js.members.filter"}}
+          @aria-label={{i18n "js.members.filter"}}
           @value={{@controller.searchTerm}}
         />
 

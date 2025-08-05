@@ -15,23 +15,8 @@
       font-size: var(--font-down-1);
     }
 
-    &-show-subcategories {
-      display: flex;
-      align-items: center;
-      margin-left: auto;
-
-      &:after {
-        margin: 0 0.5rem;
-        color: var(--primary-med-or-secondary-high);
-        content: "|";
-      }
-
-      .d-toggle-switch--label {
-        margin-bottom: 0;
-      }
-    }
-
     &-sort-by {
+      margin-left: auto;
       display: flex;
       align-items: center;
     }
