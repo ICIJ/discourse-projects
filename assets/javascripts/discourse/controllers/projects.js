@@ -1,19 +1,14 @@
 import { tracked } from "@glimmer/tracking";
 import Controller from "@ember/controller";
 import { computed } from "@ember/object";
-import { filterBy, sort } from "@ember/object/computed";
+import { sort } from "@ember/object/computed";
 import { i18n } from "discourse-i18n";
 
 export default class ProjectsController extends Controller {
   @tracked searchTerm = "";
   @tracked sortBy = "name:asc";
 
-  @filterBy("categories", "is_project") projects;
   @sort("projects", "sortByFields") sortedProjects;
-
-  get categories() {
-    return (this.model.categories ?? []);
-  }
 
   @computed("sortBy", "searchTerm")
   get filteredProjects() {
