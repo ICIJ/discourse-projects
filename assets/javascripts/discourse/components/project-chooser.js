@@ -1,19 +1,21 @@
-import Category from "discourse/models/category";
+import { computed } from "@ember/object";
+import { service } from "@ember/service";
+import { classNames } from "@ember-decorators/component";
 import CategoryChooserComponent from "select-kit/components/category-chooser";
-import iteratee from "../helpers/iteratee";
+import { pluginApiIdentifiers, selectKitOptions } from "select-kit/components/select-kit";
 
-export default CategoryChooserComponent.extend({
-  pluginApiIdentifiers: ["project-chooser"],
-  classNames: ["project-chooser"],
-  services: ["site"],
+@pluginApiIdentifiers(["project-chooser"])
+@classNames("project-chooser")
+@selectKitOptions({
+  displayCategoryDescription: true,
+  caretDownIcon: "caret-down",
+  caretUpIcon: "caret-up",
+})
+export default class ProjectChooser extends CategoryChooserComponent {
+  @service project;
 
-  selectKitOptions: {
-    displayCategoryDescription: true,
-    caretDownIcon: "caret-down",
-    caretUpIcon: "caret-up",
-  },
-
+  @computed("project.all")
   get content() {
-    return Category.list().filter(iteratee("is_project"));
-  },
-});
+    return this.project.all;
+  }
+}
