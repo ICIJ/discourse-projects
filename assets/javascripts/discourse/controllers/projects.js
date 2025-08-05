@@ -1,34 +1,21 @@
 import { tracked } from "@glimmer/tracking";
 import Controller from "@ember/controller";
-import { action, computed, set } from "@ember/object";
+import { computed } from "@ember/object";
 import { filterBy, sort } from "@ember/object/computed";
 import { i18n } from "discourse-i18n";
 
 export default class ProjectsController extends Controller {
   @tracked searchTerm = "";
   @tracked sortBy = "name:asc";
-  @tracked showSubcategories = false;
 
   @filterBy("categories", "is_project") projects;
   @sort("projects", "sortByFields") sortedProjects;
 
-  @computed("model", "showSubcategories")
   get categories() {
-    return (this.model.categories ?? []).map((category) => {
-      if (!this.showSubcategories) {
-        // We store a copy of the subcategories to be able restore them
-        set(category, "subcategories_copy", category.subcategories);
-        set(category, "subcategories", []);
-        // A copy of the subcategories exists
-      } else if (category.subcategories_copy) {
-        // We restore the subcategories from the copy
-        set(category, "subcategories", category.subcategories_copy);
-      }
-      return category;
-    });
+    return (this.model.categories ?? []);
   }
 
-  @computed("sortBy", "searchTerm", "showSubcategories")
+  @computed("sortBy", "searchTerm")
   get filteredProjects() {
     const searchTerm = this.searchTerm.toLowerCase();
     return this.sortedProjects.filter(({ name, description, slug }) => {
@@ -75,8 +62,4 @@ export default class ProjectsController extends Controller {
     return `--projects-list-th: '${th}'`;
   }
 
-  @action
-  toggleSubcategories() {
-    this.showSubcategories = !this.showSubcategories;
-  }
 }
