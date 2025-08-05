@@ -12,11 +12,11 @@ export default RouteTemplate(
       <div class="projects-header">
         <SearchTextField
           @aria-label={{i18n "js.projects.filter"}}
-          @value={{this.searchTerm}}
+          @value={{@controller.searchTerm}}
         />
-        {{#if this.showMatches}}
+        {{#if @controller.showMatches}}
           <div class="projects-header-matches">
-            {{#if this.searchTerm}}
+            {{#if @controller.searchTerm}}
               {{i18n "js.projects.matches" count=@controller.filteredProjects.length}}
             {{else}}
               {{i18n "js.projects.total" count=@controller.filteredProjects.length}}
