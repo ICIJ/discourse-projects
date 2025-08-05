@@ -39,8 +39,9 @@ en:
     category:
       edit: 'Edit: %{categoryName}'
     project_dropdown:
-      none: none
-      select: Select a project
+      label: Projects
+      placeholder: 'Search...'
+      select: Select a projects
     parent_category_chooser:
       title: Select a project
       continue: Continue

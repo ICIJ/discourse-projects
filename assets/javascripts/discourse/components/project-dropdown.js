@@ -1,53 +1,29 @@
 import { computed } from "@ember/object";
+import { classNames } from "@ember-decorators/component";
 import Category from "discourse/models/category";
 import { i18n } from "discourse-i18n";
 import CategoryDrop from "select-kit/components/category-drop";
+import { pluginApiIdentifiers, selectKitOptions } from "select-kit/components/select-kit";
+import ProjectDropdownSelectedName from "./project-dropdown/project-dropdown-selected-name";
 
-const NO_PROJECTS = "no-projects";
+@pluginApiIdentifiers(["project-dropdown"])
+@classNames("category-drop")
+@selectKitOptions({
+  clearable: true,
+  selectedNameComponent: ProjectDropdownSelectedName,
+  filterPlaceholder: "project_dropdown.placeholder"
+})
+export default class ProjectDropdown extends CategoryDrop {
+  noCategoriesLabel = i18n("js.project_dropdown.select");
 
-export default CategoryDrop.extend({
-  pluginApiIdentifiers: ["project-dropdown"],
-  classNames: "project-dropdown",
+  @computed
+  get content() {
+    return Category.list().filter((c) => c.is_project);
+  }
 
-  content: computed(function () {
-    const none = {
-      id: NO_PROJECTS,
-      name: this.noneLabel,
-      title: this.noneLabel,
-      value: NO_PROJECTS,
-      label: this.noneLabel,
-    };
-    const projects = Category.list().filter((c) => c.is_project);
-    return this.hasSelectedCategory ? [none, ...projects] : projects;
-  }),
-  selectKitOptions: {
-    none: "project_dropdown.none",
-  },
-  get hasSelectedCategory() {
-    return this.category !== null && typeof this.category !== "undefined";
-  },
+  @computed("parentCategoryName", "selectKit.options.subCategory")
+  get allCategoriesLabel() {
+    return "toto"
+  }
+}
 
-  allCategoriesLabel: computed(
-    "parentCategoryName",
-    "selectKit.options.subCategory",
-    function () {
-      if (this.editingCategory) {
-        return this.noCategoriesLabel;
-      }
-      if (this.selectKit.options.subCategory) {
-        return i18n("categories.all_subcategories", {
-          categoryName: this.parentCategoryName,
-        });
-      }
-      return this.noneLabel;
-    }
-  ),
-
-  get noneLabel() {
-    return i18n(
-      this.hasSelectedCategory
-        ? "js.project_dropdown.none"
-        : "js.project_dropdown.select"
-    );
-  },
-});
