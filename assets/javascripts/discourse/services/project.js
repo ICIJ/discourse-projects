@@ -1,8 +1,10 @@
+import { tracked } from '@glimmer/tracking';
 import { getOwner } from "@ember/application";
 import Service, { service } from "@ember/service";
 import { disableImplicitInjections } from "discourse/lib/implicit-injections";
 import Category from "discourse/models/category";
 import isDefined from "../helpers/is-defined";
+import Project from "../models/Project";
 
 /**
  * The ProjectService tries to guess the current project
@@ -11,6 +13,21 @@ import isDefined from "../helpers/is-defined";
 @disableImplicitInjections
 export default class ProjectService extends Service {
   @service router;
+  @service store;
+
+  @tracked all = [];
+
+  async init() {
+    super.init(...arguments);
+    // Load all projects from the server once
+    // and store them in the `all` property.
+    this.all.push(...await Project.findAll());
+  }
+
+  findById(id) {
+    return this.all.find((project) => project.id === id);
+  }
+
 
   /**
    * Gets the current category.
