@@ -20,10 +20,5 @@ export default class ProjectDropdown extends CategoryDrop {
   get content() {
     return Category.list().filter((c) => c.is_project);
   }
-
-  @computed("parentCategoryName", "selectKit.options.subCategory")
-  get allCategoriesLabel() {
-    return "toto"
-  }
 }
 
