@@ -8,11 +8,7 @@ function initialize(api) {
     displayName: i18n("top_menu.subcategories"),
     before: "posted",
     customFilter(category) {
-      return (
-        category !== null &&
-        typeof category !== "undefined" &&
-        category.has_children
-      );
+      return !!category;
     },
     customHref(category) {
       return `/c/${Category.slugFor(category)}/categories`;

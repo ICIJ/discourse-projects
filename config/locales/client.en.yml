@@ -23,6 +23,8 @@ en:
       empty: No projects found.
       sortBy: Sort by
       showSubcategories: Show subcategories
+      subcategories: 
+        empty: This category has no subcategories
       matches: 
         one: 1 projects match
         other: '%{count} projects match'
