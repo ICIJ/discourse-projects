@@ -20,7 +20,7 @@ export default class ProjectsController extends Controller {
       }
       // We search in the name, the description and the slug
       return [name, description, slug].some((value) =>
-        value.toLowerCase().includes(searchTerm)
+        value?.toLowerCase().includes(searchTerm)
       );
     });
   }
