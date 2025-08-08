@@ -1,6 +1,12 @@
 import { htmlSafe } from "@ember/template";
 import RouteTemplate from "ember-route-template";
 import CategoriesOnly from "discourse/components/categories-only";
+import ParentCategoryRow from "discourse/components/parent-category-row";
+import SubCategoryRow from "discourse/components/sub-category-row";
+import borderColor from "discourse/helpers/border-color";
+import categoryColorVariable from "discourse/helpers/category-color-variable";
+import SubCategoryItem from "discourse/components/sub-category-item";
+import CategoryTitleLink from "discourse/components/category-title-link";
 import EmptyState from "discourse/components/empty-state";
 import SearchTextField from "discourse/components/search-text-field";
 import { i18n } from "discourse-i18n";
@@ -35,7 +41,43 @@ export default RouteTemplate(
       </div>
       {{#if @controller.hasProjects}}
         <div class="projects-list" style={{htmlSafe @controller.projectsListStyle}}>
-          <CategoriesOnly @categories={{@controller.filteredProjects}} />
+        <table class="category-list">
+                    <thead>
+                        <tr>
+                          <th class="category"><span
+                              role="heading"
+                              aria-level="2"
+                              id="categories-only-category"
+                            >{{i18n "categories.category"}}</span></th>
+                          <th class="topics">{{i18n "categories.topics"}}</th>
+                        </tr>
+                    </thead>
+                 <tbody class="">
+                {{#each @controller.filteredProjects as |c|}}
+                        <tr
+                          data-category-id={{c.id}}
+                          data-notification-level={{c.notificationLevelString}}
+                          class="{{if c.description_excerpt 'has-description' 'no-description' }}
+                            {{ 'parent-category-row-class' }}
+                            {{if c.uploaded_logo.url 'has-logo' 'no-logo'}}"
+                        >
+                            <td
+                                class="category"
+                                style={{categoryColorVariable c.color}}
+                              >
+                                <CategoryTitleLink @category={{c}}/>
+                                 <div class="subcategories">
+                                {{#each c.subcategories as |subcategory|}}
+                                    <SubCategoryItem
+                                    @category={{subcategory}}
+                                    />
+                                {{/each}}
+                                </div>
+                            </td>
+                        </tr>
+            {{/each}}
+            </tbody>
+            </table>
         </div>
       {{else}}
         <EmptyState class="projects-empty" @title={{i18n "js.projects.empty"}} />
