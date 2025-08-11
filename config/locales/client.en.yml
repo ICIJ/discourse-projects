@@ -22,6 +22,7 @@ en:
       filter: type to filter...
       empty: No projects found.
       sortBy: Sort by
+      showDescription: Show description
       showSubcategories: Show subcategories
       subcategories: 
         empty: This category has no subcategories
@@ -34,8 +35,8 @@ en:
       sort_by:
         name: Name
         name_reverse: Name (reverse)
-        post_count: Number of posts
-        post_count_reverse: Number of posts (reverse)
+        post_count: Number of topics
+        post_count_reverse: Number of topics (reverse)
       list:
         th: Project
     category:
