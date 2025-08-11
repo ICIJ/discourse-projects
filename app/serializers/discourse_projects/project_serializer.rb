@@ -1,3 +1,3 @@
-class DiscourseProjects::ProjectSerializer < BasicCategorySerializer
+class DiscourseProjects::ProjectSerializer < CategoryDetailedSerializer
   
 end
