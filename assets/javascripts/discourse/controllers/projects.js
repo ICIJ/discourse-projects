@@ -4,9 +4,23 @@ import { computed } from "@ember/object";
 import { sort } from "@ember/object/computed";
 import { i18n } from "discourse-i18n";
 
+import { action } from "@ember/object";
+
 export default class ProjectsController extends Controller {
   @tracked searchTerm = "";
   @tracked sortBy = "name:asc";
+
+  @tracked withDescription = true;
+  @tracked withSubcategories = true;
+
+  @action
+  toggleWithSubcategories() {
+    this.withSubcategories = !this.withSubcategories;
+  }
+  @action
+  toggleWithDescription() {
+    this.withDescription = !this.withDescription;
+  }
 
   @sort("projects", "sortByFields") sortedProjects;
 
