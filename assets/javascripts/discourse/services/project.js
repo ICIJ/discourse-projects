@@ -62,7 +62,7 @@ export default class ProjectService extends Service {
   /**
    * Gets the current project.
    *
-   * This function looks up the current category or its related prohect
+   * This function looks up the current category or its related project
    *
    * @param {Object} container - The application's container instance.
    * @returns {Category|null} - The found prohect or null if not found.
