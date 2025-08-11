@@ -1,6 +1,8 @@
+import { on } from "@ember/modifier";
 import { htmlSafe } from "@ember/template";
 import RouteTemplate from "ember-route-template";
 import CategoryTitleLink from "discourse/components/category-title-link";
+import DToggleSwitch from "discourse/components/d-toggle-switch";
 import EmptyState from "discourse/components/empty-state";
 import SearchTextField from "discourse/components/search-text-field";
 import SubCategoryItem from "discourse/components/sub-category-item";
@@ -10,36 +12,52 @@ import { i18n } from "discourse-i18n";
 import ComboBox from "select-kit/components/combo-box";
 
 export default RouteTemplate(
+
+
   <template>
     <div class="projects">
       <div class="projects-header">
-        <SearchTextField
-          @aria-label={{i18n "js.projects.filter"}}
-          @value={{@controller.searchTerm}}
-        />
-        {{#if @controller.showMatches}}
-          <div class="projects-header-matches">
-            {{#if @controller.searchTerm}}
-              {{i18n
-                "js.projects.matches"
-                count=@controller.filteredProjects.length
-              }}
-            {{else}}
-              {{i18n
-                "js.projects.total"
-                count=@controller.filteredProjects.length
-              }}
-            {{/if}}
-          </div>
-        {{/if}}
-        <div class="projects-header-sort-by">
-          {{i18n "js.projects.sortBy"}}&nbsp;
-          <ComboBox
-            @value={{@controller.sortBy}}
-            @content={{@controller.sortByOptions}}
-            @nameProperty="name"
-            @valueProperty="value"
+        <div class="projects-header-start">
+          <SearchTextField
+            @aria-label={{i18n "js.projects.filter"}}
+            @value={{@controller.searchTerm}}
           />
+          {{#if @controller.showMatches}}
+            <div class="projects-header-matches">
+              {{#if @controller.searchTerm}}
+                {{i18n
+                  "js.projects.matches"
+                  count=@controller.filteredProjects.length
+                }}
+              {{else}}
+                {{i18n
+                  "js.projects.total"
+                  count=@controller.filteredProjects.length
+                }}
+              {{/if}}
+            </div>
+          {{/if}}
+        </div>
+        <div class="projects-header-end">
+            <DToggleSwitch
+                @label="js.projects.showSubcategories"
+                @state={{@controller.withSubcategories}}
+                {{on "click" @controller.toggleWithSubcategories}}
+              />
+            <DToggleSwitch
+              @label="js.projects.showDescription"
+              @state={{@controller.withDescription}}
+              {{on "click" @controller.toggleWithDescription}}
+            />
+          <div class="projects-header-sort-by">
+            {{i18n "js.projects.sortBy"}}&nbsp;
+            <ComboBox
+              @value={{@controller.sortBy}}
+              @content={{@controller.sortByOptions}}
+              @nameProperty="name"
+              @valueProperty="value"
+            />
+          </div>
         </div>
       </div>
       {{#if @controller.hasProjects}}
@@ -74,17 +92,22 @@ export default RouteTemplate(
                   <td class="category" style={{categoryColorVariable c.color}}>
                     <CategoryTitleLink @category={{c}} />
 
-                    {{#if c.description_excerpt}}
-                      <div class="category-description">
-                        {{dirSpan c.description_excerpt htmlSafe="true"}}
-                      </div>
+                    {{#if @controller.withDescription}}
+                      {{#if c.description_excerpt }}
+                        <div class="category-description">
+                          {{dirSpan c.description_excerpt htmlSafe="true"}}
+                        </div>
+                      {{/if}}
                     {{/if}}
+                    {{#if @controller.withSubcategories}}
                     <div class="subcategories">
                       {{#each c.subcategories as |subcategory|}}
                         <SubCategoryItem @category={{subcategory}} />
                       {{/each}}
                     </div>
+                    {{/if}}
                   </td>
+                  <td class="topics">{{htmlSafe c.topics_all_time}}</td>
                 </tr>
               {{/each}}
             </tbody>
