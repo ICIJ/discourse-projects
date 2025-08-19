@@ -1,10 +1,8 @@
 import { tracked } from "@glimmer/tracking";
 import Controller from "@ember/controller";
-import { computed } from "@ember/object";
+import { action,computed  } from "@ember/object";
 import { sort } from "@ember/object/computed";
 import { i18n } from "discourse-i18n";
-
-import { action } from "@ember/object";
 
 export default class ProjectsController extends Controller {
   @tracked searchTerm = "";
@@ -13,16 +11,19 @@ export default class ProjectsController extends Controller {
   @tracked withDescription = true;
   @tracked withSubcategories = true;
 
-  @action
+  @sort("projects", "sortByFields") sortedProjects;
+
+@action
   toggleWithSubcategories() {
     this.withSubcategories = !this.withSubcategories;
   }
+
   @action
   toggleWithDescription() {
     this.withDescription = !this.withDescription;
   }
 
-  @sort("projects", "sortByFields") sortedProjects;
+
 
   @computed("sortBy", "searchTerm")
   get filteredProjects() {
