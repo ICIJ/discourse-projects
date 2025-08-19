@@ -84,7 +84,7 @@ export default RouteTemplate(
                       'has-description'
                       'no-description'
                     }}
-                    {{'parent-category-row-class'}}
+                    parent-category-row-class
                     {{if c.uploaded_logo.url 'has-logo' 'no-logo'}}"
                 >
                   <td class="category" style={{categoryColorVariable c.color}}>
