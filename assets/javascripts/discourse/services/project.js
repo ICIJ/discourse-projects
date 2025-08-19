@@ -1,4 +1,4 @@
-import { tracked } from '@glimmer/tracking';
+import { tracked } from "@glimmer/tracking";
 import { getOwner } from "@ember/application";
 import Service, { service } from "@ember/service";
 import { disableImplicitInjections } from "discourse/lib/implicit-injections";
@@ -21,13 +21,12 @@ export default class ProjectService extends Service {
     super.init(...arguments);
     // Load all projects from the server once
     // and store them in the `all` property.
-    this.all.push(...await Project.findAll());
+    this.all.push(...(await Project.findAll()));
   }
 
   findById(id) {
     return this.all.find((project) => project.id === id);
   }
-
 
   /**
    * Gets the current category.

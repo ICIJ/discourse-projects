@@ -1,6 +1,6 @@
 import { tracked } from "@glimmer/tracking";
 import Controller from "@ember/controller";
-import { action,computed  } from "@ember/object";
+import { action, computed } from "@ember/object";
 import { sort } from "@ember/object/computed";
 import { i18n } from "discourse-i18n";
 
@@ -13,7 +13,7 @@ export default class ProjectsController extends Controller {
 
   @sort("projects", "sortByFields") sortedProjects;
 
-@action
+  @action
   toggleWithSubcategories() {
     this.withSubcategories = !this.withSubcategories;
   }
@@ -22,8 +22,6 @@ export default class ProjectsController extends Controller {
   toggleWithDescription() {
     this.withDescription = !this.withDescription;
   }
-
-
 
   @computed("sortBy", "searchTerm")
   get filteredProjects() {
@@ -71,5 +69,4 @@ export default class ProjectsController extends Controller {
     const th = i18n("projects.list.th");
     return `--projects-list-th: '${th}'`;
   }
-
 }

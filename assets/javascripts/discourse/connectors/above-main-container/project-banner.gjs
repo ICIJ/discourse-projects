@@ -13,13 +13,9 @@ export default class ProjectBannerConnector extends Component {
 
   position(_args, component) {
     const { siteSettings } = component.site;
-    const position = siteSettings.projects_banner_sticky
-      ? "sticky"
-      : "static";
+    const position = siteSettings.projects_banner_sticky ? "sticky" : "static";
     return position;
   }
 
-  <template>
-    <ProjectBanner />
-  </template>
+  <template><ProjectBanner /></template>
 }
