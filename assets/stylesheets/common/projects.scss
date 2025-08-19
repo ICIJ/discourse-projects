@@ -8,11 +8,13 @@
     body & > * {
       margin-bottom: 0;
     }
+
     &-start, &-end{
       display: flex;
       gap:0.75rem;
       align-items: center;
     }
+
     &-matches {
       color: var(--primary-medium);
       font-size: var(--font-down-1);
@@ -24,6 +26,7 @@
       flex-wrap: nowrap;
       align-items: center;
     }
+
     &-sort-by {
       display: flex;
       align-items: center;
@@ -35,7 +38,7 @@
   }
 
   &-list thead tr th.category {
-    &:after {
+    &::after {
       content: var(--projects-list-th, "Project");
     }
 

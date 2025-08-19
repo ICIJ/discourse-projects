@@ -1,6 +1,6 @@
 .project-banner {
   &--sticky {
-    @media screen and (min-width: 925px) {
+    @media screen and (width >= 925px) {
       position: sticky;
       left: 0;
       top: var(--header-offset);
@@ -10,7 +10,7 @@
 
   &__wrapper {
     display: block;
-    padding: 10px 0px;
+    padding: 10px 0;
     margin: 0 0 0.75em;
     background: var(--primary-low);
     text-align: center;

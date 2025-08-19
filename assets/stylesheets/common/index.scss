@@ -5,7 +5,7 @@
 @import "project-link";
 @import "projects";
 
-@media screen and (min-width: 925px) {
+@media screen and (width >= 925px) {
   // Since the project banner is sticky, we need a
   // little more space before the topic navigation.
   .container.posts .topic-navigation {
