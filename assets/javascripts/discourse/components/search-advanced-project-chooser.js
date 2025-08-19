@@ -1,7 +1,10 @@
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import { classNames } from "@ember-decorators/component";
-import { pluginApiIdentifiers, selectKitOptions } from "select-kit/components/select-kit";
+import {
+  pluginApiIdentifiers,
+  selectKitOptions,
+} from "select-kit/components/select-kit";
 import ProjectChooserComponent from "./project-chooser";
 
 @pluginApiIdentifiers(["search-advanced-project-chooser"])

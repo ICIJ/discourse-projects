@@ -7,18 +7,24 @@ export default class ProjectAddonConnector extends Component {
 
   shouldRender() {
     const { topic } = this.outletArgs;
-    return !!this.siteSettings.projects_addon && (topic.category.project || topic.category.is_project);
+    return (
+      !!this.siteSettings.projects_addon &&
+      (topic.category.project || topic.category.is_project)
+    );
   }
 
   get classNames() {
-    return this.shouldRender() ? [] : ['hidden'];
+    return this.shouldRender() ? [] : ["hidden"];
   }
 
   <template>
     {{#if @outletArgs.topic.category.project}}
       {{projectLinkHTML @outletArgs.topic.category.project}}
     {{else if @outletArgs.topic.category.is_project}}
-      {{projectLinkHTML @outletArgs.topic.category extraClasses="project-link--hide-sibling"}}
+      {{projectLinkHTML
+        @outletArgs.topic.category
+        extraClasses="project-link--hide-sibling"
+      }}
     {{/if}}
   </template>
 }

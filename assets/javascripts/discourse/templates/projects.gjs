@@ -12,8 +12,6 @@ import { i18n } from "discourse-i18n";
 import ComboBox from "select-kit/components/combo-box";
 
 export default RouteTemplate(
-
-
   <template>
     <div class="projects">
       <div class="projects-header">
@@ -39,16 +37,16 @@ export default RouteTemplate(
           {{/if}}
         </div>
         <div class="projects-header-end">
-            <DToggleSwitch
-                @label="js.projects.showSubcategories"
-                @state={{@controller.withSubcategories}}
-                {{on "click" @controller.toggleWithSubcategories}}
-              />
-            <DToggleSwitch
-              @label="js.projects.showDescription"
-              @state={{@controller.withDescription}}
-              {{on "click" @controller.toggleWithDescription}}
-            />
+          <DToggleSwitch
+            @label="js.projects.showSubcategories"
+            @state={{@controller.withSubcategories}}
+            {{on "click" @controller.toggleWithSubcategories}}
+          />
+          <DToggleSwitch
+            @label="js.projects.showDescription"
+            @state={{@controller.withDescription}}
+            {{on "click" @controller.toggleWithDescription}}
+          />
           <div class="projects-header-sort-by">
             {{i18n "js.projects.sortBy"}}&nbsp;
             <ComboBox
@@ -93,18 +91,18 @@ export default RouteTemplate(
                     <CategoryTitleLink @category={{c}} />
 
                     {{#if @controller.withDescription}}
-                      {{#if c.description_excerpt }}
+                      {{#if c.description_excerpt}}
                         <div class="category-description">
                           {{dirSpan c.description_excerpt htmlSafe="true"}}
                         </div>
                       {{/if}}
                     {{/if}}
                     {{#if @controller.withSubcategories}}
-                    <div class="subcategories">
-                      {{#each c.subcategories as |subcategory|}}
-                        <SubCategoryItem @category={{subcategory}} />
-                      {{/each}}
-                    </div>
+                      <div class="subcategories">
+                        {{#each c.subcategories as |subcategory|}}
+                          <SubCategoryItem @category={{subcategory}} />
+                        {{/each}}
+                      </div>
                     {{/if}}
                   </td>
                   <td class="topics">{{htmlSafe c.topics_all_time}}</td>
