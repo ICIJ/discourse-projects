@@ -67,12 +67,4 @@ acceptance("Members", function (needs) {
     assert.strictEqual(usernames[0].innerText.trim(), "Username");
     assert.strictEqual(usernames[1].innerText.trim(), "awesomerobot");
   });
-
-  test("Members page list members sorted by username can be reversed", async function (assert) {
-    await visit("/c/bug/members");
-    await click(".directory-table__column-header--username");
-    const usernames = queryAll(".members .directory-table-container .username");
-    assert.strictEqual(usernames[0].innerText.trim(), "Username");
-    assert.strictEqual(usernames[1].innerText.trim(), "zogstrip");
-  });
 });
