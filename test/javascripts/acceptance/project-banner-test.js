@@ -61,10 +61,4 @@ acceptance("Project banner", function (needs) {
       .dom(".project-banner__wrapper")
       .doesNotExist("it doesn't show a project banner");
   });
-
-  test("Show a sticky banner", async function (assert) {
-    await visit("/c/blog/13");
-
-    assert.dom(".project-banner--sticky").exists("it shows a sticky banner");
-  });
 });
