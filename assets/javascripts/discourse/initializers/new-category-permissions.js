@@ -1,6 +1,6 @@
 import { computed } from "@ember/object";
-import { ajax } from "discourse/lib/ajax";
 import { observes, on } from "@ember-decorators/object";
+import { ajax } from "discourse/lib/ajax";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import Category from "discourse/models/category";
 import { i18n } from "discourse-i18n";
@@ -17,7 +17,7 @@ function initialize(api) {
       class extends Superclass {
         @on("init")
         _initPanels() {
-          this._super(...arguments);
+          super._initPanels(...arguments);
           this.actions.registerValidator.call(
             this,
             this.validateParentCategory.bind(this)
