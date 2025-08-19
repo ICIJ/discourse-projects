@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 DiscourseProjects::Engine.routes.draw do
   get "/projects" => "projects#index"
 end
