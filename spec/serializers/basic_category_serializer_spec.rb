@@ -45,7 +45,7 @@ RSpec.describe BasicCategorySerializer do
       end
 
       it "has an id matching the parent category" do
-        expect(serializer.project.id).to eq(parent_category.id)
+        expect(serializer.project["id"]).to eq(parent_category.id)
       end
     end
   end
