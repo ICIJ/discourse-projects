@@ -6,8 +6,7 @@ module DiscourseProjects
   module CategoryExtension
     extend ActiveSupport::Concern
 
-    # rubocop:disable Metrics/MethodLength
-    def ancestors
+        def ancestors
       query = <<~SQL
         WITH RECURSIVE ancestors AS (
           SELECT id, parent_category_id
