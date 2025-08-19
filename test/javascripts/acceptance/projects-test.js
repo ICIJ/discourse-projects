@@ -19,10 +19,19 @@ acceptance("Projects", function (needs) {
     // the filter by project works as expected.
     return { ...cat, is_project: ["blog", "faq"].includes(cat.slug) };
   });
+  // Extract the list of projects from the categories
+  const projects = categories.filter((cat) => cat.is_project);
+  // Mock the projects API endpoint
+  needs.pretender((server, helper) => {
+    server.get("/projects.json", () =>
+      helper.response({ projects })
+    );
+  })
 
   needs.site(cloneJSON({ categories }));
   needs.user();
   needs.settings({ projects_enabled: true });
+
 
   test("Projects page exists", async function (assert) {
     await visit("/projects");
