@@ -52,14 +52,14 @@ export default RouteTemplate(
             <TableHeaderToggle
               @field="username"
               @labelKey="username"
-              @class="directory-table__column-header--username username"
+              class="directory-table__column-header--username username"
               @order={{@controller.order}}
               @asc={{@controller.asc}}
               @automatic={{true}}
             />
 
             <TableHeaderToggle
-              @class="directory-table__column-header--added"
+              class="directory-table__column-header--added"
               @order={{@controller.order}}
               @asc={{@controller.asc}}
               @field="added_at"
@@ -68,7 +68,7 @@ export default RouteTemplate(
             />
 
             <TableHeaderToggle
-              @class="directory-table__column-header--last-posted"
+              class="directory-table__column-header--last-posted"
               @order={{@controller.order}}
               @asc={{@controller.asc}}
               @field="last_posted_at"
@@ -77,7 +77,7 @@ export default RouteTemplate(
             />
 
             <TableHeaderToggle
-              @class="directory-table__column-header--last-seen"
+              class="directory-table__column-header--last-seen"
               @order={{@controller.order}}
               @asc={{@controller.asc}}
               @field="last_seen_at"
