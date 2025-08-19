@@ -1,7 +1,11 @@
 GEM
   remote: https://rubygems.org/
   specs:
+<<<<<<< HEAD
     activesupport (8.0.3)
+=======
+    activesupport (8.0.2)
+>>>>>>> ad8af66 (build: update gems)
       base64
       benchmark (>= 0.3)
       bigdecimal
@@ -40,9 +44,10 @@ GEM
     regexp_parser (2.11.3)
     rubocop (1.81.1)
       json (~> 2.3)
-      language_server-protocol (>= 3.17.0)
+      language_server-protocol (~> 3.17.0.2)
+      lint_roller (~> 1.1.0)
       parallel (~> 1.10)
-      parser (>= 3.2.2.4)
+      parser (>= 3.3.0.2)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 2.9.3, < 3.0)
       rubocop-ast (>= 1.47.1, < 2.0)
@@ -91,10 +96,11 @@ GEM
     uri (1.0.4)
 
 PLATFORMS
-  x86_64-linux
+  ruby
 
 DEPENDENCIES
   rubocop-discourse
+  syntax_tree
 
 BUNDLED WITH
    2.7.2
