@@ -24,9 +24,7 @@ acceptance("Search avdanced options with a project filter", function (needs) {
   const projects = categories.filter((cat) => cat.is_project);
   // Mock the projects API endpoint
   needs.pretender((server, helper) => {
-    server.get("/projects.json", () =>
-      helper.response({ projects })
-    );
+    server.get("/projects.json", () => helper.response({ projects }));
   });
 
   needs.site(cloneJSON({ categories }));
