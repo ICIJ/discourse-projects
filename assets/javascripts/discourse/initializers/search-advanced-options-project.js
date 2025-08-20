@@ -1,16 +1,12 @@
-import SearchAdvancedOptions from "discourse/components/search-advanced-options";
 import { withPluginApi } from "discourse/lib/plugin-api";
-import Category from "discourse/models/category";
-import SearchAdvancedCategoryChooser from "select-kit/components/search-advanced-category-chooser";
-import matches from "../helpers/matches";
 
 // For the sake of simplificy, project prefix can only be "#" and not "category:"
 // like the category filter.
 const REGEXP_PROJECT_PREFIX = /^(#)/gi;
 const REGEXP_PROJECT_SLUG = /^(\#[a-zA-Z0-9\-:]+)/gi;
 
-function initialize() {
-  SearchAdvancedOptions.reopen({
+function initialize(api) {
+  api.modifyClass("component:search-advanced-options", {
     setSearchedTermValueForCategory() {
       this._super(...arguments);
       // We need to extract the current category
@@ -54,12 +50,6 @@ function initialize() {
       }
 
       this._updateSearchTerm(searchTerm);
-    },
-  });
-
-  SearchAdvancedCategoryChooser.reopen({
-    get content() {
-      return Category.list().filter(matches({ is_project: false }));
     },
   });
 }
