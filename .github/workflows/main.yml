@@ -1,9 +1,0 @@
-name: Discourse Projects Plugin - CI
-
-on:
-  push:
-    branches: [ main ]
-
-jobs:
-  discourse:
-    uses: discourse/.github/.github/workflows/discourse-plugin.yml@v1
