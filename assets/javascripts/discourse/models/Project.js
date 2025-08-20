@@ -1,11 +1,19 @@
-import { service } from "@ember/service";
-import Category from "discourse/models/category";
-import RestModel from "discourse/models/rest";
+import { ajax } from "discourse/lib/ajax"
+import Category from "discourse/models/category"
+import CategoryList from "discourse/models/category-list"
+import RestModel from "discourse/models/rest"
 
 export default class Project extends RestModel {
+
   static async findAll() {
-    return this.project?.all.map((p) => Category.create(p)) ?? []
+    const { projects = [] } = await ajax('/projects.json') ?? {}
+    return projects.map((p) => Category.create(p))
   }
 
-  @service project;
+  static async findList() {
+    const projects = await Project.findAll()
+    const list = CategoryList.create()
+    projects.forEach((p) => list.pushObject(p))
+    return list
+  }
 }
