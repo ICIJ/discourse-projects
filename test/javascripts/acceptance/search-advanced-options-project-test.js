@@ -19,15 +19,15 @@ acceptance("Search avdanced options with a project filter", function (needs) {
   const supportCategory = categories.find((c) => c.name === "support");
   // Make the support category a children of the blog category
   supportCategory.project = blogCategory;
-  supportCategory.parent_category_id = blogCategory.id
+  supportCategory.parent_category_id = blogCategory.id;
   // Extract the list of projects from the categories
-  const projects = categories.filter((cat) => cat.is_project)
+  const projects = categories.filter((cat) => cat.is_project);
   // Mock the projects API endpoint
   needs.pretender((server, helper) => {
     server.get("/projects.json", () =>
       helper.response({ projects })
-    )
-  })
+    );
+  });
 
   needs.site(cloneJSON({ categories }));
   needs.settings({ projects_enabled: true });

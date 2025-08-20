@@ -26,7 +26,7 @@ acceptance("Projects", function (needs) {
     server.get("/projects.json", () =>
       helper.response({ projects })
     );
-  })
+  });
 
   needs.site(cloneJSON({ categories }));
   needs.user();
