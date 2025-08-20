@@ -22,9 +22,7 @@ acceptance("Members", function (needs) {
   needs.settings({ projects_enabled: true });
 
   needs.pretender((server, helper) => {
-    server.get("/projects.json", () =>
-      helper.response({ projects: [] })
-    );
+    server.get("/projects.json", () => helper.response({ projects: [] }));
 
     server.get("/groups/:group-id/members.json", () => {
       // Use Discourse's fixture for member
