@@ -25,6 +25,12 @@ acceptance("Project banner", function (needs) {
   });
 
   needs.pretender((server, helper) => {
+    const projects = categories.filter((cat) => cat.is_project)
+
+    server.get("/projects.json", () => {
+      return helper.response({ projects })
+    });
+    
     server.get("/c/:category-slug/:category-id/l/latest.json", () => {
       return helper.response(cloneJSON(discoveryFixtures["/latest.json"]));
     });

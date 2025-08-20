@@ -20,6 +20,12 @@ acceptance("Project categories link in top menu", function (needs) {
   needs.settings({ projects_enabled: true });
 
   needs.pretender((server, helper) => {
+    const projects = categories.filter((cat) => cat.is_project)
+
+    server.get("/projects.json", () => {
+      return helper.response({ projects })
+    });
+    
     server.get("/c/:category-slug/:category-id/l/latest.json", () => {
       return helper.response(cloneJSON(discoveryFixtures["/latest.json"]));
     });
