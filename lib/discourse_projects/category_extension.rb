@@ -6,6 +6,14 @@ module DiscourseProjects
   module CategoryExtension
     extend ActiveSupport::Concern
 
+    prepended do
+      scope :projects, -> { 
+        scope = where(parent_category: [nil, ''])
+        scope = scope.where(read_restricted: true) if SiteSetting.projects_private?
+        scope
+      }
+    end
+
     # rubocop:enable Metrics/MethodLength
     def ancestors
       query = <<~SQL
@@ -24,10 +32,17 @@ module DiscourseProjects
     end
 
     def project
-      ancestors.select(&:project?).first
+      return nil if project?
+      # To find the category's project we look for the first ancestor that is a project.
+      # We first use the "ancestors" method to get all ancestors, then we filter them
+      # with the "projects" scope to only get ancestors that are projects.
+      ancestors.projects.first
     end
 
-    def project?    
+    # A project is a category which does not have a parent.
+    # If `SiteSetting.projects_private?` is true, it also means the category
+    # must be private (read_restricted).
+    def project?
       (!SiteSetting.projects_private? or read_restricted) and parent_category.blank?
     end
   end

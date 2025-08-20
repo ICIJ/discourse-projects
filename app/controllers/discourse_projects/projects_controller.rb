@@ -11,7 +11,7 @@ module ::DiscourseProjects
     private
 
     def projects
-      Category.secured(guardian).select{ |category| category.project? }
+      Category.secured(guardian).projects
     end
   end
 end
