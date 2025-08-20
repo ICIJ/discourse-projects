@@ -6,9 +6,16 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "lint": "pnpm eslint",
-    "lint:fix": "yarn eslint --fix",
-    "lint:ember": "yarn ember-template-lint --no-error-on-unmatched-pattern assets/javascripts"
+    "lint:assets":"pnpm prettier --check 'assets/**/*.{scss,js,gjs,hbs}'",
+    "lint:tests":"pnpm prettier --check 'test/**/*.{js,gjs}'",
+    "lint:prettier":"pnpm lint:assets && pnpm lint:tests",
+    "lint:prettier:fix":"pnpm lint:assets --write && pnpm lint:tests --write",
+    "lint:eslint":"pnpm eslint",
+    "lint:eslint:fix":"pnpm eslint --fix",
+    "lint:ember": "pnpm ember-template-lint --no-error-on-unmatched-pattern assets/javascripts",
+    "lint:ember:fix": "pnpm lint:ember --fix",
+    "lint": "pnpm lint:prettier && pnpm lint:eslint && pnpm lint:ember",
+    "lint:fix": "pnpm lint:prettier:fix && pnpm lint:eslint:fix && pnpm lint:ember:fix"
   },
   "devDependencies": {
     "@discourse/lint-configs": "2.32.0",
