@@ -5,7 +5,7 @@ import CategoryChooserComponent from "select-kit/components/category-chooser";
 import {
   pluginApiIdentifiers,
   selectKitOptions,
-} from "select-kit/components/select-kit"
+} from "select-kit/components/select-kit";
 import ProjectDropdownSelectedName from "./project-dropdown/project-dropdown-selected-name";
 
 @pluginApiIdentifiers(["project-chooser"])
