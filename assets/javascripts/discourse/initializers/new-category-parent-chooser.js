@@ -2,6 +2,11 @@ import { getOwner } from "@ember/application";
 import { not } from "@ember/object/computed";
 import { withPluginApi } from "discourse/lib/plugin-api";
 
+/**
+ * When creating a new subcategory from a project
+ * it will hide the parent category chooser in the
+ * category form.
+ */
 function initialize(api) {
   api.modifyClass(
     "component:edit-category-general",

@@ -5,7 +5,8 @@ import CategoryChooserComponent from "select-kit/components/category-chooser";
 import {
   pluginApiIdentifiers,
   selectKitOptions,
-} from "select-kit/components/select-kit";
+} from "select-kit/components/select-kit"
+import ProjectDropdownSelectedName from "./project-dropdown/project-dropdown-selected-name";
 
 @pluginApiIdentifiers(["project-chooser"])
 @classNames("project-chooser")
@@ -13,6 +14,7 @@ import {
   displayCategoryDescription: true,
   caretDownIcon: "caret-down",
   caretUpIcon: "caret-up",
+  selectedNameComponent: ProjectDropdownSelectedName,
 })
 export default class ProjectChooser extends CategoryChooserComponent {
   @service project;
