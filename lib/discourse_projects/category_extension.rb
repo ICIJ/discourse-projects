@@ -6,7 +6,8 @@ module DiscourseProjects
   module CategoryExtension
     extend ActiveSupport::Concern
 
-        def ancestors
+    # rubocop:enable Metrics/MethodLength
+    def ancestors
       query = <<~SQL
         WITH RECURSIVE ancestors AS (
           SELECT id, parent_category_id
@@ -21,7 +22,6 @@ module DiscourseProjects
       ancestors_ids = self.class.find_by_sql(query).map(&:id)
       self.class.where(id: ancestors_ids)
     end
-    # rubocop:enable Metrics/MethodLength
 
     def project
       ancestors.select(&:project?).first
