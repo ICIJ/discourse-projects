@@ -13,15 +13,15 @@ acceptance("Subcategories", function (needs) {
     // That also means the projects page will only show those 2 categories if
     // the filter by project works as expected.
     return { ...cat, is_project: ["blog", "faq"].includes(cat.slug) };
-  })
+  });
   // Extract the list of projects from the categories
-  const projects = categories.filter((cat) => cat.is_project)
+  const projects = categories.filter((cat) => cat.is_project);
   // Mock the projects API endpoint
   needs.pretender((server, helper) => {
     server.get("/projects.json", () =>
       helper.response({ projects })
-    )
-  })
+    );
+  });
 
   needs.site(cloneJSON({ categories }));
   needs.user();
