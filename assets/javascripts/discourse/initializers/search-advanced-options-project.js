@@ -5,6 +5,11 @@ import { withPluginApi } from "discourse/lib/plugin-api";
 const REGEXP_PROJECT_PREFIX = /^(#)/gi;
 const REGEXP_PROJECT_SLUG = /^(\#[a-zA-Z0-9\-:]+)/gi;
 
+/**
+ * Update the search input with the selected terms.
+ * Plus, when selecting a subcategory in a project,
+ * the search input and the project select are updated too!
+ */
 function initialize(api) {
   api.modifyClass("component:search-advanced-options", {
     setSearchedTermValueForCategory() {
