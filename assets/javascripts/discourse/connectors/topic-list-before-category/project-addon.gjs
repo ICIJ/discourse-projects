@@ -6,11 +6,9 @@ export default class ProjectAddonConnector extends Component {
   @service siteSettings;
 
   shouldRender() {
-    const { topic } = this.outletArgs;
-    return (
-      !!this.siteSettings.projects_addon &&
-      (topic.category.project || topic.category.is_project)
-    );
+    const { topic: { category } } = this.outletArgs;
+    const isProject = category && (category.project || category.is_project);
+    return !!this.siteSettings.projects_addon && isProject;
   }
 
   get classNames() {
