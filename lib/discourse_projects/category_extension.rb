@@ -14,7 +14,6 @@ module DiscourseProjects
       }
     end
 
-    # rubocop:enable Metrics/MethodLength
     def ancestors
       query = <<~SQL
         WITH RECURSIVE ancestors AS (
