@@ -7,6 +7,7 @@ import Project from "../models/Project";
 
 export default class ProjectsRoute extends DiscourseRoute {
   @service router;
+  @service siteSettings;
 
   async model() {
     try {
