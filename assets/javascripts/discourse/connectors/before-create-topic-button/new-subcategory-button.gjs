@@ -1,10 +1,8 @@
 import Component from "@ember/component";
 import { computed } from "@ember/object";
 import { service } from "@ember/service";
-import { tagName } from "@ember-decorators/component";
 import NewSubcategoryButton from "../../components/new-subcategory-button";
 
-@tagName("")
 export default class NewSubcategoryButtonConnector extends Component {
   @service currentUser;
   @service router;
