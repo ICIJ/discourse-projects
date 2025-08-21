@@ -66,11 +66,15 @@ export default RouteTemplate(
           <table class="category-list">
             <thead>
               <tr>
-                <th class="category"><span
+                <th class="category">
+                  <span
                     role="heading"
                     aria-level="2"
                     id="categories-only-category"
-                  >{{i18n "categories.category"}}</span></th>
+                  >
+                    {{i18n "categories.category"}}
+                  </span>
+                </th>
                 <th class="topics">{{i18n "categories.topics"}}</th>
               </tr>
             </thead>

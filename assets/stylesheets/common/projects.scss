@@ -38,13 +38,19 @@
     padding: 0.5em 0;
   }
 
-  &-list thead tr th.category {
-    &::after {
-      content: var(--projects-list-th, "Project");
+  &-list {
+    thead tr th.category {
+      &::after {
+        content: var(--projects-list-th, "Project");
+      }
+
+      span {
+        display: none;
+      }
     }
 
-    span {
-      display: none;
+    tbody tr td .category-logo {
+      float: right;
     }
   }
 }
