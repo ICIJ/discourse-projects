@@ -7,9 +7,9 @@ import SearchAdvancedProjectChooser from "../../components/search-advanced-proje
 export default class ProjectFilterConnector extends Component {
   <template>
     <div class="control-group advanced-search-project">
-      <label class="control-label">{{i18n
-          "search.advanced.in_project.label"
-        }}</label>
+      <label class="control-label">
+        {{i18n "search.advanced.in_project.label"}}
+      </label>
       <div class="controls">
         <SearchAdvancedProjectChooser
           @id="search-in-project"
