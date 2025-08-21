@@ -15,7 +15,7 @@ export default class NewSubcategoryButtonConnector extends Component {
   }
 
   get canCreateCategory() {
-    return this.currentUser.can_create_category;
+    return this.currentUser?.can_create_category;
   }
 
   get isDiscoveryCategoriesRoute() {

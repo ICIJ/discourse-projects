@@ -49,7 +49,7 @@ function initialize(api) {
         }
 
         get currentUserIsAdmin() {
-          return api.getCurrentUser().admin;
+          return !!api.getCurrentUser()?.admin;
         }
 
         @computed("model.parent_category_id")
