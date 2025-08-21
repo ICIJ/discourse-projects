@@ -2,7 +2,7 @@
 
 module ::DiscourseProjects
   class ProjectsController < ::ApplicationController
-    requires_plugin PLUGIN_NAME
+    requires_plugin DiscourseProjects::PLUGIN_NAME
 
     def index
       render_serialized(projects, DiscourseProjects::ProjectSerializer, root: "projects")
