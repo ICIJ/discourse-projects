@@ -12,6 +12,7 @@ const REGEXP_PROJECT_SLUG = /^(\#[a-zA-Z0-9\-:]+)/gi;
  */
 function initialize(api) {
   api.modifyClass("component:search-advanced-options", {
+    pluginId: 'discourse-projects',
     setSearchedTermValueForCategory() {
       this._super(...arguments);
       // We need to extract the current category
