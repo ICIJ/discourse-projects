@@ -31,3 +31,6 @@ plugins:
   projects_category_requires_parent:
     default: true
     client: true
+  projects_hide_navigation_menu_categories:
+    default: false
+    client: true

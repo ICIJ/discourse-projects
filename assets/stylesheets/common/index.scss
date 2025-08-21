@@ -12,3 +12,8 @@
     top: calc(var(--header-offset, 60px) + 4em);
   }
 }
+
+.hide-navigation-menu-categories
+  .sidebar-section[data-section-name="categories"] {
+  display: none;
+}
