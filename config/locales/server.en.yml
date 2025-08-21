@@ -9,3 +9,4 @@ en:
     projects_banner_routes: On which routes the project banner is shown. If you suffix the route name with a "!" it will alsways show the banner, regardless of the nesting level of the route.
     projects_private: Categories must have read restriction to be considered as a project
     projects_category_requires_parent: New category requires a parent
+    projects_hide_navigation_menu_categories: Hide the categories section in the navigation menu
