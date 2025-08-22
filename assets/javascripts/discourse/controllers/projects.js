@@ -9,7 +9,7 @@ export default class ProjectsController extends Controller {
   @tracked sortBy = "name:asc";
 
   @tracked withDescription = true;
-  @tracked withSubcategories = false;
+  @tracked withSubcategories = true;
 
   @sort("projects", "sortByFields") sortedProjects;
 
