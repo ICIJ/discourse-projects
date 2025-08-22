@@ -30,7 +30,9 @@ function initialize(api) {
         }
 
         get showLogoPlaceholder() {
-          return this.siteSettings.projects_show_logo_placeholder && this.is_project;
+          return (
+            this.siteSettings.projects_show_logo_placeholder && this.is_project
+          );
         }
       }
   );
