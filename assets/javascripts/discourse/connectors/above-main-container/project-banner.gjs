@@ -2,6 +2,10 @@ import Component from "@ember/component";
 import { service } from "@ember/service";
 import ProjectBanner from "../../components/project-banner";
 
+/**
+ * This connector renders the project banner component above the
+ * main container if the site setting is enabled.
+ */
 export default class ProjectBannerConnector extends Component {
   @service siteSettings;
 

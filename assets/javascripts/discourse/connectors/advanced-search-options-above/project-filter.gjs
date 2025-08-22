@@ -3,6 +3,10 @@ import { classNames } from "@ember-decorators/component";
 import { i18n } from "discourse-i18n";
 import SearchAdvancedProjectChooser from "../../components/search-advanced-project-chooser";
 
+/**
+ * This connector renders the project filter in the advanced search options
+ * if the site setting is enabled.
+ */
 @classNames("advanced-search-options-above-outlet", "project-filter")
 export default class ProjectFilterConnector extends Component {
   <template>

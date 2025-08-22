@@ -3,6 +3,9 @@ import { get } from "@ember/helper";
 import { classNames, tagName } from "@ember-decorators/component";
 import ProjectDropdown from "../../components/project-dropdown";
 
+/**
+ * This connector renders the project dropdown in the breadcrumbs.
+ */
 @tagName("li")
 @classNames("bread-crumbs-left-outlet", "project-dropdown")
 export default class ProjectDropdownConnector extends Component {
