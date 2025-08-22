@@ -5,6 +5,11 @@ import { withPluginApi } from "discourse/lib/plugin-api";
 import Category from "discourse/models/category";
 import { i18n } from "discourse-i18n";
 
+/**
+ * The role of this initializer is to manage the permissions
+ * for new categories and subcategories. It ensures that
+ * the correct permissions are set based on the parent category.
+ */
 function initialize(api) {
   async function getCategoryGroupPermissions(categoryId) {
     const { category } = await ajax(`/c/${categoryId}/show.json`);

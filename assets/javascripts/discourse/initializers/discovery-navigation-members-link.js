@@ -2,6 +2,10 @@ import { withPluginApi } from "discourse/lib/plugin-api";
 import Category from "discourse/models/category";
 import { i18n } from "discourse-i18n";
 
+/**
+ * The role of this initializer is to add a link to the members page
+ * of a project in the discovery navigation.
+ */
 function initialize(api) {
   api.addNavigationBarItem({
     name: "link-to-members",

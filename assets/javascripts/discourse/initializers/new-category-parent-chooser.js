@@ -3,9 +3,8 @@ import { not } from "@ember/object/computed";
 import { withPluginApi } from "discourse/lib/plugin-api";
 
 /**
- * When creating a new subcategory from a project
- * it will hide the parent category chooser in the
- * category form.
+ * The role of this initializer is to hide the parent category chooser
+ * when creating a new subcategory from a project.
  */
 function initialize(api) {
   api.modifyClass(

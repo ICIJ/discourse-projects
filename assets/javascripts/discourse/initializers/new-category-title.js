@@ -5,6 +5,11 @@ import Category from "discourse/models/category";
 import { i18n } from "discourse-i18n";
 import { projectLinkHTML } from "../helpers/project-link";
 
+/**
+ * The role of this initializer is to manage the title
+ * of new categories and subcategories page, based on their
+ * parent category.
+ */
 function initialize(api) {
   api.modifyClass(
     "controller:edit-category-tabs",

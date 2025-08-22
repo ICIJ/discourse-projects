@@ -2,6 +2,10 @@ import { service } from "@ember/service";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import categoryPlaceholderLogo from "../helpers/category-logo-placeholder";
 
+/**
+ * The role of this initializer is to provide a placeholder logo for categories
+ * that do not have an uploaded logo.
+ */
 function initialize(api) {
   api.modifyClass(
     "model:category",
