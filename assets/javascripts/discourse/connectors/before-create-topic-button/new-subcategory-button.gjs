@@ -3,6 +3,12 @@ import { computed } from "@ember/object";
 import { service } from "@ember/service";
 import NewSubcategoryButton from "../../components/new-subcategory-button";
 
+/**
+ * This connector renders the new subcategory button
+ * before the create topic button if the user has permission
+ * to create a category and if the current route is not the
+ * discovery categories route (which already contains a button)
+ */
 export default class NewSubcategoryButtonConnector extends Component {
   @service currentUser;
   @service router;

@@ -2,6 +2,11 @@ import Component from "@ember/component";
 import { service } from "@ember/service";
 import { projectLinkHTML } from "../../helpers/project-link";
 
+/**
+ * This connector adds a project link in the topic list
+ * before the category name if the site setting is enabled
+ * and if the topic belongs to a project category.
+ */
 export default class ProjectAddonConnector extends Component {
   @service siteSettings;
 
