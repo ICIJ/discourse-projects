@@ -34,3 +34,6 @@ plugins:
   projects_hide_navigation_menu_categories:
     default: false
     client: true
+  projects_show_logo_placeholder:
+    default: true
+    client: true
