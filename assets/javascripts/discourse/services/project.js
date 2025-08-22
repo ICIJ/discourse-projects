@@ -21,7 +21,7 @@ export default class ProjectService extends Service {
     super.init(...arguments);
     // Load all projects from the server once
     // and store them in the `all` property.
-    this.all.push(...(await Project.findAll()));
+    this.all = await Project.findAll();
   }
 
   findById(id) {

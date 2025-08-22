@@ -25,6 +25,7 @@ after_initialize do
   end
 
   reloadable_patch do |_plugin|
+    ApplicationLayoutPreloader.prepend DiscourseProjects::ApplicationLayoutPreloaderExtension
     Category.prepend DiscourseProjects::CategoryExtension
   end
 
