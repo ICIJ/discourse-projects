@@ -10,3 +10,4 @@ en:
     projects_private: Categories must have read restriction to be considered as a project
     projects_category_requires_parent: New category requires a parent
     projects_hide_navigation_menu_categories: Hide the categories section in the navigation menu
+    projects_show_logo_placeholder: Show a placeholder logo for projects without a custom logo

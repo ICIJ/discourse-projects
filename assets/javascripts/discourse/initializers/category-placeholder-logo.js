@@ -15,16 +15,22 @@ function initialize(api) {
         }
 
         get uploaded_logo_placeholder() {
+          if (!this.showLogoPlaceholder) {
+            return null;
+          }
           const svg = categoryPlaceholderLogo(
             this.name,
             this.color,
-            this.text_color,
-            60,
-            60
+            this.text_color
           );
-          const url =
-            "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+          const header = "data:image/svg+xml;charset=utf-8";
+          const payload = encodeURIComponent(svg);
+          const url = `${header},${payload}`;
           return { url, height: 60, width: 60 };
+        }
+
+        get showLogoPlaceholder() {
+          return this.siteSettings.projects_show_logo_placeholder && this.is_project;
         }
       }
   );
