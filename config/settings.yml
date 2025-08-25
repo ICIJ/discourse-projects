@@ -37,3 +37,6 @@ plugins:
   projects_show_logo_placeholder:
     default: true
     client: true
+  projects_styled_links:
+    default: true
+    client: true
