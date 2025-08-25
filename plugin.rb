@@ -27,6 +27,7 @@ after_initialize do
   reloadable_patch do |_plugin|
     ApplicationLayoutPreloader.prepend DiscourseProjects::ApplicationLayoutPreloaderExtension
     Category.prepend DiscourseProjects::CategoryExtension
+    Topic.prepend DiscourseProjects::TopicExtension
   end
 
   add_to_serializer(:current_user, :can_create_category) do
@@ -36,6 +37,10 @@ after_initialize do
 
   add_to_serializer(:basic_category, :is_project) do
     object.project?
+  end
+
+  add_to_serializer(:topic_list_item, :project) do
+    object.project.as_json(only: [:id, :name, :slug, :color, :text_color])
   end
 
   add_to_serializer(:basic_category, :project) do
