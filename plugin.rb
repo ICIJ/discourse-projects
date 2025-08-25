@@ -40,10 +40,10 @@ after_initialize do
   end
 
   add_to_serializer(:topic_list_item, :project) do
-    object.project.as_json(only: [:id, :name, :slug, :color, :text_color])
+    object.project.as_json(only: [:id, :name, :slug, :color, :text_color, :read_restricted])
   end
 
   add_to_serializer(:basic_category, :project) do
-    object.project.as_json(only: [:id, :name, :slug, :color, :text_color])
+    object.project.as_json(only: [:id, :name, :slug, :color, :text_color, :read_restricted])
   end
 end
