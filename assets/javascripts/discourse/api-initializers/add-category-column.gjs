@@ -3,13 +3,15 @@ import { apiInitializer } from "discourse/lib/api";
 import { projectLinkHTML } from "../helpers/project-link";
 
 const ItemCell = <template>
-  <td class="category topic-list-data topic-category">
-    {{#unless @topic.isPinnedUncategorized}}
-      {{#if @topic.project}}
-        {{projectLinkHTML @topic.project}}
-      {{/if}}
-      {{categoryLink @topic.category}}
-    {{/unless}}
+  <td class="category topic-list-data">
+    <div class="topic-category">
+      {{#unless @topic.isPinnedUncategorized}}
+        {{#if @topic.project}}
+          {{projectLinkHTML @topic.project}}
+        {{/if}}
+        {{categoryLink @topic.category}}
+      {{/unless}}
+    </div>
   </td>
 </template>;
 
