@@ -5,7 +5,7 @@ module DiscourseProjects
     extend ActiveSupport::Concern
 
     def project
-      category&.project
+      category&.project? ? category : category&.project
     end
   end
 end
