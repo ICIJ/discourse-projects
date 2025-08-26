@@ -1,19 +1,39 @@
+import Component from "@glimmer/component";
 import categoryLink from "discourse/helpers/category-link";
 import { apiInitializer } from "discourse/lib/api";
 import { projectLinkHTML } from "../helpers/project-link";
 
-const ItemCell = <template>
-  <td class="category topic-list-data">
-    <div class="topic-category">
-      {{#unless @topic.isPinnedUncategorized}}
-        {{#if @topic.project}}
-          {{projectLinkHTML @topic.project}}
+class ItemCell extends Component {
+  get showLinks() {
+    return (
+      !this.args.topic.isPinnedUncategorized &&
+      (this.showProject || this.showCategory)
+    );
+  }
+
+  get showProject() {
+    return this.args.topic.project;
+  }
+
+  get showCategory() {
+    return this.args.topic.category?.id !== this.args.topic.project?.id;
+  }
+
+  <template>
+    <td class="category topic-list-data">
+      <div class="topic-category">
+        {{#if this.showLinks}}
+          {{#if this.showProject}}
+            {{projectLinkHTML @topic.project}}
+          {{/if}}
+          {{#if this.showCategory}}
+            {{categoryLink @topic.category}}
+          {{/if}}
         {{/if}}
-        {{categoryLink @topic.category}}
-      {{/unless}}
-    </div>
-  </td>
-</template>;
+      </div>
+    </td>
+  </template>
+}
 
 /**
  * The role of this API initializer is to modify the category column in
