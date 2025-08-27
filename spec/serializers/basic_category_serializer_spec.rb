@@ -20,7 +20,7 @@ RSpec.describe BasicCategorySerializer do
 
     describe '#project' do 
       it "returns nil" do
-        expect(serializer.project).to be_nil
+        expect(serializer.project.object).to be_nil
       end
     end
   end
@@ -41,11 +41,11 @@ RSpec.describe BasicCategorySerializer do
 
     describe '#project' do 
       it "returns a project that is not nil" do
-        expect(serializer.project).not_to be_nil
+        expect(serializer.project.object).not_to be_nil
       end
 
       it "has an id matching the parent category" do
-        expect(serializer.project["id"]).to eq(parent_category.id)
+        expect(serializer.project.object["id"]).to eq(parent_category.id)
       end
     end
   end
