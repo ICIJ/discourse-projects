@@ -2,7 +2,7 @@ import { ajax } from "discourse/lib/ajax";
 import PreloadStore from "discourse/lib/preload-store";
 import Category from "discourse/models/category";
 import CategoryList from "discourse/models/category-list";
-import RestModel from "discourse/models/rest"
+import RestModel from "discourse/models/rest";
 import Site from "discourse/models/site";
 
 export default class Project extends RestModel {
@@ -30,13 +30,15 @@ export default class Project extends RestModel {
     return list;
   }
 
-  static async asyncSearch(filter = '') {
+  static async asyncSearch(filter = "") {
     const projects = await Project.findAll();
     const needle = filter.toLowerCase().trim();
     const match = ({ name, slug }) => {
-      return !filter 
-      || name.toLowerCase().includes(needle) 
-      || slug.toLowerCase().includes(needle);
+      return (
+        !filter ||
+        name.toLowerCase().includes(needle) ||
+        slug.toLowerCase().includes(needle)
+      );
     };
     return projects.filter(match);
   }
