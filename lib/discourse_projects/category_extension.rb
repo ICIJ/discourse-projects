@@ -7,10 +7,14 @@ module DiscourseProjects
     extend ActiveSupport::Concern
 
     prepended do
+      scope :categorized, -> { 
+        where.not(id: SiteSetting.uncategorized_category_id)
+      }
+
       scope :projects, -> { 
         scope = where(parent_category: [nil, ''])
         scope = scope.where(read_restricted: true) if SiteSetting.projects_private?
-        scope
+        scope.categorized
       }
     end
 
@@ -30,6 +34,10 @@ module DiscourseProjects
       self.class.where(id: ancestors_ids)
     end
 
+    def is_categorized
+      id != SiteSetting.uncategorized_category_id
+    end
+
     def project
       return nil if project?
       # To find the category's project we look for the first ancestor that is a project.
@@ -42,7 +50,7 @@ module DiscourseProjects
     # If `SiteSetting.projects_private?` is true, it also means the category
     # must be private (read_restricted).
     def project?
-      (!SiteSetting.projects_private? or read_restricted) and parent_category.blank?
+      (!SiteSetting.projects_private? or read_restricted) and parent_category.blank? and is_categorized
     end
   end
 end
