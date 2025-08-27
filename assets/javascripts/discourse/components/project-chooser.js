@@ -7,6 +7,7 @@ import {
   selectKitOptions,
 } from "select-kit/components/select-kit";
 import ProjectDropdownSelectedName from "./project-dropdown/project-dropdown-selected-name";
+import Project from "../models/Project";
 
 @pluginApiIdentifiers(["project-chooser"])
 @classNames("project-chooser")
@@ -22,5 +23,12 @@ export default class ProjectChooser extends CategoryChooserComponent {
   @computed("project.all")
   get content() {
     return this.project.all;
+  }
+
+  async search(filter = "") {
+    if (!filter) {
+      return this.content
+    }
+    return Project.asyncSearch(filter);
   }
 }
