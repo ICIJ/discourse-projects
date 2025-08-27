@@ -6,8 +6,8 @@ import {
   pluginApiIdentifiers,
   selectKitOptions,
 } from "select-kit/components/select-kit";
-import ProjectDropdownSelectedName from "./project-dropdown/project-dropdown-selected-name";
 import Project from "../models/Project";
+import ProjectDropdownSelectedName from "./project-dropdown/project-dropdown-selected-name";
 
 @pluginApiIdentifiers(["project-chooser"])
 @classNames("project-chooser")
@@ -27,7 +27,7 @@ export default class ProjectChooser extends CategoryChooserComponent {
 
   async search(filter = "") {
     if (!filter) {
-      return this.content
+      return this.content;
     }
     return Project.asyncSearch(filter);
   }

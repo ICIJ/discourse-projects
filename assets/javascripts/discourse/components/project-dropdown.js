@@ -7,8 +7,8 @@ import {
   pluginApiIdentifiers,
   selectKitOptions,
 } from "select-kit/components/select-kit";
-import ProjectDropdownSelectedName from "./project-dropdown/project-dropdown-selected-name";
 import Project from "../models/Project";
+import ProjectDropdownSelectedName from "./project-dropdown/project-dropdown-selected-name";
 
 @pluginApiIdentifiers(["project-dropdown"])
 @classNames("category-drop")
@@ -29,8 +29,8 @@ export default class ProjectDropdown extends CategoryDrop {
 
   async search(filter = "") {
     if (!filter) {
-      return this.content
+      return this.content;
     }
-    return Project.asyncSearch(filter)
+    return Project.asyncSearch(filter);
   }
 }
