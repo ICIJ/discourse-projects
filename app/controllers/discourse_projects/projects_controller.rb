@@ -13,7 +13,7 @@ module ::DiscourseProjects
     private
 
     def projects
-      Category.secured(guardian).projects
+      Category.secured(guardian).projects.order(name: :asc)
     end
   end
 end

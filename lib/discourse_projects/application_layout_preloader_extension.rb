@@ -8,7 +8,7 @@ module DiscourseProjects
     end
 
     def fetch_projects
-      Category.secured(@guardian).projects
+      Category.secured(@guardian).projects.order(name: :asc)
     end
 
     def fetch_projects_json
