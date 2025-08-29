@@ -28,6 +28,6 @@ function initialize(api) {
 export default {
   name: "new-category-parent-chooser",
   initialize() {
-    withPluginApi("1.8.0", initialize);
+    withPluginApi("2.1.1", initialize);
   },
 };

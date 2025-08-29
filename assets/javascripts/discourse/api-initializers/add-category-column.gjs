@@ -61,4 +61,4 @@ function initialize(api) {
   });
 }
 
-export default apiInitializer("0.8", initialize);
+export default apiInitializer(initialize);
