@@ -7,18 +7,16 @@ import { withPluginApi } from "discourse/lib/plugin-api";
  * when creating a new subcategory from a project.
  */
 function initialize(api) {
-  api.modifyClass(
-    "component:edit-category-general", {
-      pluginId: "discourse-projects",
-      get canSelectParentCategory() {
-        return (!this.isNewSubcategory && not("category.isUncategorizedCategory"));
-      },
-      get isNewSubcategory() {
-        const router = getOwner(this).lookup("service:router");
-        return router?.currentRoute?.name === "newSubcategory";
-      }
-    }
-  );
+  api.modifyClass("component:edit-category-general", {
+    pluginId: "discourse-projects",
+    get canSelectParentCategory() {
+      return !this.isNewSubcategory && not("category.isUncategorizedCategory");
+    },
+    get isNewSubcategory() {
+      const router = getOwner(this).lookup("service:router");
+      return router?.currentRoute?.name === "newSubcategory";
+    },
+  });
 }
 
 export default {
