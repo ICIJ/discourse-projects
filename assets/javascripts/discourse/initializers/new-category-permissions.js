@@ -1,5 +1,5 @@
 import { computed } from "@ember/object";
-import { observes, on } from "@ember-decorators/object";
+import { observes } from "@ember-decorators/object";
 import { ajax } from "discourse/lib/ajax";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import Category from "discourse/models/category";
@@ -20,9 +20,8 @@ function initialize(api) {
     "controller:edit-category-tabs",
     (Superclass) =>
       class extends Superclass {
-        @on("init")
-        _initPanels() {
-          super._initPanels(...arguments);
+        init() {
+          super.init(...arguments);
           this.actions.registerValidator.call(
             this,
             this.validateParentCategory.bind(this)
