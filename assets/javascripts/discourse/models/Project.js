@@ -1,23 +1,18 @@
 import { ajax } from "discourse/lib/ajax";
 import PreloadStore from "discourse/lib/preload-store";
-import Category from "discourse/models/category";
 import CategoryList from "discourse/models/category-list";
 import RestModel from "discourse/models/rest";
 import Site from "discourse/models/site";
+import iteratee from "../helpers/iteratee";
+
 
 export default class Project extends RestModel {
   static async findAll() {
     try {
       const pre = await PreloadStore.getAndRemove("projects");
-      const { projects = [] } = pre
-        ? { projects: pre }
-        : await ajax("/projects.json");
-      // We must convert the project objects to categories in order to update the site
-      // store for categories. This will allow to the category helpers and components to
-      // display project correctly.
-      const categories = projects.map((p) => Category.create(p));
-      categories.forEach((cat) => Site.current().updateCategory(cat));
-      return categories;
+      const projects = pre ?? await ajax("/projects.json").then(iteratee("projects"));
+
+      return projects.map((p) => Site.current().updateCategory(p));
     } catch {
       return [];
     }

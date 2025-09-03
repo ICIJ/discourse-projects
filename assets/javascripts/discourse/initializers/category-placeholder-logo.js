@@ -13,9 +13,14 @@ function initialize(api) {
       class extends Superclass {
         @service siteSettings;
 
-        init() {
-          super.init(...arguments);
-          this.uploaded_logo ||= this.uploaded_logo_placeholder;
+        _rawUploadedLogo = null;
+
+        get uploaded_logo() {
+          return this._rawUploadedLogo ?? this.uploaded_logo_placeholder;
+        }
+
+        set uploaded_logo(value) {
+          this._rawUploadedLogo = value;
         }
 
         get uploaded_logo_placeholder() {
