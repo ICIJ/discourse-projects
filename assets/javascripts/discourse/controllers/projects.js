@@ -1,6 +1,6 @@
 import { tracked } from "@glimmer/tracking";
 import Controller from "@ember/controller";
-import { action, computed } from "@ember/object";
+import { computed } from "@ember/object";
 import { sort } from "@ember/object/computed";
 import { i18n } from "discourse-i18n";
 
@@ -12,16 +12,6 @@ export default class ProjectsController extends Controller {
   @tracked withSubcategories = true;
 
   @sort("projects", "sortByFields") sortedProjects;
-
-  @action
-  toggleWithSubcategories() {
-    this.withSubcategories = !this.withSubcategories;
-  }
-
-  @action
-  toggleWithDescription() {
-    this.withDescription = !this.withDescription;
-  }
 
   @computed("sortBy", "searchTerm")
   get filteredProjects() {
@@ -55,12 +45,21 @@ export default class ProjectsController extends Controller {
 
   get sortByOptions() {
     return [
-      { value: "name:asc", name: i18n("projects.sort_by.name") },
-      { value: "name:desc", name: i18n("projects.sort_by.name_reverse") },
-      { value: "post_count:asc", name: i18n("projects.sort_by.post_count") },
       {
-        value: "post_count:desc",
-        name: i18n("projects.sort_by.post_count_reverse"),
+        value: "name:asc",
+        name: i18n("projects.sort_by.name_asc"),
+      },
+      {
+        value: "name:desc",
+        name: i18n("projects.sort_by.name_desc"),
+      },
+      {
+        value: "topics_all_time:asc",
+        name: i18n("projects.sort_by.topics_all_time_asc"),
+      },
+      {
+        value: "topics_all_time:desc",
+        name: i18n("projects.sort_by.topics_all_time_desc"),
       },
     ];
   }

@@ -33,12 +33,14 @@ en:
         one: 1 project
         other: '%{count} projects'
       sort_by:
-        name: Name
-        name_reverse: Name (reverse)
-        post_count: Number of topics
-        post_count_reverse: Number of topics (reverse)
-      list:
-        th: Project
+        name_asc: Name (A to Z)
+        name_desc: Name (Z to A)
+        topics_all_time_asc: Number of topics (Fewest to Most)
+        topics_all_time_desc: Number of topics (Most to Fewest)
+      stats:
+        topics:
+          one: 1 topic
+          other: '%{count} topics'
     category:
       edit: 'Edit: %{categoryName}'
     project_dropdown:

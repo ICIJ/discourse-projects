@@ -1,5 +1,5 @@
 .projects {
-  &-header {
+  &__header {
     display: flex;
     background: var(--primary-low);
     padding: 0.75rem;
@@ -13,8 +13,8 @@
       margin-bottom: 0;
     }
 
-    &-start,
-    &-end {
+    &__start,
+    &__end {
       display: flex;
       gap: 0.75rem;
       align-items: center;
@@ -25,42 +25,70 @@
       }
     }
 
-    &-matches {
+    &__matches {
       color: var(--primary-medium);
       font-size: var(--font-down-1);
     }
 
-    &-toggle {
-      display: flex !important;
-      flex: 1 0 300px;
-      flex-wrap: nowrap;
-      align-items: center;
-    }
-
-    &-sort-by {
+    &__sort-by {
       display: flex;
       align-items: center;
     }
   }
 
-  &-empty .empty-state {
-    padding: 0.5em 0;
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+
+    &__entry {
+      border-width: var(--d-category-border-box-width);
+      border-style: solid;
+      border-color: var(--primary-low);
+      border-radius: var(--d-border-radius);
+      border-left-color: var(--category-badge-color, var(--primary-low));
+      border-left-width: var(--d-category-border-accent-width);
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+
+      &__wrapper {
+        flex-grow: 1;
+      }
+
+      & &__logo:has(.category-logo img) {
+        max-width: 90px;
+        flex-shrink: 0;
+        width: 100%;
+      }
+
+      & &__title {
+        font-size: var(--font-up-1);
+        font-weight: bold;
+        color: var(--category-badge-text-color);
+        padding: 0;
+        margin-bottom: 0.5rem;
+        display: block;
+      }
+
+      & &__description {
+        color: var(--primary-high);
+      }
+
+      & &__footer {
+        margin-top: 1rem;
+
+        &__stats {
+          color: var(--primary-medium);
+        }
+      }
+    }
   }
 
-  &-list {
-    thead tr th.category {
-      &::after {
-        content: var(--projects-list-th, "Project");
-      }
-
-      span {
-        display: none;
-      }
-    }
-
-    tbody tr td .category-logo {
-      float: right;
-      margin: 0 1rem 1rem 0.25rem;
-    }
+  &__empty .empty-state {
+    padding: 0.5em 0;
   }
 }
