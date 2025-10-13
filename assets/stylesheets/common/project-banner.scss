@@ -12,7 +12,8 @@
     display: block;
     padding: 10px 0;
     margin: 0 0 0.75em;
-    background: var(--primary-low);
+    border-radius: var(--d-border-radius);
+    background: var(--primary-very-low);
     text-align: center;
     z-index: 10;
 
