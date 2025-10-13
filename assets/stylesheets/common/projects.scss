@@ -3,13 +3,14 @@
     display: flex;
     background: var(--primary-low);
     padding: 0.75rem;
+    align-items: center;
     justify-content: space-between;
 
     @media (width < 1110px) {
       display: block;
     }
 
-    body & > * {
+    body &__start > * {
       margin-bottom: 0;
     }
 
