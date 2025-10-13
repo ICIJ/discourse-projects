@@ -37,19 +37,19 @@ acceptance("Projects", function (needs) {
 
   test("Projects page list 2 projects", async function (assert) {
     await visit("/projects");
-    assert.ok(exists(".projects .category-list"), "it shows a projects list");
-    assert.strictEqual(count(".projects .category-list tbody tr"), 2);
+    assert.ok(exists(".projects__grid"), "it shows a projects list");
+    assert.strictEqual(count(".projects__grid__entry"), 2);
   });
 
   test("Projects page should filter projects by name", async function (assert) {
     await visit("/projects");
-    await fillIn(".projects-header input[type=text]", "log");
-    assert.strictEqual(count(".projects .category-list tbody tr"), 1);
+    await fillIn(".projects__header input[type=text]", "log");
+    assert.strictEqual(count(".projects__grid__entry"), 1);
   });
 
   test("Projects page list projects sorted by name by default", async function (assert) {
     await visit("/projects");
-    const names = queryAll(".projects .category-list .category-name");
+    const names = queryAll(".projects__grid__entry__title__name");
     assert.strictEqual(names[0].innerText, "blog");
     assert.strictEqual(names[1].innerText, "faq");
   });
