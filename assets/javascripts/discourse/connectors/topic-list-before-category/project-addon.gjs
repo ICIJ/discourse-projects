@@ -9,12 +9,19 @@ import { projectLinkHTML } from "../../helpers/project-link";
  */
 export default class ProjectAddonConnector extends Component {
   @service siteSettings;
+  @service router;
 
   shouldRender() {
-    const { topic } = this.outletArgs;
-    const { category = null } = topic ?? {};
-    const isProject = category && (category.project || category.is_project);
-    return !!this.siteSettings.projects_addon && isProject;
+    return (
+      this.siteSettings.projects_addon
+    ) && (
+      this.router.currentRouteName === "discovery.latest" ||
+      this.router.currentRouteName === "discovery.new" ||
+      this.router.currentRouteName === "discovery.top" ||
+      this.router.currentRouteName === "discovery.posted"
+    ) && !!(
+      this.outletArgs.topic.project
+    );
   }
 
   get classNames() {
@@ -22,13 +29,13 @@ export default class ProjectAddonConnector extends Component {
   }
 
   <template>
-    {{#if @outletArgs.topic.category.project}}
-      {{projectLinkHTML @outletArgs.topic.category.project}}
-    {{else if @outletArgs.topic.category.is_project}}
+    {{#if @outletArgs.topic.category.is_project}}
       {{projectLinkHTML
         @outletArgs.topic.category
         extraClasses="project-link--hide-sibling"
       }}
+    {{else}}
+      {{projectLinkHTML @outletArgs.topic.project}}
     {{/if}}
   </template>
 }

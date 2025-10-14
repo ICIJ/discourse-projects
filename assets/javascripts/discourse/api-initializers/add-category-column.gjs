@@ -1,9 +1,13 @@
+import { service } from "@ember/service";
 import Component from "@glimmer/component";
 import categoryLink from "discourse/helpers/category-link";
 import { apiInitializer } from "discourse/lib/api";
 import { projectLinkHTML } from "../helpers/project-link";
 
 class ItemCell extends Component {
+  @service router;
+  @service siteSettings;
+
   get showLinks() {
     return (
       !this.args.topic.isPinnedUncategorized &&
@@ -12,7 +16,16 @@ class ItemCell extends Component {
   }
 
   get showProject() {
-    return this.args.topic.project;
+    return (
+      this.siteSettings.projects_addon
+    ) && (
+      this.router.currentRouteName === "discovery.latest" ||
+      this.router.currentRouteName === "discovery.new" ||
+      this.router.currentRouteName === "discovery.top" ||
+      this.router.currentRouteName === "discovery.posted"
+    ) && !!(
+      this.args.topic.project
+    );
   }
 
   get showCategory() {
