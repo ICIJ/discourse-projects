@@ -6,8 +6,6 @@ import icon from "discourse/helpers/d-icon";
 import { i18n } from "discourse-i18n";
 
 export default class NewSubcategoryButton extends Component {
-  @service modal;
-  @service site;
   @service siteSettings;
   @service newSubcategoryModal;
 

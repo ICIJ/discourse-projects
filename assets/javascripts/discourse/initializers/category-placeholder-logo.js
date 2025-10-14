@@ -50,6 +50,6 @@ function initialize(api) {
 export default {
   name: "category-placeholder-logo",
   initialize() {
-    withPluginApi("2.1.1", initialize);
+    withPluginApi(initialize);
   },
 };

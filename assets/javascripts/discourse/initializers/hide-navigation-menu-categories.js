@@ -21,6 +21,6 @@ export default {
   name: "hide-navigation-menu-categories",
 
   initialize() {
-    withPluginApi("2.1.1", initialize);
+    withPluginApi(initialize);
   },
 };

@@ -81,6 +81,6 @@ function initialize(api) {
 export default {
   name: "new-category-permissions",
   initialize() {
-    withPluginApi("2.1.1", initialize);
+    withPluginApi(initialize);
   },
 };

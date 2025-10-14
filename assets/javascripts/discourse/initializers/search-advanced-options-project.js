@@ -63,6 +63,6 @@ function initialize(api) {
 export default {
   name: "search-advanced-options-project",
   initialize() {
-    withPluginApi("2.1.1", initialize);
+    withPluginApi(initialize);
   },
 };

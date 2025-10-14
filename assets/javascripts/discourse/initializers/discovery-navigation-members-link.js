@@ -25,6 +25,6 @@ function initialize(api) {
 export default {
   name: "discovery-navigation-members-link",
   initialize() {
-    withPluginApi("2.1.1", initialize);
+    withPluginApi(initialize);
   },
 };

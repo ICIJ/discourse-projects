@@ -8,7 +8,6 @@ import uniqueBy from "../helpers/unique-by";
 
 export default class MembersRoute extends DiscourseRoute {
   @service router;
-  @service store;
 
   async model({ category_slug: slug }) {
     // Load the category by its slug.

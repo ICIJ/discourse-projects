@@ -1,5 +1,5 @@
-import { getOwner } from "@ember/application";
 import { not } from "@ember/object/computed";
+import { getOwner } from "@ember/owner";
 import { withPluginApi } from "discourse/lib/plugin-api";
 
 /**
@@ -22,6 +22,6 @@ function initialize(api) {
 export default {
   name: "new-category-parent-chooser",
   initialize() {
-    withPluginApi("2.1.1", initialize);
+    withPluginApi(initialize);
   },
 };

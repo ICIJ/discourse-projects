@@ -1,4 +1,3 @@
-import { service } from "@ember/service";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import { defaultHomepage } from "discourse/lib/utilities";
 import DiscourseRoute from "discourse/routes/discourse";
@@ -6,9 +5,6 @@ import { i18n } from "discourse-i18n";
 import Project from "../models/Project";
 
 export default class ProjectsRoute extends DiscourseRoute {
-  @service router;
-  @service siteSettings;
-
   async model() {
     try {
       const projects = await Project.findList();

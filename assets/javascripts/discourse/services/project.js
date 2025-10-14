@@ -1,5 +1,5 @@
 import { tracked } from "@glimmer/tracking";
-import { getOwner } from "@ember/application";
+import { getOwner } from "@ember/owner";
 import Service, { service } from "@ember/service";
 import { disableImplicitInjections } from "discourse/lib/implicit-injections";
 import Category from "discourse/models/category";
@@ -13,7 +13,6 @@ import Project from "../models/Project";
 @disableImplicitInjections
 export default class ProjectService extends Service {
   @service router;
-  @service store;
 
   @tracked all = [];
 

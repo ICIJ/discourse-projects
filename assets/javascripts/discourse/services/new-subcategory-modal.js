@@ -6,8 +6,6 @@ import ParentCategoryChooser from "../components/modal/parent-category-chooser";
 @disableImplicitInjections
 export default class NewSubcategory extends Service {
   @service modal;
-  @service site;
-  @service siteSettings;
 
   async create(currentCategory) {
     if (currentCategory) {
