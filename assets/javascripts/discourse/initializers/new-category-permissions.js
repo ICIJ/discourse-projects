@@ -23,31 +23,52 @@ function initialize(api) {
   }
 
   api.modifyClass(
-    "controller:edit-category-tabs",
+    "route:new-category",
+    (Superclass) =>
+      class extends Superclass {
+        setupController(controller, model, transition) {
+          super.setupController(controller, model, transition);
+          // This is to ensure that when we create a new category
+          // with a parent category, the permissions
+          // are updated accordingly.
+          return controller.setCategoryPermissions();
+        }
+      }
+  );
+
+  api.modifyClass(
+    "controller:edit-category.tabs",
     (Superclass) =>
       class extends Superclass {
         init() {
           super.init(...arguments);
-          this.actions.registerValidator.call(
-            this,
-            this.validateParentCategory.bind(this)
-          );
+          // Register the validator to ensure the parent category is valid
+          const validator = this.validateParentCategory.bind(this);
+          this.actions.registerValidator.call(this, validator);
         }
 
+        // This observer current doesnt work. That means that if you change
+        // the parent category, the permissions are not updated accordingly.
+        // We need to find a way to make it work. For now, the permissions
+        // are only set when the controller is initialized.
         @observes("model.parent_category_id")
-        async onParentCategoryChange() {
-          if (this.model.parent_category_id) {
-            const groupPermissions = await getCategoryGroupPermissions(
-              this.model.parent_category_id
-            );
-            // This ensure we do not cumulate new permissions with the existing one
-            this.model.permissions.clear();
-            // Then we add each permission one by one to ensure
-            // the set is used correctly
-            groupPermissions.forEach((permission) => {
-              this.model.addPermission(permission);
-            });
+        onParentCategoryChange() {
+          return this.setCategoryPermissions();
+        }
+
+        async setCategoryPermissions() {
+          if (!this.model.parent_category_id) {
+            return;
           }
+
+          const groupPermissions = await getCategoryGroupPermissions(
+            this.model.parent_category_id
+          );
+          // This ensure we do not cumulate new permissions with the existing one
+          this.model.permissions.clear();
+          // Then we add each permission one by one to ensure
+          // the set is used correctly
+          groupPermissions.forEach(this.model.addPermission.bind(this.model));
         }
 
         get hasParentCategory() {
@@ -68,7 +89,8 @@ function initialize(api) {
         }
 
         validateParentCategory() {
-          // This valid
+          // If we don't need to validate the parent category, or if we have one,
+          // or if the user is an admin then everything is fine.
           if (
             !this.hasParentValidation ||
             this.hasParentCategory ||
@@ -76,7 +98,6 @@ function initialize(api) {
           ) {
             return false;
           }
-          // This invalid
           this.dialog.alert(i18n("js.subcategory.errors.parent"));
           return true;
         }
