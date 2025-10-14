@@ -11,6 +11,12 @@ import { i18n } from "discourse-i18n";
  * the correct permissions are set based on the parent category.
  */
 function initialize(api) {
+  const user = api.getCurrentUser();
+  // Only proceed if the user is a moderator or an admin
+  if (!user?.moderator && !user?.admin) {
+    return;
+  }
+
   async function getCategoryGroupPermissions(categoryId) {
     const { category } = await ajax(`/c/${categoryId}/show.json`);
     return category.group_permissions;

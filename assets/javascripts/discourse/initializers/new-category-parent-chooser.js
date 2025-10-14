@@ -7,6 +7,12 @@ import { withPluginApi } from "discourse/lib/plugin-api";
  * when creating a new subcategory from a project.
  */
 function initialize(api) {
+  const user = api.getCurrentUser();
+  // Only proceed if the user is a moderator or an admin
+  if (!user?.moderator && !user?.admin) {
+    return;
+  }
+
   api.modifyClass("component:edit-category-general", {
     pluginId: "discourse-projects",
     get canSelectParentCategory() {
