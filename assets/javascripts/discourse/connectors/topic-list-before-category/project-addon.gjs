@@ -13,14 +13,12 @@ export default class ProjectAddonConnector extends Component {
 
   shouldRender() {
     return (
-      this.siteSettings.projects_addon
-    ) && (
-      this.router.currentRouteName === "discovery.latest" ||
-      this.router.currentRouteName === "discovery.new" ||
-      this.router.currentRouteName === "discovery.top" ||
-      this.router.currentRouteName === "discovery.posted"
-    ) && !!(
-      this.outletArgs.topic.project
+      this.siteSettings.projects_addon &&
+      (this.router.currentRouteName === "discovery.latest" ||
+        this.router.currentRouteName === "discovery.new" ||
+        this.router.currentRouteName === "discovery.top" ||
+        this.router.currentRouteName === "discovery.posted") &&
+      !!this.outletArgs.topic.project
     );
   }
 
