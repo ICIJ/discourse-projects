@@ -3,7 +3,7 @@ import DiscourseRoute from "discourse/routes/discourse";
 import { i18n } from "discourse-i18n";
 import Project from "../models/Project";
 
-export default class MembersRoute extends DiscourseRoute {
+export default class ProjectMembersRoute extends DiscourseRoute {
   @service router;
 
   async model({ category_slug: slug }) {

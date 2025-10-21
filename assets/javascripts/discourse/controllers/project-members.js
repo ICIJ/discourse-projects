@@ -8,7 +8,7 @@ import DiscourseURL from "discourse/lib/url";
 import Category from "discourse/models/category";
 import NavItem from "discourse/models/nav-item";
 
-export default class MembersController extends Controller {
+export default class ProjectMembersController extends Controller {
   @service router;
 
   order = "username";
@@ -56,12 +56,12 @@ export default class MembersController extends Controller {
 
   @action
   editCategory() {
-    DiscourseURL.routeTo(`/c/${Category.slugFor(this.category)}/edit`)
+    DiscourseURL.routeTo(`/c/${Category.slugFor(this.category)}/edit`);
   }
 
   @action
   createCategory() {
-    this.router.transitionTo("newCategory")
+    this.router.transitionTo("newCategory");
   }
 
   @debounce(500)

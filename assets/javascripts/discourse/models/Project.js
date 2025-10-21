@@ -78,12 +78,12 @@ export default class Project {
     // Always reset offset to 0 when refreshing
     const data = { limit, offset: refresh ? 0 : offset, filter, asc };
     const response = await Project.loadMembers(this.slug, data);
-    // If refreshing... 
+    // If refreshing...
     this.members = refresh
-    // * replace members
-    ? response.members
-    // * otherwise append members*
-      : [...this.members, ...response.members];
+      ? // * replace members
+        response.members
+      : // * otherwise append members*
+        [...this.members, ...response.members];
     // We update the model to reflect the new members count, limit and offset
     this.members_count = response.meta.total;
     this.limit = response.meta.limit;
