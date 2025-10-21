@@ -1,30 +1,18 @@
 import { service } from "@ember/service";
-import Category from "discourse/models/category";
-import Group from "discourse/models/group";
 import DiscourseRoute from "discourse/routes/discourse";
 import { i18n } from "discourse-i18n";
-import iteratee from "../helpers/iteratee";
-import uniqueBy from "../helpers/unique-by";
+import Project from "../models/Project";
 
 export default class MembersRoute extends DiscourseRoute {
   @service router;
 
   async model({ category_slug: slug }) {
-    // Load the category by its slug.
-    const category = Category.findSingleBySlug(slug);
-    // Reload it from the backend to get its groups permissions
-    const groupPermissions = await Category.reloadBySlugPath(slug).then(
-      iteratee("category.group_permissions")
-    );
-    // Define an asynchronous function to load group members.
-    const loadMembers = ({ group_name: name }) =>
-      Group.loadMembers(name).then(iteratee("members"));
-    // Use Promise.all to load members for all groups concurrently.
-    const groupMembers = await Promise.all(groupPermissions.map(loadMembers));
-    // Flatten the array of group members and remove duplicates.
-    const members = uniqueBy(groupMembers.flat(), iteratee("id"));
-    // Return the category and its unique members.
-    return { category, members };
+    return Project.create({ slug }).load();
+  }
+
+  setupController(controller, model) {
+    controller.setProperties({ model });
+    controller.reloadMembers();
   }
 
   afterModel(model) {
@@ -35,8 +23,7 @@ export default class MembersRoute extends DiscourseRoute {
   }
 
   titleToken() {
-    const { category } = this.currentModel;
-    const { name: projectName } = category;
+    const { name: projectName } = this.currentModel;
     return i18n("members.title", { projectName });
   }
 }
