@@ -6,7 +6,6 @@ import { observes } from "@ember-decorators/object";
 import discourseComputed, { debounce } from "discourse/lib/decorators";
 import DiscourseURL from "discourse/lib/url";
 import Category from "discourse/models/category";
-import NavItem from "discourse/models/nav-item";
 
 export default class ProjectMembersController extends Controller {
   @service router;
@@ -102,17 +101,5 @@ export default class ProjectMembersController extends Controller {
   @discourseComputed("model.members_count")
   membersTotal(count) {
     return count;
-  }
-
-  @discourseComputed("category")
-  navItems(category) {
-    return NavItem.buildList(category, {
-      filterType: "latest",
-      noSubcategories: false,
-      currentRouteQueryParams: this.router.currentRoute.queryParams,
-      tagId: null,
-      siteSettings: this.siteSettings,
-      skipCategoriesNavItem: true,
-    });
   }
 }
