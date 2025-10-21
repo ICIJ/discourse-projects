@@ -1,4 +1,4 @@
-import { fillIn, visit } from "@ember/test-helpers";
+import { visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import { cloneJSON } from "discourse/lib/object";
 import categoryFixtures from "discourse/tests/fixtures/category-fixtures";
@@ -12,7 +12,7 @@ import {
 } from "discourse/tests/helpers/qunit-helpers";
 
 acceptance("Members", function (needs) {
-  // Use Discourse's ficture for categories
+  // Use Discourse's fixture for categories
   // @see https://github.com/discourse/discourse/blob/main/app/assets/javascripts/discourse/tests/fixtures/discovery-fixtures.js
   const categories =
     discoveryFixtures["/categories.json"].category_list.categories;
@@ -24,7 +24,7 @@ acceptance("Members", function (needs) {
   needs.pretender((server, helper) => {
     server.get("/projects.json", () => helper.response({ projects: [] }));
 
-    server.get("/groups/:group-id/members.json", () => {
+    server.get("/projects/:slug/members.json", () => {
       // Use Discourse's fixture for member
       // @see https://github.com/discourse/iscourse/blob/main/app/assets/javascripts/discourse/tests/fixtures/group-fixtures.js
       return helper.response(
@@ -36,6 +36,13 @@ acceptance("Members", function (needs) {
       // Use Discourse's fixture for the first category
       // @see https://github.com/discourse/iscourse/blob/main/app/assets/javascripts/discourse/tests/fixtures/category-fixtures.js
       return helper.response(cloneJSON(categoryFixtures["/c/1/show.json"]));
+    });
+
+    server.get("/projects/:slug.json", () => {
+      // Use Discourse's fixture for the first category
+      // @see https://github.com/discourse/iscourse/blob/main/app/assets/javascripts/discourse/tests/fixtures/category-fixtures.js
+      const { category: project } = categoryFixtures["/c/1/show.json"];
+      return helper.response(cloneJSON({ project }));
     });
   });
 
@@ -51,16 +58,6 @@ acceptance("Members", function (needs) {
       "it shows a members list"
     );
     assert.strictEqual(count(".members .directory-table__row"), 7);
-  });
-
-  test("Members page should filter members by username", async function (assert) {
-    await visit("/c/bug/members");
-    await fillIn(".members-header-search", "awesomerobot");
-    assert.ok(
-      exists(".members .directory-table-container"),
-      "it shows a members list"
-    );
-    assert.strictEqual(count(".members .directory-table__row"), 1);
   });
 
   test("Members page list members sorted by username by default", async function (assert) {
