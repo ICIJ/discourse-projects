@@ -40,7 +40,7 @@ export default class ProjectService extends Service {
   get category() {
     // Destructure for cleaner access
     const { category_id, category_slug, category_slug_path_with_id } =
-      this.routeParams(this.router.currentRoute);
+      this.routeParams(this.router.currentRoute ?? {});
 
     if (isDefined(category_id)) {
       return Category.findById(category_id);
@@ -79,10 +79,12 @@ export default class ProjectService extends Service {
    * parameters from its parent routes, if any.
    *
    * @param {Object} route - The route from which to gather parameters.
+   * @param {Object} route.parent - The parent route, if any.
+   * @param {Object} route.params - The parameters of the current route.
    * @return {Object} - An aggregated object of parameters from the given route and its parents.
    */
-  routeParams(route) {
-    const parentParams = route.parent ? this.routeParams(route.parent) : {};
-    return { ...parentParams, ...route.params };
+  routeParams({ parent = null, params = null } = {}) {
+    const parentParams = parent ? this.routeParams(parent) : {};
+    return { ...parentParams, ...params };
   }
 }
