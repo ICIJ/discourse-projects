@@ -1,5 +1,5 @@
-import { service } from "@ember/service";
 import Component from "@glimmer/component";
+import { service } from "@ember/service";
 import categoryLink from "discourse/helpers/category-link";
 import { apiInitializer } from "discourse/lib/api";
 import { projectLinkHTML } from "../helpers/project-link";
@@ -17,14 +17,12 @@ class ItemCell extends Component {
 
   get showProject() {
     return (
-      this.siteSettings.projects_addon
-    ) && (
-      this.router.currentRouteName === "discovery.latest" ||
-      this.router.currentRouteName === "discovery.new" ||
-      this.router.currentRouteName === "discovery.top" ||
-      this.router.currentRouteName === "discovery.posted"
-    ) && !!(
-      this.args.topic.project
+      this.siteSettings.projects_addon &&
+      (this.router.currentRouteName === "discovery.latest" ||
+        this.router.currentRouteName === "discovery.new" ||
+        this.router.currentRouteName === "discovery.top" ||
+        this.router.currentRouteName === "discovery.posted") &&
+      !!this.args.topic.project
     );
   }
 
