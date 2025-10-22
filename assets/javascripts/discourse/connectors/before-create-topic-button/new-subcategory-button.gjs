@@ -23,7 +23,8 @@ export default class NewSubcategoryButtonConnector extends Component {
   }
 
   get isDiscoveryCategoriesRoute() {
-    return this.router.currentRouteName === "discovery.categories";
+    return this.router.currentRouteName === "discovery.categories"
+        || this.router.currentRouteName === "discovery.subcategories";
   }
 
   <template>
