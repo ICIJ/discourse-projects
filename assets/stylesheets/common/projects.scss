@@ -42,7 +42,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
     gap: 1rem;
-    margin-top: 1rem;
+    margin-block: 1rem;
 
     &__entry {
       border-width: var(--d-category-border-box-width);
