@@ -1,5 +1,4 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
-import Category from "discourse/models/category";
 import { i18n } from "discourse-i18n";
 
 /**
@@ -15,12 +14,13 @@ function initialize(api) {
       return !!category;
     },
     customHref(category) {
-      return `/c/${Category.slugFor(category)}/categories`;
+      const slug = category.path.split("/c/").pop();
+      return `/c/${slug}/subcategories`;
     },
     forceActive(category, _args, router) {
-      return (
-        router.currentURL === `/c/${Category.slugFor(category)}/categories`
-      );
+      const slug = category.path.split("/c/").pop();
+      const href = `/c/${slug}/subcategories`;
+      return router.currentURL === href;
     },
   });
 }
