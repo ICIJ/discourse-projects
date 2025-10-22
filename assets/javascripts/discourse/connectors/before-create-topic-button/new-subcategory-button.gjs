@@ -1,5 +1,6 @@
 import Component from "@ember/component";
 import { computed } from "@ember/object";
+import discourseComputed from "discourse/lib/decorators";
 import { service } from "@ember/service";
 import NewSubcategoryButton from "../../components/new-subcategory-button";
 
@@ -13,24 +14,27 @@ export default class NewSubcategoryButtonConnector extends Component {
   @service currentUser;
   @service router;
 
-  @computed("router.currentRouteName")
-  get show() {
+  shouldRender() {
     return this.canCreateCategory && !this.isDiscoveryCategoriesRoute;
   }
 
-  get canCreateCategory() {
-    return this.currentUser?.can_create_category;
+  @discourseComputed("currentUser")
+  canCreateCategory(currentUser) {
+    return currentUser?.can_create_category;
   }
 
-  get isDiscoveryCategoriesRoute() {
-    return (
-      this.router.currentRouteName === "discovery.categories" ||
-      this.router.currentRouteName === "discovery.subcategories"
-    );
+  @discourseComputed("router.currentRouteName")
+  isDiscoveryCategoriesRoute(currentRouteName) {
+    const routes = ["discovery.categories", "discovery.subcategories"];
+    return routes.includes(currentRouteName);
+  }
+
+  get classNames() {
+    return this.shouldRender() ? [] : ["hidden"];
   }
 
   <template>
-    {{#if this.show}}
+    {{#if this.shouldRender}}
       <NewSubcategoryButton @category={{@outletArgs.category}} />
     {{/if}}
   </template>
