@@ -1,7 +1,6 @@
 import Component from "@ember/component";
-import { computed } from "@ember/object";
-import discourseComputed from "discourse/lib/decorators";
 import { service } from "@ember/service";
+import discourseComputed from "discourse/lib/decorators";
 import NewSubcategoryButton from "../../components/new-subcategory-button";
 
 /**
