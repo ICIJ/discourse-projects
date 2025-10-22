@@ -9,7 +9,8 @@ function initialize(api) {
   api.addNavigationBarItem({
     name: "link-to-subcategories",
     displayName: i18n("top_menu.subcategories"),
-    before: "posted",
+    after: "posted",
+    before: "link-to-members",
     customFilter(category) {
       return !!category;
     },
