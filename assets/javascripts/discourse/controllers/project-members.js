@@ -8,6 +8,8 @@ import DiscourseURL from "discourse/lib/url";
 import Category from "discourse/models/category";
 
 export default class ProjectMembersController extends Controller {
+  @service composer;
+  @service currentUser;
   @service router;
 
   order = "username";
@@ -59,6 +61,13 @@ export default class ProjectMembersController extends Controller {
   }
 
   @action
+  createTopic() {
+    this.composer.openNewTopic({
+      category: this.category
+    });
+  }
+
+  @action
   createCategory() {
     this.router.transitionTo("newCategory");
   }
@@ -101,5 +110,10 @@ export default class ProjectMembersController extends Controller {
   @discourseComputed("model.members_count")
   membersTotal(count) {
     return count;
+  }
+
+  @discourseComputed("currentUser")
+  canCreateTopic(currentUser) {
+    return currentUser?.can_create_topic;
   }
 }

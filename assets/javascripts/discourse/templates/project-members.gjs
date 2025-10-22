@@ -15,14 +15,16 @@ export default RouteTemplate(
       <section class="navigation-container">
         <DNavigation
           @category={{@controller.category}}
-          @showCategoryAdmin={{false}}
-          @createTopic={{false}}
-          @noSubcategories={{false}}
-          @toggleInfo={{false}}
-          @editCategory={{@controller.editCategory}}
           @createCategory={{@controller.createCategory}}
+          @createTopic={{@controller.createTopic}}
+          @editCategory={{@controller.editCategory}}
           @hasDraft={{false}}
+          @noSubcategories={{false}}
+          @showCategoryAdmin={{false}}
           @skipCategoriesNavItem={{true}}
+          @toggleInfo={{false}}
+
+          @canCreateTopic={{@controller.canCreateTopic}}
         />
       </section>
 
