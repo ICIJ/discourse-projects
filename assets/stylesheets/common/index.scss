@@ -17,3 +17,14 @@
   .sidebar-section[data-section-name="categories"] {
   display: none;
 }
+
+
+// This ensure both the edit category button and the
+// category notifications tracking button are at the end
+// of the navigation controls. This is needed because
+// we use a connector to add the "new category" button
+// on some pages which changes the order of the buttons.
+.navigation-controls > .edit-category,
+.navigation-controls > .category-notifications-tracking {
+  order: 10;
+}
