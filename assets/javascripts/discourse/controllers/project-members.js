@@ -63,7 +63,7 @@ export default class ProjectMembersController extends Controller {
   @action
   createTopic() {
     this.composer.openNewTopic({
-      category: this.category
+      category: this.category,
     });
   }
 

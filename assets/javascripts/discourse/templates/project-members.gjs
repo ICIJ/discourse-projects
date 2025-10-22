@@ -23,7 +23,6 @@ export default RouteTemplate(
           @showCategoryAdmin={{false}}
           @skipCategoriesNavItem={{true}}
           @toggleInfo={{false}}
-
           @canCreateTopic={{@controller.canCreateTopic}}
         />
       </section>
