@@ -13,9 +13,21 @@
   }
 }
 
-.hide-navigation-menu-categories
+.hide-navigation-menu-categories {
   .sidebar-section[data-section-name="categories"] {
-  display: none;
+    display: none;
+  }
+}
+
+.highlight-projects-sidebar-link {
+  .sidebar-section-link[href="/projects"] {
+    background: var(--btn-tertiary-bg);
+    color: var(--btn-tertiary-color);
+
+    .sidebar-section-link-prefix.icon {
+      color: inherit;
+    }
+  }
 }
 
 // This ensure both the edit category button and the
