@@ -25,7 +25,7 @@ plugins:
     max: 4
     client: true
   projects_banner_routes:
-    default: "discovery|subcategories|members|topic!"
+    default: "discovery|subcategories|projectMembers|topic!"
     type: list
     client: true
   projects_category_requires_parent:
