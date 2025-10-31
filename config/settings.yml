@@ -43,3 +43,6 @@ plugins:
   projects_styled_links:
     default: true
     client: true
+  projects_home_logo_to_projects:
+    default: false
+    client: true
