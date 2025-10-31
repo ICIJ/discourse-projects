@@ -33,25 +33,37 @@
   .sidebar-section-link[href="/projects"] {
     position: relative;
 
-    &:after {
+    &::after {
       content: "";
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(45deg,
-            #d0232b,
-            #f15d22,
-            #fff9ae,
-            #00a94f,
-            #00aeef);
+      background: linear-gradient(
+        45deg,
+        #d0232b,
+        #f15d22,
+        #fff9ae,
+        #00a94f,
+        #00aeef
+      );
       border-radius: inherit;
+
       // Turn the background into a 2px border
-      clip-path: polygon(evenodd, 
-        0 0, 100% 0, 100% 100%, 0 100%, 0 0,
-        2px 2px, calc(100% - 2px) 2px, calc(100% - 2px) calc(100% - 2px), 
-        2px calc(100% - 2px), 2px 2px);
+      clip-path: polygon(
+        evenodd,
+        0 0,
+        100% 0,
+        100% 100%,
+        0 100%,
+        0 0,
+        2px 2px,
+        calc(100% - 2px) 2px,
+        calc(100% - 2px) calc(100% - 2px),
+        2px calc(100% - 2px),
+        2px 2px
+      );
     }
   }
 }
