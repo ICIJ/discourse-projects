@@ -1,4 +1,4 @@
-name: Discourse Projects Plugin - CI
+name: Discourse Projects Plugin
 
 on:
   push:
