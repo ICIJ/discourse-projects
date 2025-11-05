@@ -31,8 +31,7 @@ after_initialize do
   end
 
   add_to_serializer(:current_user, :can_create_category) do
-    guardian = Guardian.new(scope.user)
-    guardian.is_admin? || (SiteSetting.moderators_manage_categories_and_groups && guardian.is_moderator?)
+    Guardian.new(scope.user).can_create_category?
   end
 
   add_to_serializer(:basic_category, :is_project) do
