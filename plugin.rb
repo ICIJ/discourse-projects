@@ -24,7 +24,7 @@ after_initialize do
     get '/c/*category_slug/members' => "categories#find_by_slug", :constraints => { format: 'html' }, as: "members_index"
   end
 
-  reloadable_patch do |_plugin|
+  reloadable_patch do
     ApplicationLayoutPreloader.prepend DiscourseProjects::ApplicationLayoutPreloaderExtension
     Category.prepend DiscourseProjects::CategoryExtension
     Topic.prepend DiscourseProjects::TopicExtension
