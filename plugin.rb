@@ -2,8 +2,8 @@
 
 # name: discourse-projects
 # about: A plugin for using groups to separate and organize categories and topics.
-# version: 0.0.0
 # authors: ICIJ <engineering@icij.org>
+# url: https://github.com/ICIJ/discourse-projects
 # required_version: 3.4.0
 
 
