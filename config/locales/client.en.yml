@@ -1,5 +1,12 @@
 en:
   js:
+    categories:
+      subcategories_label: categories
+      subcategories: Categories
+      no_subcategories: no categories
+    category:
+      list_filters:
+        none: no categories
     top_menu:
       members: Members
       subcategories: Categories
@@ -22,10 +29,6 @@ en:
       filter: type to filter...
       empty: No projects found.
       sortBy: Sort by
-      showDescription: Show description
-      showSubcategories: Show subcategories
-      subcategories: 
-        empty: This category has no subcategories
       matches: 
         one: 1 projects match
         other: '%{count} projects match'
