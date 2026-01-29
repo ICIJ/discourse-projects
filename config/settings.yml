@@ -46,3 +46,6 @@ plugins:
   projects_home_logo_to_projects:
     default: false
     client: true
+  projects_sort_categories_alphabetically:
+    default: true
+    client: false

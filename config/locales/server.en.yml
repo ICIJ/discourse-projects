@@ -14,3 +14,4 @@ en:
     projects_show_logo_placeholder: Show a placeholder logo for projects without a custom logo
     projects_styled_links: Use a different style for project links
     projects_home_logo_to_projects: Make the logo on the homepage link to the projects page
+    projects_sort_categories_alphabetically: Sort categories and subcategories alphabetically instead of by position
