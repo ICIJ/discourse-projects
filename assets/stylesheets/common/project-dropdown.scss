@@ -1,9 +1,14 @@
-.category-breadcrumb {
-  li.project-dropdown + li.bread-crumbs-left-outlet + li,
-  li.bread-crumbs-left-outlet.project-dropdown + li {
-    display: none;
+// When project dropdown is enabled, hide the core category dropdown that follows
+.breadcrumb-project-dropdown {
+  .category-breadcrumb {
+    li.project-dropdown + li.bread-crumbs-left-outlet + li,
+    li.bread-crumbs-left-outlet.project-dropdown + li {
+      display: none;
+    }
   }
+}
 
+.category-breadcrumb {
   .select-kit.combo-box.category-drop
     .select-kit-row[data-value="no-projects"] {
     color: var(--tertiary);
