@@ -68,10 +68,10 @@ function initialize(api) {
 
               // Insert at the position matching its order in top_menu
               const topMenuOrder = siteSettings.top_menu.split("|");
-              const catIdx = topMenuOrder.indexOf("categories");
-              const isAfter = (item) => topMenuOrder.indexOf(item.name) > catIdx;
-              const idx = items.findIndex(isAfter);
-              const pos = idx === -1 ? items.length : idx;
+              const categoriesIndex = topMenuOrder.indexOf("categories");
+              const isAfterCategories = (item) => topMenuOrder.indexOf(item.name) > categoriesIndex;
+              const index = items.findIndex(isAfterCategories);
+              const pos = index === -1 ? items.length : index;
               items.splice(pos, 0, categoriesItem);
             }
           }
