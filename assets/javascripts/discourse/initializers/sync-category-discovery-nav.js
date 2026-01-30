@@ -1,5 +1,4 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
-import Category from "discourse/models/category";
 import { customNavItemHref } from "discourse/models/nav-item";
 
 /**
@@ -26,8 +25,8 @@ function initialize(api) {
   // to point to the subcategories page instead of /categories
   customNavItemHref(function (navItem) {
     if (navItem.name === "categories" && navItem.category) {
-      const slug = Category.slugFor(navItem.category);
-      return `/c/${slug}/subcategories`;
+      // Use category.path which includes the ID (e.g., /c/aladdin/1435)
+      return `${navItem.category.path}/subcategories`;
     }
     return null; // Use default href
   });
