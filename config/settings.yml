@@ -55,3 +55,6 @@ plugins:
   projects_sync_category_discovery_nav:
     default: false
     client: true
+  projects_link_to_subcategories:
+    default: false
+    client: true
