@@ -6,7 +6,6 @@ import { projectLinkHTML } from "../../helpers/project-link";
 // on both /categories and subcategories pages when the category
 // belongs to a project.
 export default class ProjectBadgeConnector extends Component {
-  @service siteSettings;
   @service router;
 
   get shouldRender() {
