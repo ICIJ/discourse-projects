@@ -17,3 +17,4 @@ en:
     projects_sort_categories_alphabetically: Sort categories and subcategories alphabetically instead of by position
     projects_hide_projects_from_categories_page: Hide projects (top-level categories) from the /categories page, showing only their subcategories
     projects_sync_category_discovery_nav: Ensure category pages show the same navigation items as the main page (based on top_menu setting)
+    projects_link_to_subcategories: Make project links (e.g., in the banner) redirect to the subcategories page instead of the main category page
