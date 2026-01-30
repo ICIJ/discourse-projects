@@ -9,6 +9,7 @@ import dIcon from "discourse/helpers/d-icon";
 import dirSpan from "discourse/helpers/dir-span";
 import { i18n } from "discourse-i18n";
 import ComboBox from "select-kit/components/combo-box";
+import { projectUrl } from "../helpers/project-link";
 
 export default RouteTemplate(
   <template>
@@ -56,11 +57,11 @@ export default RouteTemplate(
               class="projects__grid__entry"
               style={{categoryColorVariable c.color}}
             >
-              <a class="projects__grid__entry__logo" href={{c.url}}>
+              <a class="projects__grid__entry__logo" href={{projectUrl c}}>
                 <CategoryLogo @category={{c}} />
               </a>
               <div class="projects__grid__entry__wrapper">
-                <a class="projects__grid__entry__title" href={{c.url}}>
+                <a class="projects__grid__entry__title" href={{projectUrl c}}>
                   <CategoryTitleBefore @category={{c}} />
                   <span class="projects__grid__entry__title__name">
                     {{dirSpan c.displayName}}
