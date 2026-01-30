@@ -49,3 +49,6 @@ plugins:
   projects_sort_categories_alphabetically:
     default: true
     client: false
+  projects_hide_projects_from_categories_page:
+    default: false
+    client: true

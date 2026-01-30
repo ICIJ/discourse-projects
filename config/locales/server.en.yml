@@ -15,3 +15,4 @@ en:
     projects_styled_links: Use a different style for project links
     projects_home_logo_to_projects: Make the logo on the homepage link to the projects page
     projects_sort_categories_alphabetically: Sort categories and subcategories alphabetically instead of by position
+    projects_hide_projects_from_categories_page: Hide projects (top-level categories) from the /categories page, showing only their subcategories
