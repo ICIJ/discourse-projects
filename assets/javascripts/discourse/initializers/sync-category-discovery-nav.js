@@ -64,12 +64,14 @@ function initialize(api) {
             );
             if (!hasCategories) {
               // Create a new categories NavItem for this category
-              const categoriesItem = Superclass.fromText("categories", { category });
-
+              const categoriesItem = Superclass.fromText("categories", {
+                category,
+              });
               // Insert at the position matching its order in top_menu
               const topMenuOrder = siteSettings.top_menu.split("|");
               const categoriesIndex = topMenuOrder.indexOf("categories");
-              const isAfterCategories = (item) => topMenuOrder.indexOf(item.name) > categoriesIndex;
+              const isAfterCategories = ({ name }) =>
+                topMenuOrder.indexOf(name) > categoriesIndex;
               const index = items.findIndex(isAfterCategories);
               const pos = index === -1 ? items.length : index;
               items.splice(pos, 0, categoriesItem);
