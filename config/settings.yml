@@ -58,3 +58,9 @@ plugins:
   projects_link_to_subcategories:
     default: false
     client: true
+  projects_breadcrumb_project_dropdown:
+    default: true
+    client: true
+  projects_breadcrumb_subcategory_links:
+    default: false
+    client: true
