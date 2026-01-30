@@ -1,13 +1,13 @@
 plugins:
+  # Core
   projects_enabled:
     default: true
     client: false
   projects_private:
     default: true
     client: false
-  projects_addon:
-    default: true
-    client: true
+
+  # Banner
   projects_banner:
     default: true
     client: true
@@ -28,8 +28,21 @@ plugins:
     default: "discovery|subcategories|projectMembers|topic!"
     type: list
     client: true
-  projects_category_requires_parent:
+
+  # Breadcrumb
+  projects_breadcrumb_project_dropdown:
     default: true
+    client: true
+  projects_breadcrumb_subcategory_links:
+    default: false
+    client: true
+
+  # Navigation
+  projects_link_to_subcategories:
+    default: false
+    client: true
+  projects_sync_category_discovery_nav:
+    default: false
     client: true
   projects_hide_navigation_menu_categories:
     default: false
@@ -37,14 +50,13 @@ plugins:
   projects_highlight_projects_sidebar_link:
     default: true
     client: true
-  projects_show_logo_placeholder:
-    default: true
-    client: true
-  projects_styled_links:
-    default: true
-    client: true
   projects_home_logo_to_projects:
     default: false
+    client: true
+
+  # Categories
+  projects_category_requires_parent:
+    default: true
     client: true
   projects_sort_categories_alphabetically:
     default: true
@@ -52,15 +64,14 @@ plugins:
   projects_hide_projects_from_categories_page:
     default: false
     client: true
-  projects_sync_category_discovery_nav:
-    default: false
-    client: true
-  projects_link_to_subcategories:
-    default: false
-    client: true
-  projects_breadcrumb_project_dropdown:
+
+  # Styling
+  projects_addon:
     default: true
     client: true
-  projects_breadcrumb_subcategory_links:
-    default: false
+  projects_styled_links:
+    default: true
+    client: true
+  projects_show_logo_placeholder:
+    default: true
     client: true
