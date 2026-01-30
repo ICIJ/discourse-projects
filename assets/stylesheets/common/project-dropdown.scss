@@ -15,3 +15,104 @@
     font-weight: 700;
   }
 }
+
+// When breadcrumb subcategory links are enabled, hide subcategory dropdowns
+// since we render them as links instead.
+.breadcrumb-subcategory-links {
+  .category-breadcrumb {
+    align-items: center;
+
+    // When project dropdown is enabled, hide ALL core category dropdowns
+    li.bread-crumbs-left-outlet.project-dropdown ~ li:has(.category-drop) {
+      display: none;
+    }
+
+    // When project dropdown is disabled, hide ALL category dropdowns
+    // (all categories including the project are shown as links)
+    &:not(:has(li.project-dropdown)) li:has(.category-drop) {
+      display: none;
+    }
+
+    // Style the subcategory links with arrow separators
+    li.breadcrumb-subcategory-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 41.5px;
+      padding: 0 0.5rem;
+      background: var(--primary-very-low);
+      position: relative;
+      margin-left: 0;
+
+      // Arrow point on the right side using border triangle
+      &::after {
+        content: "";
+        position: absolute;
+        left: 100%;
+        top: 0;
+        width: 0;
+        height: 0;
+        border-top: 20.75px solid transparent;
+        border-bottom: 20.75px solid transparent;
+        border-left: 10px solid var(--primary-very-low);
+        z-index: 1;
+      }
+
+      // Notch on the left side using border triangle with page background
+      &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 0;
+        height: 0;
+        border-top: 20.75px solid transparent;
+        border-bottom: 20.75px solid transparent;
+        border-left: 10px solid var(--secondary);
+      }
+
+      .badge-category__wrapper {
+        font-size: var(--d-nav-font-size);
+        align-items: center;
+        position: relative;
+        z-index: 2;
+      }
+
+      &:hover {
+        background: var(--primary-low);
+
+        &::after {
+          border-left-color: var(--primary-low);
+        }
+      }
+    }
+
+    // First subcategory link: no left notch, rounded left corners
+    li.breadcrumb-subcategory-link:not(li.breadcrumb-subcategory-link ~ li.breadcrumb-subcategory-link) {
+      border-radius: var(--d-border-radius) 0 0 var(--d-border-radius);
+
+      &::before {
+        display: none;
+      }
+    }
+
+    // Links following another link: extra left padding for the notch
+    li.breadcrumb-subcategory-link ~ li.breadcrumb-subcategory-link {
+      padding-left: 1rem;
+    }
+
+    // Hide duplicate renders from the outlet being called multiple times.
+    // Each render adds a hidden marker at the end. We hide any links/markers
+    // that come after the first marker (i.e., from subsequent renders).
+    li.breadcrumb-subcategory-links-end ~ li.breadcrumb-subcategory-link,
+    li.breadcrumb-subcategory-links-end ~ li.breadcrumb-subcategory-links-end {
+      display: none;
+    }
+
+    // Ensure tag dropdowns still appear at the end
+    li:has(.tag-drop),
+    li:has(.tags-intersection-chooser) {
+      order: 2;
+    }
+  }
+}
