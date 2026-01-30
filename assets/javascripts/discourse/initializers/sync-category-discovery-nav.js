@@ -1,6 +1,6 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
-import { customNavItemHref } from "discourse/models/nav-item";
 import Category from "discourse/models/category";
+import { customNavItemHref } from "discourse/models/nav-item";
 
 /**
  * This initializer ensures that category discovery pages show the same
@@ -60,7 +60,9 @@ function initialize(api) {
           // it out when category is present
           if (category && topMenuItems.has("categories")) {
             // Check if categories item already exists
-            const hasCategories = items.some((item) => item.name === "categories");
+            const hasCategories = items.some(
+              (item) => item.name === "categories"
+            );
             if (!hasCategories) {
               // Create a new categories NavItem for this category
               const categoriesItem = Superclass.fromText("categories", {
