@@ -77,3 +77,21 @@
 .navigation-controls > .category-notifications-tracking {
   order: 10;
 }
+
+// Project badge shown next to categories on the /categories page
+.category-list {
+  td.category:has(.category-project-badge) {
+    display: flex;
+    flex-direction: column;
+    
+    .category-project-badge {
+      order: -1;
+      display: block;
+      margin-bottom: 0.25em;
+  
+      .project-link--badge {
+        font-size: 0.85em;
+      }
+    }
+  }
+}
