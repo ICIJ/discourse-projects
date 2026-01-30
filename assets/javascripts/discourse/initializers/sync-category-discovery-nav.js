@@ -64,23 +64,19 @@ function initialize(api) {
             );
             if (!hasCategories) {
               // Create a new categories NavItem for this category
-              const categoriesItem = Superclass.fromText("categories", {
-                category,
-              });
+              const categoriesItem = Superclass.fromText("categories", { category });
+
               // Insert at the position matching its order in top_menu
               const topMenuOrder = siteSettings.top_menu.split("|");
               const categoriesIndex = topMenuOrder.indexOf("categories");
-
-              // Find the right position to insert
-              let insertIndex = items.length;
-              for (let i = 0; i < items.length; i++) {
-                const itemIndex = topMenuOrder.indexOf(items[i].name);
-                if (itemIndex > categoriesIndex) {
-                  insertIndex = i;
-                  break;
-                }
-              }
-              items.splice(insertIndex, 0, categoriesItem);
+              const insertIndex = items.findIndex(
+                (item) => topMenuOrder.indexOf(item.name) > categoriesIndex
+              );
+              items.splice(
+                insertIndex === -1 ? items.length : insertIndex,
+                0,
+                categoriesItem
+              );
             }
           }
 
