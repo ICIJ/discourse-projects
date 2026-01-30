@@ -88,7 +88,9 @@
     }
 
     // First subcategory link: no left notch, rounded left corners
-    li.breadcrumb-subcategory-link:not(li.breadcrumb-subcategory-link ~ li.breadcrumb-subcategory-link) {
+    li.breadcrumb-subcategory-link:not(
+        li.breadcrumb-subcategory-link ~ li.breadcrumb-subcategory-link
+      ) {
       border-radius: var(--d-border-radius) 0 0 var(--d-border-radius);
 
       &::before {
