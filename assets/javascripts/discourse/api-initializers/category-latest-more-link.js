@@ -7,41 +7,52 @@ import getURL from "discourse/lib/get-url";
  * the latest topic list to point to the category-scoped latest page
  * (e.g. /c/aladdin/42/l/latest) instead of the global /latest.
  *
- * We use a MutationObserver because:
- * - CategoriesAndLatestTopics imports CategoriesTopicList via a static
- *   ES module import, bypassing the Ember container — so `modifyClass`
- *   on the component has no effect.
- * - `onPageChange` + `schedule("afterRender")` fires before the Ember
- *   app finishes rendering the component tree on full page loads.
+ * CategoriesAndLatestTopics imports CategoriesTopicList via a static
+ * ES module import, bypassing the Ember container — so `modifyClass`
+ * on the component has no effect. We use `onPageChange` with a short
+ * polling loop to wait for the DOM element to appear after render.
  */
 function initialize(api) {
   const siteSettings = api.container.lookup("service:site-settings");
+  // Only apply this behavior if the setting is enabled.
   if (!siteSettings.projects_limit_latest_to_category) {
     return;
   }
 
-  function rewriteMoreLink() {
+  api.onPageChange(() => {
     const route = api.container.lookup("route:discovery.subcategories");
     const parentCategory = route?.controller?.model?.parentCategory;
+    // No parent category means we're not on a subcategories page, so we can skip the rest of the logic.
     if (!parentCategory) {
       return;
     }
 
-    const moreLink = document.querySelector(".more-topics a");
-    const href = `/c/${parentCategory.slug}/${parentCategory.id}/l/latest`;
-    if (moreLink) {
-      moreLink.href = getURL(href);
-    }
-  }
+    const href = `/c/${parentCategory.slug}/${parentCategory.id}/l/latest`
+    const targetHref = getURL(href);
 
-  // Observe the DOM for the .more-topics element appearing
-  const observer = new MutationObserver(() => rewriteMoreLink());
-  const childList = true;
-  const subtree = true;
-  observer.observe(document.documentElement, { childList, subtree });
-  // Also run on page changes for Ember transitions where the DOM may
-  // already be present but the link needs updating
-  api.onPageChange(() => rewriteMoreLink());
+    // Poll for the .more-topics link to appear in the DOM (up to ~500ms).
+    // This covers full page loads where Ember hasn't finished rendering yet.
+    let attempts = 0;
+
+    function retryRewrite() {
+      if (attempts < 10) {
+        attempts++;
+        requestAnimationFrame(tryRewrite);
+      }
+    }
+
+    function tryRewrite() {
+      const moreLink = document.querySelector(".more-topics a");
+      if (moreLink) {
+        moreLink.href = targetHref;
+        return
+      }
+      
+      retryRewrite();
+    }
+
+    tryRewrite();
+  });
 }
 
 export default apiInitializer(initialize);
