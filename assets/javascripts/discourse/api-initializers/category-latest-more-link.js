@@ -30,17 +30,19 @@ function initialize(api) {
       const owner = getOwner(this);
       const route = owner.lookup("route:discovery.subcategories");
       const moreLink = this.element?.querySelector(".more-topics a");
-      const parentCategory = route?.controller?.model?.parentCategory
+      const parentCategory = route?.controller?.model?.parentCategory;
 
       // No parent category means we're not on a subcategories page, so we can skip the rest of the logic.
-      // The more link may not be present if there are fewer topics than the threshold for showing the link, 
+      // The more link may not be present if there are fewer topics than the threshold for showing the link,
       // so we also check for its existence before trying to modify it.
       if (!parentCategory || !moreLink) {
         return;
       }
 
       // Finnally, rewrite the "More" link to point to the category-scoped latest page.
-      moreLink.href = getURL(`/c/${parentCategory.slug}/${parentCategory.id}/l/latest`);
+      moreLink.href = getURL(
+        `/c/${parentCategory.slug}/${parentCategory.id}/l/latest`
+      );
     },
   });
 }
