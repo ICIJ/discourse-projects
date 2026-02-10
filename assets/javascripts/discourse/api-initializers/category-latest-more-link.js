@@ -1,3 +1,4 @@
+import { getOwner } from "@ember/owner";
 import { apiInitializer } from "discourse/lib/api";
 import getURL from "discourse/lib/get-url";
 
@@ -7,10 +8,11 @@ import getURL from "discourse/lib/get-url";
  * the latest topic list to point to the category-scoped latest page
  * (e.g. /c/aladdin/42/l/latest) instead of the global /latest.
  *
- * CategoriesAndLatestTopics imports CategoriesTopicList via a static
- * ES module import, bypassing the Ember container — so `modifyClass`
- * on the component has no effect. We use `onPageChange` with a short
- * polling loop to wait for the DOM element to appear after render.
+ * CategoriesTopicList is a classic Ember component, so we can use
+ * `modifyClass` with `didRender` to rewrite the link after each render.
+ * Even though CategoriesAndLatestTopics imports CategoriesTopicList via
+ * a static ES module import, `reopen` modifies the class prototype
+ * in-place, so the modification applies everywhere.
  */
 function initialize(api) {
   const siteSettings = api.container.lookup("service:site-settings");
@@ -19,39 +21,27 @@ function initialize(api) {
     return;
   }
 
-  api.onPageChange(() => {
-    const route = api.container.lookup("route:discovery.subcategories");
-    const parentCategory = route?.controller?.model?.parentCategory;
-    // No parent category means we're not on a subcategories page, so we can skip the rest of the logic.
-    if (!parentCategory) {
-      return;
-    }
+  api.modifyClass("component:categories-topic-list", {
+    pluginId: "discourse-projects",
 
-    const href = `/c/${parentCategory.slug}/${parentCategory.id}/l/latest`;
-    const targetHref = getURL(href);
+    didRender() {
+      this._super(...arguments);
 
-    // Poll for the .more-topics link to appear in the DOM (up to ~500ms).
-    // This covers full page loads where Ember hasn't finished rendering yet.
-    let attempts = 0;
+      const owner = getOwner(this);
+      const route = owner.lookup("route:discovery.subcategories");
+      const moreLink = this.element?.querySelector(".more-topics a");
+      const parentCategory = route?.controller?.model?.parentCategory
 
-    function retryRewrite() {
-      if (attempts < 10) {
-        attempts++;
-        requestAnimationFrame(tryRewrite);
-      }
-    }
-
-    function tryRewrite() {
-      const moreLink = document.querySelector(".more-topics a");
-      if (moreLink) {
-        moreLink.href = targetHref;
+      // No parent category means we're not on a subcategories page, so we can skip the rest of the logic.
+      // The more link may not be present if there are fewer topics than the threshold for showing the link, 
+      // so we also check for its existence before trying to modify it.
+      if (!parentCategory || !moreLink) {
         return;
       }
 
-      retryRewrite();
-    }
-
-    tryRewrite();
+      // Finnally, rewrite the "More" link to point to the category-scoped latest page.
+      moreLink.href = getURL(`/c/${parentCategory.slug}/${parentCategory.id}/l/latest`);
+    },
   });
 }
 
