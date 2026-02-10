@@ -27,7 +27,7 @@ function initialize(api) {
       return;
     }
 
-    const href = `/c/${parentCategory.slug}/${parentCategory.id}/l/latest`
+    const href = `/c/${parentCategory.slug}/${parentCategory.id}/l/latest`;
     const targetHref = getURL(href);
 
     // Poll for the .more-topics link to appear in the DOM (up to ~500ms).
@@ -45,9 +45,9 @@ function initialize(api) {
       const moreLink = document.querySelector(".more-topics a");
       if (moreLink) {
         moreLink.href = targetHref;
-        return
+        return;
       }
-      
+
       retryRewrite();
     }
 
