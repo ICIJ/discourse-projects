@@ -64,6 +64,9 @@ plugins:
   projects_hide_projects_from_categories_page:
     default: false
     client: true
+  projects_limit_latest_to_category:
+    default: true
+    client: false
 
   # Styling
   projects_addon:

@@ -19,6 +19,7 @@ require_relative 'lib/engine'
 
 after_initialize do
   DiscourseProjects::CategorySorting.register(self)
+  DiscourseProjects::CategoryLatestFiltering.register(self)
 
   Discourse::Application.routes.prepend do
     get '/new-subcategory/:parent' => 'categories#show', :constraints => { format: 'html' }, as: "subcategory_new"
