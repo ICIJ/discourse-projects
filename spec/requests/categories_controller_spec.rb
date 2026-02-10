@@ -12,7 +12,7 @@ describe CategoriesController do
 
     fab!(:topic_in_parent) { Fabricate(:topic, category: parent_category) }
     fab!(:topic_in_subcategory) { Fabricate(:topic, category: subcategory) }
-    fab!(:topic_in_other) { Fabricate(:topic) }
+    fab!(:topic_in_other, :topic)
 
     before do
       SiteSetting.desktop_category_page_style = "categories_and_latest_topics"
