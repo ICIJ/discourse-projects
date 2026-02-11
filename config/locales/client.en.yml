@@ -56,8 +56,8 @@ en:
     project_banner:
       label: You're in Project
     subcategory:
-      create: New %{categoryName} Category (%{projectLink})
-      create_in_project: New %{projectLink} Category 
+      create: "%{projectLink} &#8250; New \"%{categoryName}\" Category"
+      create_in_project: "%{projectLink} &#8250; New Category"
       button:
         label: New Category
       errors:
