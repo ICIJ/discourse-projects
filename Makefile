@@ -1,10 +1,10 @@
-install_yarn: 
-		yarn install
+install_pnpm: 
+		pnpmm install
 
 install_bundle:
 		bundle install
 
-install: install_yarn install_bundle
+install: install_pnpm install_bundle
 
 rubocop: 
 		bundle exec rubocop
@@ -13,21 +13,21 @@ rubocop-fix:
 		bundle exec rubocop -A
 
 eslint: 
-		yarn run lint
+		pnpm run lint
 
 eslint-fix: 
-		yarn run lint:fix
+		pnpm run lint:fix
 
 ember:
-		yarn run ember
+		pnpm run ember
 
 prettier:
-		yarn run prettier:assets
-		yarn run prettier:test
+		pnpm run prettier:assets
+		pnpm run prettier:test
 
 prettier-fix:
-		yarn run prettier:assets:fix
-		yarn run prettier:test:fix
+		pnpm run prettier:assets:fix
+		pnpm run prettier:test:fix
 
 lint: eslint prettier ember rubocop 
 lint-fix: eslint-fix prettier-fix ember rubocop-fix
