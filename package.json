@@ -7,6 +7,7 @@
   "private": true,
   "scripts": {
     "lint:assets": "pnpm prettier --check 'assets/**/*.{scss,js,gjs,hbs}'",
+    "lint:assets:fix": "pnpm prettier --write 'assets/**/*.{scss,js,gjs,hbs}'",
     "lint:tests": "pnpm prettier --check 'test/**/*.{js,gjs}'",
     "lint:prettier": "pnpm lint:assets && pnpm lint:tests",
     "lint:prettier:fix": "pnpm lint:assets --write && pnpm lint:tests --write",

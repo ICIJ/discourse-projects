@@ -19,15 +19,16 @@ eslint-fix:
 		pnpm run lint:fix
 
 ember:
-		pnpm run ember
+		pnpm run lint:ember
+
+ember-fix:
+		pnpm run lint:ember:fix
 
 prettier:
-		pnpm run prettier:assets
-		pnpm run prettier:test
+		pnpm run lint:prettier
 
 prettier-fix:
-		pnpm run prettier:assets:fix
-		pnpm run prettier:test:fix
+		pnpm run lint:prettier:fix
 
 lint: eslint prettier ember rubocop 
 lint-fix: eslint-fix prettier-fix ember rubocop-fix
