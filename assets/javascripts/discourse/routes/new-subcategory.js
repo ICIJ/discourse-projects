@@ -2,7 +2,6 @@ import { ajax } from "discourse/lib/ajax";
 import { SEARCH_PRIORITIES } from "discourse/lib/constants";
 import Site from "discourse/models/site";
 import NewCategoryRoute from "discourse/routes/new-category";
-import { addObserver } from "@ember/object/observers";
 
 export default class NewSubcategoryRoute extends NewCategoryRoute {
   async model(params) {
