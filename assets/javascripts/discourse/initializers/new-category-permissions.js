@@ -1,5 +1,5 @@
-import { computed } from "@ember/object";
-import { observes } from "@ember-decorators/object";
+import { action } from "@ember/object";
+import { next } from "@ember/runloop";
 import { ajax } from "discourse/lib/ajax";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import Category from "discourse/models/category";
@@ -18,45 +18,54 @@ function initialize(api) {
   }
 
   api.modifyClass(
-    "route:new-category",
-    (Superclass) =>
-      class extends Superclass {
-        setupController(controller, model, transition) {
-          super.setupController(controller, model, transition);
-          // This is to ensure that when we create a new category
-          // with a parent category, the permissions
-          // are updated accordingly.
-          return controller.setCategoryPermissions();
-        }
-      }
-  );
-
-  api.modifyClass(
     "controller:edit-category.tabs",
     (Superclass) =>
       class extends Superclass {
+        transientParentCategoryId = null;
+
         init() {
           super.init(...arguments);
           // Register the validator to ensure the parent category is valid
           const validator = this.validateParentCategory.bind(this);
-          this.actions.registerValidator.call(this, validator);
+          this.actions.registerValidator.call(this, validator)
         }
 
-        // This observer current doesnt work. That means that if you change
-        // the parent category, the permissions are not updated accordingly.
-        // We need to find a way to make it work. For now, the permissions
-        // are only set when the controller is initialized.
-        @observes("model.parent_category_id")
-        onParentCategoryChange() {
-          return this.setCategoryPermissions();
+        setTransientParentCategoryId(parentCategoryId) {
+          this.set('transientParentCategoryId', parentCategoryId);
+          // We need to wait for the transientParentCategoryId to be set before we can update 
+          // the permissions so we use next to ensure it runs in the next run loop.
+          next(this.setCategoryPermissions.bind(this));
+        }
+
+        /**
+         * When the parent category is changed, we need to update the permissions of the new category
+         * to match the new parent category. To do this, we set a transient parent category id
+         * that will be used to fetch the permissions of the new parent category and update the
+         * permissions of the new category accordingly.
+         * 
+         * This is necessary because when we change the parent category, the model is not immediately updated
+         * with the new parent category id, so we need to use a transient value to keep track of the new parent 
+         * category id until the model is updated.
+         * 
+         * Unfortunately, there is no hook that we can use to detect when the parent category is changed, 
+         * so we need to override the canSaveForm action to detect when the parent category.
+         */
+        @action
+        canSaveForm(transientData) {
+          if (transientData.parent_category_id !== this.parentCategoryId) {
+            this.setTransientParentCategoryId(transientData.parent_category_id);
+          }
+          return super.canSaveForm(transientData);
         }
 
         async getCategoryGroupPermissions() {
           try {
-            const { category } = await ajax(`/c/${this.parentCategoryId}/show.json`)
+            const { category } = await ajax(
+              `/c/${this.parentCategoryId}/show.json`
+            );
             return category?.group_permissions ?? [];
           } catch {
-            return []; 
+            return [];
           }
         }
 
@@ -66,7 +75,7 @@ function initialize(api) {
           }
 
           const groupPermissions = await this.getCategoryGroupPermissions();
-          // Sometimes we can have a parent category but no permissions, in 
+          // Sometimes we can have a parent category but no permissions, in
           // that case we do not want to do anything
           if (!groupPermissions.length) {
             return;
@@ -90,16 +99,13 @@ function initialize(api) {
           return !!api.getCurrentUser()?.admin;
         }
 
-        @computed("model.parent_category_id")
         get parentCategory() {
           return Category.findById(this.parentCategoryId);
         }
 
-        @computed("model.parent_category_id")
         get parentCategoryId() {
-          return this.model.parent_category_id;
+          return this.transientParentCategoryId ?? this.model.parent_category_id;
         }
-
 
         validateParentCategory() {
           // If we don't need to validate the parent category, or if we have one,
