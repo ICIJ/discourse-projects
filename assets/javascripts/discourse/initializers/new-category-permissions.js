@@ -17,11 +17,6 @@ function initialize(api) {
     return;
   }
 
-  async function getCategoryGroupPermissions(categoryId) {
-    const { category } = await ajax(`/c/${categoryId}/show.json`);
-    return category.group_permissions;
-  }
-
   api.modifyClass(
     "route:new-category",
     (Superclass) =>
@@ -56,14 +51,26 @@ function initialize(api) {
           return this.setCategoryPermissions();
         }
 
+        async getCategoryGroupPermissions() {
+          try {
+            const { category } = await ajax(`/c/${this.parentCategoryId}/show.json`)
+            return category?.group_permissions ?? [];
+          } catch {
+            return []; 
+          }
+        }
+
         async setCategoryPermissions() {
-          if (!this.model.parent_category_id) {
+          if (!this.parentCategoryId) {
             return;
           }
 
-          const groupPermissions = await getCategoryGroupPermissions(
-            this.model.parent_category_id
-          );
+          const groupPermissions = await this.getCategoryGroupPermissions();
+          // Sometimes we can have a parent category but no permissions, in 
+          // that case we do not want to do anything
+          if (!groupPermissions.length) {
+            return;
+          }
           // This ensure we do not cumulate new permissions with the existing one
           this.model.permissions.clear();
           // Then we add each permission one by one to ensure
@@ -72,7 +79,7 @@ function initialize(api) {
         }
 
         get hasParentCategory() {
-          return !!this.parentCategory;
+          return !!this.parentCategoryId;
         }
 
         get hasParentValidation() {
@@ -85,8 +92,14 @@ function initialize(api) {
 
         @computed("model.parent_category_id")
         get parentCategory() {
-          return Category.findById(this.model.parent_category_id);
+          return Category.findById(this.parentCategoryId);
         }
+
+        @computed("model.parent_category_id")
+        get parentCategoryId() {
+          return this.model.parent_category_id;
+        }
+
 
         validateParentCategory() {
           // If we don't need to validate the parent category, or if we have one,
