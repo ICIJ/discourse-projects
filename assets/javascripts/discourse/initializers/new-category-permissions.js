@@ -27,12 +27,12 @@ function initialize(api) {
           super.init(...arguments);
           // Register the validator to ensure the parent category is valid
           const validator = this.validateParentCategory.bind(this);
-          this.actions.registerValidator.call(this, validator)
+          this.actions.registerValidator.call(this, validator);
         }
 
         setTransientParentCategoryId(parentCategoryId) {
-          this.set('transientParentCategoryId', parentCategoryId);
-          // We need to wait for the transientParentCategoryId to be set before we can update 
+          this.set("transientParentCategoryId", parentCategoryId);
+          // We need to wait for the transientParentCategoryId to be set before we can update
           // the permissions so we use next to ensure it runs in the next run loop.
           next(this.setCategoryPermissions.bind(this));
         }
@@ -42,12 +42,12 @@ function initialize(api) {
          * to match the new parent category. To do this, we set a transient parent category id
          * that will be used to fetch the permissions of the new parent category and update the
          * permissions of the new category accordingly.
-         * 
+         *
          * This is necessary because when we change the parent category, the model is not immediately updated
-         * with the new parent category id, so we need to use a transient value to keep track of the new parent 
+         * with the new parent category id, so we need to use a transient value to keep track of the new parent
          * category id until the model is updated.
-         * 
-         * Unfortunately, there is no hook that we can use to detect when the parent category is changed, 
+         *
+         * Unfortunately, there is no hook that we can use to detect when the parent category is changed,
          * so we need to override the canSaveForm action to detect when the parent category.
          */
         @action
@@ -104,7 +104,9 @@ function initialize(api) {
         }
 
         get parentCategoryId() {
-          return this.transientParentCategoryId ?? this.model.parent_category_id;
+          return (
+            this.transientParentCategoryId ?? this.model.parent_category_id
+          );
         }
 
         validateParentCategory() {
