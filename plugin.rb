@@ -37,6 +37,14 @@ after_initialize do
     Guardian.new(scope.user).can_create_category?
   end
 
+  add_to_serializer(:category, :include_group_permissions?) do
+    Guardian.new(scope.user).can_create_category?
+  end
+
+  add_to_serializer(:category, :include_available_groups?) do
+    Guardian.new(scope.user).can_create_category?
+  end
+
   add_to_serializer(:basic_category, :is_project) do
     object.project?
   end
