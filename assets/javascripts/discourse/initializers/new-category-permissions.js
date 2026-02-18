@@ -12,8 +12,8 @@ import { i18n } from "discourse-i18n";
  */
 function initialize(api) {
   const user = api.getCurrentUser();
-  // Only proceed if the user is a moderator or an admin
-  if (!user?.moderator && !user?.admin) {
+  // Only proceed if the user can create categories
+  if (!user?.can_create_category) {
     return;
   }
 
@@ -22,7 +22,7 @@ function initialize(api) {
     (Superclass) =>
       class extends Superclass {
         transientParentCategoryId = null;
-
+        
         init() {
           super.init(...arguments);
           // Register the validator to ensure the parent category is valid
