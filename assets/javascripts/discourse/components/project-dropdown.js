@@ -27,20 +27,20 @@ export default class ProjectDropdown extends CategoryDrop {
   noCategoriesLabel = i18n("js.project_dropdown.select");
 
   /**
-   * Override the default search behavior to use our custom search method that only returns 
+   * Override the default search behavior to use our custom search method that only returns
    * projects. This ensures that the dropdown only shows projects and not regular categories.
    */
   async search(filter = "") {
     if (!filter) {
-      return this.content
+      return this.content;
     }
-    return Project.asyncSearch(filter)
+    return Project.asyncSearch(filter);
   }
 
   /**
-   * The content of the dropdown is all categories that are projects. This is 
-   * provided by the project service which caches this list for performance. By using 
-   * a computed property, we ensure that the dropdown updates automatically when the 
+   * The content of the dropdown is all categories that are projects. This is
+   * provided by the project service which caches this list for performance. By using
+   * a computed property, we ensure that the dropdown updates automatically when the
    * list of projects changes.
    */
   @computed("project.all")
@@ -78,7 +78,7 @@ export default class ProjectDropdown extends CategoryDrop {
     if (!this.castValue?.slug) {
       return null;
     }
-    const slug = this.castValue.slug
+    const slug = this.castValue.slug;
     const idx = this.currentPath.lastIndexOf(`/${slug}`);
     return idx !== -1 ? this.currentPath.slice(idx + slug.length + 1) : null;
   }

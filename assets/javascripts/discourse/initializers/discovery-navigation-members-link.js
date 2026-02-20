@@ -20,9 +20,12 @@ function initialize(api) {
     },
     forceActive(category, _args, router) {
       const { currentURL } = router;
-      const { id = null } = category || {}
+      const { id = null } = category || {};
       const slug = Category.slugFor(category);
-      return currentURL === `/c/${slug}/${id}/members` || currentURL === `/c/${slug}/members`;
+      return (
+        currentURL === `/c/${slug}/${id}/members` ||
+        currentURL === `/c/${slug}/members`
+      );
     },
   });
 }
