@@ -91,29 +91,29 @@ export default class ProjectDropdown extends CategoryDrop {
   }
 
   /**
-   * When the user clears the dropdown and the setting `projects_home_logo_to_projects` is enabled,
-   * we want to route them to the projects home page. Otherwise, we fallback to the default
-   * behavior of clearing the category selection.
-   *
-   * When selecting a project, navigate to the same tab (categories, latest, etc.)
-   * that the user is currently viewing.
+   * Whether clearing the dropdown should navigate to the projects page.
    */
+  get shouldRouteToProjects() {
+    return this.siteSettings.projects_home_logo_to_projects;
+  }
+
+  /**
+   * Build the route for a given category, preserving the current tab.
+   */
+  routeForCategory(categoryId) {
+    const category = Category.findById(parseInt(categoryId, 10));
+    return category ? category.path + this.currentTabSuffix : null;
+  }
+
   @action
   onChange(categoryId) {
-    if (!categoryId && this.siteSettings.projects_home_logo_to_projects) {
+    if (!categoryId && this.shouldRouteToProjects) {
       DiscourseURL.routeToUrl("/projects");
       return;
     }
 
-    if (categoryId) {
-      const category = Category.findById(parseInt(categoryId, 10));
-      if (category) {
-        const route = category.path + this.currentTabSuffix;
-        DiscourseURL.routeToUrl(route);
-        return;
-      }
-    }
-
-    super.onChange(categoryId);
+    const route = categoryId ? this.routeForCategory(categoryId) : null;
+    // If we have a valid route for the selected category, navigate to it. Otherwise, fallback to the default behavior.
+    return route ? DiscourseURL.routeToUrl(route) : super.onChange(categoryId);
   }
 }
