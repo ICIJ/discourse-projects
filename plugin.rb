@@ -30,18 +30,11 @@ after_initialize do
   reloadable_patch do
     ApplicationLayoutPreloader.prepend DiscourseProjects::ApplicationLayoutPreloaderExtension
     Category.prepend DiscourseProjects::CategoryExtension
+    CategorySerializer.prepend DiscourseProjects::CategorySerializerExtension
     Topic.prepend DiscourseProjects::TopicExtension
   end
 
   add_to_serializer(:current_user, :can_create_category) do
-    Guardian.new(scope.user).can_create_category?
-  end
-
-  add_to_serializer(:category, :include_group_permissions?) do
-    Guardian.new(scope.user).can_create_category?
-  end
-
-  add_to_serializer(:category, :include_available_groups?) do
     Guardian.new(scope.user).can_create_category?
   end
 
