@@ -22,7 +22,7 @@ function initialize(api) {
     (Superclass) =>
       class extends Superclass {
         transientParentCategoryId = null;
-        
+
         init() {
           super.init(...arguments);
           // Register the validator to ensure the parent category is valid
