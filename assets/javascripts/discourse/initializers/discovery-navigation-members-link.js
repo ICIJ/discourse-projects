@@ -14,10 +14,15 @@ function initialize(api) {
       return category && category.is_project;
     },
     customHref(category) {
-      return `/c/${Category.slugFor(category)}/members`;
+      const { id = null } = category || {};
+      const slug = Category.slugFor(category);
+      return slug && id ? `/c/${slug}/${id}/members` : null;
     },
     forceActive(category, _args, router) {
-      return router.currentURL === `/c/${Category.slugFor(category)}/members`;
+      const { currentURL } = router;
+      const { id = null } = category || {}
+      const slug = Category.slugFor(category);
+      return currentURL === `/c/${slug}/${id}/members` || currentURL === `/c/${slug}/members`;
     },
   });
 }
