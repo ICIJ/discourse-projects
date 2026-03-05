@@ -68,6 +68,11 @@ plugins:
     default: true
     client: true
 
+  # Composer
+  projects_composer_project_chooser:
+    default: true
+    client: true
+
   # Styling
   projects_addon:
     default: true
