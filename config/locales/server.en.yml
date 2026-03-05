@@ -28,7 +28,14 @@ en:
     projects_hide_projects_from_categories_page: Hide top-level project categories from /categories, showing only subcategories
     projects_limit_latest_to_category: "Scope the \"Latest\" topic list on category pages to the current category and its subcategories instead of showing all topics site-wide"
 
+    # Composer
+    projects_composer_project_chooser: "Replace the default category chooser in the composer with project and subcategory dropdowns"
+
     # Styling
     projects_addon: Show a project badge next to category names in topic lists
     projects_styled_links: Use styled badges for project links
     projects_show_logo_placeholder: Show a placeholder logo for projects without a custom logo
+
+  discourse_projects:
+    errors:
+      topic_in_project_category: "Topics cannot be created directly in a project. Please select a subcategory."
