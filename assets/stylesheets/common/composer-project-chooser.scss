@@ -1,0 +1,41 @@
+// When the project chooser connector is rendered, hide the default category chooser.
+// Use #reply-control to match the specificity of Discourse's own
+// `#reply-control .category-input .category-chooser { display: flex }` rule.
+#reply-control .category-input:has(.composer-project-chooser) {
+  > .category-chooser,
+  > .select-kit.category-chooser {
+    display: none;
+  }
+}
+
+// Force .category-input onto its own line below the title
+// by making it take full width inside the flex-wrapped .title-and-category.
+#reply-control .title-and-category:has(.composer-project-chooser) {
+  flex-wrap: wrap;
+
+  > .category-input {
+    flex: 1 0 100%;
+    max-width: 100%;
+    margin-left: 0;
+  }
+}
+
+// Place the two dropdowns side by side at 50/50.
+.composer-project-chooser {
+  flex: 1;
+  display: flex;
+  gap: 0.5em;
+
+  &__project,
+  &__subcategory {
+    flex: 1;
+    min-width: 0;
+    max-width: 50%;
+  }
+}
+
+// Hide the project badge (first badge) in subcategory dropdown rows
+// since the project is already shown in the adjacent dropdown.
+.subcategory-chooser .category-status > .badge-category__wrapper:first-child {
+  display: none;
+}

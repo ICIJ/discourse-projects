@@ -62,6 +62,13 @@ en:
         label: New Category
       errors:
         parent: You must select a parent category.
+    composer:
+      project:
+        label: Project
+        placeholder: Select a project...
+      subcategory:
+        label: Category
+        placeholder: Select a category...
     search:
       advanced:
         in_project:
