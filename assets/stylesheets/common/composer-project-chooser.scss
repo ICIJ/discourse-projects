@@ -35,7 +35,7 @@
     flex: 1;
     min-width: 0;
   }
-  
+
   // Hide the project badge (first badge) in subcategory dropdown rows since the project is already shown in the adjacent dropdown.
   .subcategory-chooser .category-status > .badge-category__wrapper:first-child,
   // Hide the project badge (first badge) in dropdown toggler too
