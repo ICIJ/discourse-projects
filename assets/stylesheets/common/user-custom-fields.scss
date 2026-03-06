@@ -1,0 +1,18 @@
+.user-profile-website {
+  margin-right: 1em;
+}
+
+.user-custom-field {
+  display: flex;
+  overflow: hidden;
+  align-items: center;
+  margin-right: 0.5em;
+
+  .d-icon {
+    margin-right: 0.25em;
+  }
+
+  span {
+    @include ellipsis;
+  }
+}
