@@ -4,14 +4,26 @@ import Site from "discourse/models/site";
 import NewCategoryRoute from "discourse/routes/new-category";
 
 export default class NewSubcategoryRoute extends NewCategoryRoute {
+  async loadAndSetCategoryId(categoryId) {
+    const id = parseInt(categoryId, 10);
+    const { category } = await ajax(`/c/${categoryId}/show.json`);
+    Site.current().updateCategory(category);
+    // Register the category as loaded so that the CategoryChooser
+    // doesn't try to async-load it again via notifyPropertyChange,
+    // which conflicts with FormKit's read-only @transientData binding
+    const ids = Site.current().loadedCategoryIds || new Set();
+    // This will ensure that the category is available in the store
+    ids.add(id);
+    Site.current().set("loadedCategoryIds", ids);
+    return { id, category };
+  }
+
   async model(params) {
     const model = await super.model(...arguments);
     try {
       const { category_id: categoryId } = params;
-      const { category } = await ajax(`/c/${categoryId}/show.json`);
-      // Make sure the parent category is up to date in the store
-      Site.current().updateCategory(category);
-      // This will update the form's model value for the parent category
+      const { id: parentCategoryId, category } =
+        await this.loadAndSetCategoryId(categoryId);
       return this.store.createRecord("category", {
         color: "0088CC",
         text_color: "FFFFFF",
@@ -19,7 +31,7 @@ export default class NewSubcategoryRoute extends NewCategoryRoute {
         icon: "square-full",
         group_permissions: category?.group_permissions ?? [],
         available_groups: this.site.groups.map((g) => g.name),
-        parent_category_id: parseInt(categoryId, 10),
+        parent_category_id: parentCategoryId,
         allow_badges: true,
         topic_featured_link_allowed: true,
         custom_fields: {},
