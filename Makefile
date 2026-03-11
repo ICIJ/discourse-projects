@@ -1,5 +1,5 @@
 install_pnpm: 
-		pnpmm install
+		pnpm install
 
 install_bundle:
 		bundle install
