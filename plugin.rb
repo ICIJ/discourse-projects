@@ -17,9 +17,6 @@ end
 
 require_relative 'lib/engine'
 
-allow_public_user_custom_field :country
-allow_public_user_custom_field :organization
-
 after_initialize do
   DiscourseProjects::CategorySorting.register(self)
   DiscourseProjects::CategoryLatestFiltering.register(self)
