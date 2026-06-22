@@ -2,20 +2,3 @@
   margin-right: 0;
   font-size: 1em;
 }
-
-// When creating a category it must belong to a project and inherits the
-// project's permissions, so the public/private visibility chooser is
-// contradictory — hide it. Scoped to the new-category route (body class) so the
-// edit-category form is unaffected. `--radio-cards` is unique to the visibility
-// container in core's upsert-category/general form.
-body.projects-new-category .form-kit__container[class~="--radio-cards"] {
-  display: none;
-}
-
-// The Project tab is now the source of truth for nesting (a required project
-// plus an optional scoped parent), so core's raw General-tab parent field is
-// redundant and would let the user bypass the project requirement. Hide it on
-// the new-category route.
-body.projects-new-category .form-kit__field[data-name="parent_category_id"] {
-  display: none;
-}
