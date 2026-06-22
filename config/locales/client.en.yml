@@ -58,6 +58,13 @@ en:
     subcategory:
       create: "%{projectLink} &#8250; New \"%{categoryName}\" Category"
       create_in_project: "%{projectLink} &#8250; New Category"
+      project_tab: Project
+      project:
+        label: Project
+        placeholder: Select a project...
+      parent:
+        label: Parent category
+        placeholder: Directly under the project
       button:
         label: New Category
       errors:
