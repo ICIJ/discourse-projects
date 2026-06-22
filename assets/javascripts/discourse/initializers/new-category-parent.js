@@ -19,12 +19,17 @@ function initialize(api) {
     (Superclass) =>
       class extends Superclass {
         @service project;
-        @service newSubcategoryModal;
 
         // Tag the <body> while inside the new-category flow so plugin CSS can
         // scope creation-only tweaks (e.g. hiding the visibility field, whose
         // value is inherited from the parent project) without affecting the
         // edit-category form.
+        //
+        // We intentionally do NOT force the project-picker modal in beforeModel:
+        // aborting a direct navigation to /new-category left a blank page. The
+        // required Project tab + the save-time validator already guarantee a
+        // project is chosen, and the modal remains available from the
+        // "new subcategory" button.
         activate() {
           super.activate(...arguments);
           document.body.classList.add("projects-new-category");
@@ -33,21 +38,6 @@ function initialize(api) {
         deactivate() {
           super.deactivate(...arguments);
           document.body.classList.remove("projects-new-category");
-        }
-
-        beforeModel(transition) {
-          const redirect = super.beforeModel(...arguments);
-          if (redirect) {
-            return redirect;
-          }
-          // Always require a parent/project for new categories. If the user
-          // reached the creator without one stashed (direct URL, sidebar, core
-          // "new category" button), force the project-picker modal — for every
-          // user, regardless of the requires-parent setting.
-          if (!this.project?.pendingParentCategoryId) {
-            transition.abort();
-            this.newSubcategoryModal.create();
-          }
         }
 
         async model() {
