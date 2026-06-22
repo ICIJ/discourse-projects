@@ -41,6 +41,10 @@ function initialize(api) {
             }
           } catch {
             // If the parent can't be loaded, fall back to a top-level category.
+            // eslint-disable-next-line no-console
+            console.warn(
+              "[discourse-projects] failed to load parent category; creating a top-level category"
+            );
           }
 
           return model;

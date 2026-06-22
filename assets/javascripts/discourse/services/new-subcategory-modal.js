@@ -20,6 +20,10 @@ export default class NewSubcategory extends Service {
 
   routeToNewCategory(parentCategoryId) {
     this.project.pendingParentCategoryId = parentCategoryId;
-    return this.router.transitionTo("newCategory.setup");
+    // If the transition is aborted before route:new-category's model() consumes
+    // the stash, clear it so a later top-level creation isn't polluted.
+    return this.router.transitionTo("newCategory.setup").catch(() => {
+      this.project.pendingParentCategoryId = null;
+    });
   }
 }
