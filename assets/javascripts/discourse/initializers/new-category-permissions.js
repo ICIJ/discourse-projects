@@ -25,9 +25,9 @@ function initialize(api) {
 
         init() {
           super.init(...arguments);
-          // Register the validator to ensure the parent category is valid
-          const validator = this.validateParentCategory.bind(this);
-          this.actions.registerValidator.call(this, validator);
+          // Register a save-time validator wired to the core form's
+          // validateForm(data, { addError }) API.
+          this.registerValidator(this.validateParentCategory.bind(this));
         }
 
         setTransientParentCategoryId(parentCategoryId) {
@@ -109,18 +109,21 @@ function initialize(api) {
           );
         }
 
-        validateParentCategory() {
-          // If we don't need to validate the parent category, or if we have one,
-          // or if the user is an admin then everything is fine.
-          if (
-            !this.hasParentValidation ||
-            this.hasParentCategory ||
-            this.currentUserIsAdmin
-          ) {
-            return false;
+        validateParentCategory(data, helpers) {
+          // Admins may create top-level project categories; only enforce when
+          // the site setting requires a parent and the user is not an admin.
+          if (!this.hasParentValidation || this.currentUserIsAdmin) {
+            return;
           }
-          this.dialog.alert(i18n("js.subcategory.errors.parent"));
-          return true;
+          const parentId =
+            data?.parent_category_id ?? this.model?.parent_category_id;
+          if (parentId) {
+            return;
+          }
+          helpers?.addError?.("parent_category_id", {
+            title: i18n("js.category.parent_category"),
+            message: i18n("js.subcategory.errors.parent"),
+          });
         }
       }
   );

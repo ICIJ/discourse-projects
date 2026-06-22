@@ -17,6 +17,27 @@ function initialize(api) {
     (Superclass) =>
       class extends Superclass {
         @service project;
+        @service siteSettings;
+        @service currentUser;
+        @service newSubcategoryModal;
+
+        beforeModel(transition) {
+          const redirect = super.beforeModel(...arguments);
+          if (redirect) {
+            return redirect;
+          }
+          // Force a parent/project selection for non-admins when the site
+          // requires it and the user reached the creator without one stashed
+          // (e.g. direct URL, sidebar, or the core "new category" button).
+          if (
+            this.siteSettings.projects_category_requires_parent &&
+            !this.currentUser?.admin &&
+            !this.project?.pendingParentCategoryId
+          ) {
+            transition.abort();
+            this.newSubcategoryModal.create();
+          }
+        }
 
         async model() {
           const model = await super.model(...arguments);
