@@ -21,6 +21,20 @@ function initialize(api) {
         @service project;
         @service newSubcategoryModal;
 
+        // Tag the <body> while inside the new-category flow so plugin CSS can
+        // scope creation-only tweaks (e.g. hiding the visibility field, whose
+        // value is inherited from the parent project) without affecting the
+        // edit-category form.
+        activate() {
+          super.activate(...arguments);
+          document.body.classList.add("projects-new-category");
+        }
+
+        deactivate() {
+          super.deactivate(...arguments);
+          document.body.classList.remove("projects-new-category");
+        }
+
         beforeModel(transition) {
           const redirect = super.beforeModel(...arguments);
           if (redirect) {
