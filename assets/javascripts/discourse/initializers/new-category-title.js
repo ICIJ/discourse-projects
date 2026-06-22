@@ -12,7 +12,7 @@ import { projectLinkHTML } from "../helpers/project-link";
  */
 function initialize(api) {
   api.modifyClass(
-    "controller:edit-category-tabs",
+    "controller:edit-category.tabs",
     (Superclass) =>
       class extends Superclass {
         get hasParentCategory() {
