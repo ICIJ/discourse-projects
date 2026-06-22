@@ -6,10 +6,12 @@ import Site from "discourse/models/site";
 /**
  * Injects a parent category into the record built by the core `newCategory`
  * route. The parent id is stashed on the project service by the
- * "new subcategory" entry points. We load the parent so we can copy its group
- * permissions onto the new category and register it as loaded (avoids the
- * CategoryChooser re-async-loading it under FormKit's read-only @transientData
- * binding).
+ * "new subcategory" entry points. We load the parent so we can pre-select it in
+ * the (visible) parent field and inherit its permissions onto the new category
+ * — mirroring what core's `onParentCategoryChange` does on a user-driven change,
+ * since that hook does not fire for our programmatic pre-selection. We also
+ * register the parent as loaded (avoids the CategoryChooser re-async-loading it
+ * under FormKit's read-only @transientData binding).
  */
 function initialize(api) {
   api.modifyClass(
@@ -18,16 +20,6 @@ function initialize(api) {
       class extends Superclass {
         @service project;
         @service newSubcategoryModal;
-
-        activate() {
-          super.activate(...arguments);
-          document.body.classList.add("projects-new-category");
-        }
-
-        deactivate() {
-          super.deactivate(...arguments);
-          document.body.classList.remove("projects-new-category");
-        }
 
         beforeModel(transition) {
           const redirect = super.beforeModel(...arguments);
@@ -57,13 +49,28 @@ function initialize(api) {
           try {
             const id = parseInt(parentId, 10);
             const { category } = await ajax(`/c/${id}/show.json`);
-            Site.current().updateCategory(category);
+            const parentCategory = Site.current().updateCategory(category);
             const ids = Site.current().loadedCategoryIds || new Set();
             ids.add(id);
             Site.current().set("loadedCategoryIds", ids);
             model.set("parent_category_id", id);
-            if (category?.group_permissions) {
-              model.set("group_permissions", category.group_permissions);
+
+            // Inherit the parent's permissions onto the new category. The form's
+            // permission UI reads `transientData.permissions ?? category.permissions`,
+            // so setting model.permissions here makes the inherited groups show
+            // immediately. `setupGroupsAndPermissions` derives `permissions` from
+            // the raw `group_permissions` returned by the server.
+            parentCategory?.setupGroupsAndPermissions?.();
+            const parentPermissions = parentCategory?.permissions ?? [];
+            if (parentPermissions.length) {
+              model.set(
+                "permissions",
+                parentPermissions.map((p) => ({
+                  group_name: p.group_name,
+                  group_id: p.group_id,
+                  permission_type: p.permission_type,
+                }))
+              );
             }
           } catch {
             // If the parent can't be loaded, fall back to a top-level category.

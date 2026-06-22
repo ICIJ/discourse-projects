@@ -2,10 +2,3 @@
   margin-right: 0;
   font-size: 1em;
 }
-
-// During category creation the parent project is chosen via the forced
-// ProjectChooser modal, so hide core's in-form parent-category field. Scoped
-// to the new-category route (body class) so editing still shows it.
-body.projects-new-category .form-kit__field[data-name="parent_category_id"] {
-  display: none;
-}
