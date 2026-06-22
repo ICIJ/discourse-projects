@@ -17,23 +17,28 @@ function initialize(api) {
     (Superclass) =>
       class extends Superclass {
         @service project;
-        @service siteSettings;
-        @service currentUser;
         @service newSubcategoryModal;
+
+        activate() {
+          super.activate(...arguments);
+          document.body.classList.add("projects-new-category");
+        }
+
+        deactivate() {
+          super.deactivate(...arguments);
+          document.body.classList.remove("projects-new-category");
+        }
 
         beforeModel(transition) {
           const redirect = super.beforeModel(...arguments);
           if (redirect) {
             return redirect;
           }
-          // Force a parent/project selection for non-admins when the site
-          // requires it and the user reached the creator without one stashed
-          // (e.g. direct URL, sidebar, or the core "new category" button).
-          if (
-            this.siteSettings.projects_category_requires_parent &&
-            !this.currentUser?.admin &&
-            !this.project?.pendingParentCategoryId
-          ) {
+          // Always require a parent/project for new categories. If the user
+          // reached the creator without one stashed (direct URL, sidebar, core
+          // "new category" button), force the project-picker modal — for every
+          // user, regardless of the requires-parent setting.
+          if (!this.project?.pendingParentCategoryId) {
             transition.abort();
             this.newSubcategoryModal.create();
           }

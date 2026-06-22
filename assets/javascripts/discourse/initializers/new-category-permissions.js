@@ -10,12 +10,6 @@ import { i18n } from "discourse-i18n";
  * syncs permissions itself.
  */
 function initialize(api) {
-  const user = api.getCurrentUser();
-  // Only proceed if the user can create categories
-  if (!user?.can_create_category) {
-    return;
-  }
-
   api.modifyClass(
     "controller:edit-category.tabs",
     (Superclass) =>
@@ -27,18 +21,11 @@ function initialize(api) {
           this.registerValidator(this.validateParentCategory.bind(this));
         }
 
-        get hasParentValidation() {
-          return this.siteSettings.projects_category_requires_parent;
-        }
-
-        get currentUserIsAdmin() {
-          return !!api.getCurrentUser()?.admin;
-        }
-
         validateParentCategory(data, helpers) {
-          // Admins may create top-level project categories; only enforce when
-          // the site setting requires a parent and the user is not an admin.
-          if (!this.hasParentValidation || this.currentUserIsAdmin) {
+          // Enforce on NEW category creation only — editing an existing
+          // category (including a top-level project, which has no parent) must
+          // not be blocked. New records created via store.createRecord have no id.
+          if (this.model?.id) {
             return;
           }
           const parentId =
