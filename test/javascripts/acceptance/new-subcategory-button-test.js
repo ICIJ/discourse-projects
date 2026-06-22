@@ -35,6 +35,16 @@ acceptance("New subcategory button", function (needs) {
     server.get("/c/:category-id/show.json", () => {
       return helper.response(cloneJSON(categoryFixtures["/c/1/show.json"]));
     });
+
+    server.get("/categories/types", () => {
+      return helper.response({
+        types: [
+          { id: "general", name: "General", configuration_schema: {} },
+          { id: "other", name: "Other", configuration_schema: {} },
+        ],
+        counts: { general: 0, other: 0 },
+      });
+    });
   });
 
   test("Show the button on the homepage", async function (assert) {
@@ -55,15 +65,24 @@ acceptance("New subcategory button", function (needs) {
       .exists("it shows the button on the homepage");
   });
 
-  test("Don't open a modal to select a project on the `faq` category page", async function (assert) {
+  test("Routes into the core newCategory flow with the parent injected", async function (assert) {
     await visit("/c/faq");
     await click("button.new-subcategory-button");
-    assert.dom(".d-modal").doesNotExist("it shows a modal");
-    const router = getOwner(this).lookup("service:router");
+    assert.dom(".d-modal").doesNotExist("it does not show a modal");
+
+    const owner = getOwner(this);
+    const router = owner.lookup("service:router");
+    assert.true(
+      router.currentRouteName.startsWith("newCategory"),
+      "is in the core newCategory flow"
+    );
+
+    const faq = owner.lookup("service:site").categories.findBy("slug", "faq");
+    const model = owner.lookup("route:new-category").currentModel;
     assert.strictEqual(
-      router.currentRouteName,
-      "newSubcategory",
-      "is on new sub category route"
+      model.parent_category_id,
+      faq.id,
+      "the new category has the faq category as parent"
     );
   });
 });
