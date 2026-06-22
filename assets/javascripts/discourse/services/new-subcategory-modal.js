@@ -1,24 +1,25 @@
 import Service, { service } from "@ember/service";
 import { disableImplicitInjections } from "discourse/lib/implicit-injections";
-import DiscourseURL from "discourse/lib/url";
 import ParentCategoryChooser from "../components/modal/parent-category-chooser";
 
 @disableImplicitInjections
 export default class NewSubcategory extends Service {
   @service modal;
+  @service router;
+  @service project;
 
   async create(currentCategory) {
     if (currentCategory) {
-      const href = this.getHref(currentCategory.id);
-      return DiscourseURL.routeTo(href);
+      return this.routeToNewCategory(currentCategory.id);
     }
     const { categoryId = null } = await this.modal.show(ParentCategoryChooser);
     if (categoryId) {
-      return DiscourseURL.routeTo(this.getHref(categoryId));
+      return this.routeToNewCategory(categoryId);
     }
   }
 
-  getHref(parentCategoryId) {
-    return `/new-subcategory/${parentCategoryId}`;
+  routeToNewCategory(parentCategoryId) {
+    this.project.pendingParentCategoryId = parentCategoryId;
+    return this.router.transitionTo("newCategory.setup");
   }
 }
