@@ -54,8 +54,8 @@ export default class ProjectTab extends Component {
       return;
     }
     helpers?.addError?.("project_category_id", {
-      title: i18n("js.subcategory.project.label"),
-      message: i18n("js.subcategory.errors.parent"),
+      title: i18n("subcategory.project.label"),
+      message: i18n("subcategory.errors.parent"),
     });
   }
 
@@ -144,7 +144,7 @@ export default class ProjectTab extends Component {
     <div class="project-tab edit-category-tab-project">
       <@form.Field
         @name="project_category_id"
-        @title={{i18n "js.subcategory.project.label"}}
+        @title={{i18n "subcategory.project.label"}}
         @format="large"
         @type="custom"
         as |field|
@@ -153,14 +153,14 @@ export default class ProjectTab extends Component {
           <ProjectChooser
             @value={{this.selectedProjectId}}
             @onChange={{this.onProjectChange}}
-            @options={{hash none="js.subcategory.project.placeholder"}}
+            @options={{hash none="subcategory.project.placeholder"}}
           />
         </field.Control>
       </@form.Field>
 
       <@form.Field
         @name="scoped_parent_category_id"
-        @title={{i18n "js.subcategory.parent.label"}}
+        @title={{i18n "subcategory.parent.label"}}
         @format="large"
         @type="custom"
         as |field|
@@ -171,7 +171,7 @@ export default class ProjectTab extends Component {
             @value={{this.parentValue}}
             @onChange={{this.onParentChange}}
             @options={{hash
-              none="js.subcategory.parent.placeholder"
+              none="subcategory.parent.placeholder"
               disabled=(not this.selectedProjectId)
             }}
           />
