@@ -11,7 +11,7 @@ import ProjectTab from "../components/project-tab";
 export default apiInitializer((api) => {
   api.registerEditCategoryTab({
     id: "project",
-    name: i18n("js.subcategory.project_tab"),
+    name: i18n("subcategory.project_tab"),
     component: ProjectTab,
     primary: true,
     condition: ({ siteSettings }) => siteSettings.projects_enabled,
