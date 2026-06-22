@@ -25,7 +25,7 @@ module DiscourseProjects
 
       # Builds base topic query options (mirrors Discourse core defaults).
       plugin.add_to_class(:categories_controller, :base_topic_options) do |style|
-        opts = { per_page: CategoriesController.topics_per_page, no_definitions: true }
+        opts = { per_page: topics_per_page, no_definitions: true }
         opts.merge!(build_topic_list_options)
         opts[:order] = "created" if style == "categories_and_latest_topics"
         opts
