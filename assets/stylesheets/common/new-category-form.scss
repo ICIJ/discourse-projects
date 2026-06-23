@@ -23,21 +23,17 @@
     line-height: 1.4;
   }
 
-  // The form sits in a card so it reads as an intentional panel, not a raw
-  // stack of inputs floating on the page background.
-  &__card {
+  // Each block ("Details", project/parent, "Appearance") is its own card.
+  .category-form__section {
     background: var(--secondary);
     border: 1px solid var(--primary-low);
     border-radius: var(--d-border-radius);
-    padding: 1.75rem;
+    padding: 1.5rem;
     box-shadow: 0 1px 3px rgb(0 0 0 / 6%);
-  }
 
-  // Grouped sections ("Details", "Appearance") with a divider between them.
-  .category-form__section + .category-form__section {
-    margin-top: 1.75rem;
-    padding-top: 1.75rem;
-    border-top: 1px solid var(--primary-low);
+    & + .category-form__section {
+      margin-top: 1rem;
+    }
   }
 
   .category-form__section-title {
@@ -49,22 +45,9 @@
     color: var(--primary-medium);
   }
 
-  // Even rhythm between fields; the last field in a section has no trailing gap.
-  .category-form__section .form-kit__field {
-    margin-bottom: 1.25rem;
-  }
-
-  .category-form__section > .form-kit__field:last-child,
-  .category-form__section > .category-form__logos:last-child {
-    margin-bottom: 0;
-  }
-
-  // FormKit lays the form out as a flex column packed to the left with
+  // FormKit lays the form out as flex columns packed to the left with
   // fixed-width controls. Stretch its rows and widen the control wrappers so
-  // every field fills the card for a tidy, aligned form.
-  // Each field and the form are flex columns; stretching them makes every
-  // control fill the card width (FormKit otherwise left-packs fixed-width
-  // controls), so the form reads as a tidy, aligned panel.
+  // every field fills the card.
   .form-kit,
   .form-kit__field,
   .form-kit__container-content {
@@ -90,8 +73,38 @@
     width: 100% !important;
   }
 
-  // Logo uploaders sit side-by-side; a zero flex-basis keeps them in one row
-  // at the form's actual width, and the media query below stacks them small.
+  // Even rhythm between fields; the last row in a card has no trailing gap.
+  .category-form__section .form-kit__field {
+    margin-bottom: 1.25rem;
+  }
+
+  .category-form__section > .form-kit__field:last-child,
+  .category-form__section > .category-form__location:last-child,
+  .category-form__section > .category-form__logos:last-child {
+    margin-bottom: 0;
+  }
+
+  // Project + parent sit side-by-side at 50/50, like the topic composer.
+  .category-form__location {
+    display: flex;
+    gap: 0.5rem;
+
+    .form-kit__field {
+      flex: 1;
+      min-width: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  // Match the composer: the parent dropdown hides the redundant project badge
+  // (the project is already shown in the adjacent dropdown).
+  .subcategory-chooser .category-status > .badge-category__wrapper:first-child,
+  .subcategory-chooser .name > .badge-category__wrapper:first-child {
+    display: none;
+  }
+
+  // Logo uploaders side-by-side; a zero flex-basis keeps them in one row at the
+  // form's actual width, and the media query below stacks them small.
   .category-form__logos {
     display: flex;
     flex-wrap: wrap;
@@ -108,20 +121,27 @@
     }
   }
 
-  // Footer action bar: the primary action is separated and right-aligned.
+  // Primary action sits below the cards, right-aligned.
   .category-form__actions {
     display: flex;
     justify-content: flex-end;
-    margin-top: 1.75rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--primary-low);
+    margin-top: 1.5rem;
   }
 
   @media (width < 600px) {
     padding: 1rem 0.5rem 2rem;
 
-    &__card {
+    .category-form__section {
       padding: 1.25rem;
+    }
+
+    .category-form__location {
+      flex-direction: column;
+      gap: 0;
+
+      .form-kit__field {
+        margin-bottom: 1.25rem;
+      }
     }
 
     .category-form__logos {
