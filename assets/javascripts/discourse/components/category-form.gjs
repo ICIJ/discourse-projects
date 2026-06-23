@@ -1,4 +1,6 @@
 import Component from "@glimmer/component";
+import { tracked } from "@glimmer/tracking";
+import { fn } from "@ember/helper";
 import { action } from "@ember/object";
 import Form from "discourse/components/form";
 import getURL from "discourse/lib/get-url";
@@ -9,6 +11,7 @@ import fetchCategoryPermissions from "../lib/fetch-category-permissions";
 import CategoryColorField from "./category-form/color-field";
 import CategoryDescriptionField from "./category-form/description-field";
 import CategoryLogoField from "./category-form/logo-field";
+import CategoryParentField from "./category-form/parent-field";
 import CategoryProjectField from "./category-form/project-field";
 import CategoryTitleField from "./category-form/title-field";
 
@@ -17,12 +20,16 @@ import CategoryTitleField from "./category-form/title-field";
 const DEFAULT_COLOR = "0088CC";
 
 export default class CategoryForm extends Component {
-  // @parentCategoryId, @onCreated(category)
+  // @parentCategoryId (a pre-selected project), @onCreated(category)
+
+  // Scopes the in-project parent chooser; kept in sync with the project field.
+  @tracked selectedProjectId = this.args.parentCategoryId ?? null;
 
   // Seed values for FormKit's @data — read once at construction; FormKit owns
   // the live field state after that.
   formData = {
-    parentCategoryId: this.args.parentCategoryId ?? null,
+    projectId: this.args.parentCategoryId ?? null,
+    parentCategoryId: null,
     name: "",
     description: "",
     color: DEFAULT_COLOR,
@@ -31,16 +38,26 @@ export default class CategoryForm extends Component {
   };
 
   @action
+  onProjectChange(form, value) {
+    this.selectedProjectId = value;
+    // A scoped parent only makes sense within the chosen project, so clear it
+    // whenever the project changes.
+    form.set("parentCategoryId", null);
+  }
+
+  @action
   async submit(data) {
-    // Fetch permissions at submit time so the result is always keyed to the
-    // actually-submitted parent — no async race between eager load and submit.
-    const permissions = data.parentCategoryId
-      ? await fetchCategoryPermissions(data.parentCategoryId)
+    // The optional in-project parent, when set, is the actual parent; otherwise
+    // the category sits directly under the project. Permissions inherit from
+    // that effective parent so a subcategory of a private project stays private.
+    const parentCategoryId = data.parentCategoryId ?? data.projectId;
+    const permissions = parentCategoryId
+      ? await fetchCategoryPermissions(parentCategoryId)
       : {};
 
     const category = await createCategory({
       name: data.name,
-      parentCategoryId: data.parentCategoryId,
+      parentCategoryId,
       description: data.description,
       color: data.color,
       uploadedLogoId: data.logo?.id,
@@ -61,9 +78,22 @@ export default class CategoryForm extends Component {
         <h2 class="category-form__section-title">
           {{i18n "js.new_category.section.details"}}
         </h2>
-        <CategoryProjectField @form={{form}} />
         <CategoryTitleField @form={{form}} />
         <CategoryDescriptionField @form={{form}} />
+      </section>
+
+      <section class="category-form__section">
+        <h2 class="category-form__section-title">
+          {{i18n "js.new_category.section.location"}}
+        </h2>
+        <CategoryProjectField
+          @form={{form}}
+          @onChange={{fn this.onProjectChange form}}
+        />
+        <CategoryParentField
+          @form={{form}}
+          @projectId={{this.selectedProjectId}}
+        />
       </section>
 
       <section class="category-form__section">
