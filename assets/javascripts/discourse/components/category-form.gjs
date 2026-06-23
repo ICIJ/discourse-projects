@@ -1,12 +1,13 @@
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
-import { fn } from "@ember/helper";
+import { fn, hash } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
-import { eq } from "truth-helpers";
+import { eq, or } from "truth-helpers";
 import Form from "discourse/components/form";
 import getURL from "discourse/lib/get-url";
 import DiscourseURL from "discourse/lib/url";
+import dCategoryBadge from "discourse/ui-kit/helpers/d-category-badge";
 import { i18n } from "discourse-i18n";
 import createCategory from "../lib/create-category";
 import fetchCategoryPermissions from "../lib/fetch-category-permissions";
@@ -95,7 +96,7 @@ export default class CategoryForm extends Component {
   }
 
   <template>
-    <Form @data={{this.formData}} @onSubmit={{this.submit}} as |form|>
+    <Form @data={{this.formData}} @onSubmit={{this.submit}} as |form data|>
       <div class="category-form__tabs">
         <button
           type="button"
@@ -147,14 +148,14 @@ export default class CategoryForm extends Component {
           as |field|
         >
           <field.Control as |group|>
-            <group.Radio @value="square">
-              {{i18n "js.new_category.style.square"}}
-            </group.Radio>
             <group.Radio @value="icon">
               {{i18n "js.new_category.style.icon"}}
             </group.Radio>
             <group.Radio @value="emoji">
               {{i18n "js.new_category.style.emoji"}}
+            </group.Radio>
+            <group.Radio @value="square">
+              {{i18n "js.new_category.style.square"}}
             </group.Radio>
           </field.Control>
         </form.Field>
@@ -180,6 +181,23 @@ export default class CategoryForm extends Component {
             <field.Control />
           </form.Field>
         {{/if}}
+
+        <div class="category-form__preview">
+          <span class="category-form__preview-label">
+            {{i18n "js.new_category.preview"}}
+          </span>
+          <div class="category-form__preview-badge">
+            {{dCategoryBadge
+              (hash name=(or data.name "category") color=data.color)
+              (hash
+                styleType=data.styleType
+                icon=data.icon
+                emoji=data.emoji
+                previewColor=true
+              )
+            }}
+          </div>
+        </div>
 
         <div class="category-form__logos">
           <CategoryLogoField
