@@ -23,6 +23,7 @@ en:
     projects_home_logo_to_projects: Make the site logo link to the projects page instead of the homepage
 
     # Categories
+    projects_custom_category_form: Replace the core new-category page with a simpler project-scoped category creation form.
     projects_category_requires_parent: Require new categories to have a parent category
     projects_sort_categories_alphabetically: Sort categories alphabetically instead of by position
     projects_hide_projects_from_categories_page: Hide top-level project categories from /categories, showing only subcategories

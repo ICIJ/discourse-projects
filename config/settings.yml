@@ -55,6 +55,9 @@ plugins:
     client: true
 
   # Categories
+  projects_custom_category_form:
+    default: true
+    client: true
   projects_category_requires_parent:
     default: true
     client: true
