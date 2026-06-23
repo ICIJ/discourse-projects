@@ -137,22 +137,6 @@
     gap: 1.25rem;
   }
 
-  // Live preview of the resulting category badge (name + colour + style).
-  .category-form__preview {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1.25rem;
-  }
-
-  .category-form__preview-label {
-    font-size: var(--font-down-1);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--primary-medium);
-  }
-
   // Logo uploaders stacked, one per line.
   .category-form__logos {
     margin-bottom: 0;
