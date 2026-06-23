@@ -81,7 +81,7 @@ en:
         placeholder: Select a project...
       parent:
         label: Parent category
-        placeholder: Directly under the project
+        placeholder: Select a category...
       button:
         label: New Category
       errors:
