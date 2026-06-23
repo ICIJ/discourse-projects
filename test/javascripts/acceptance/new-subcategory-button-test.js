@@ -1,5 +1,5 @@
 import { getOwner } from "@ember/owner";
-import { click, visit } from "@ember/test-helpers";
+import { click, currentURL, visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import { cloneJSON } from "discourse/lib/object";
 import categoryFixtures from "discourse/tests/fixtures/category-fixtures";
@@ -19,7 +19,10 @@ acceptance("New subcategory button", function (needs) {
 
   needs.site(cloneJSON({ categories }));
   needs.user({ can_create_category: true });
-  needs.settings({ projects_enabled: true });
+  needs.settings({
+    projects_enabled: true,
+    projects_custom_category_form: true,
+  });
 
   needs.pretender((server, helper) => {
     const projects = categories.filter((cat) => cat.is_project);
@@ -32,18 +35,14 @@ acceptance("New subcategory button", function (needs) {
       return helper.response(cloneJSON(discoveryFixtures["/latest.json"]));
     });
 
+    server.get("/c/:id/show.json", () =>
+      helper.response({
+        category: { id: 1, group_permissions: [] },
+      })
+    );
+
     server.get("/c/:category-id/show.json", () => {
       return helper.response(cloneJSON(categoryFixtures["/c/1/show.json"]));
-    });
-
-    server.get("/categories/types", () => {
-      return helper.response({
-        types: [
-          { id: "general", name: "General", configuration_schema: {} },
-          { id: "other", name: "Other", configuration_schema: {} },
-        ],
-        counts: { general: 0, other: 0 },
-      });
     });
   });
 
@@ -52,10 +51,11 @@ acceptance("New subcategory button", function (needs) {
     assert.dom("button.new-subcategory-button").exists("it shows the button");
   });
 
-  test("Open a modal to select a project on the homepage", async function (assert) {
+  test("Navigates to the custom form from the homepage (no parent)", async function (assert) {
     await visit("/");
     await click("button.new-subcategory-button");
-    assert.dom(".d-modal").exists("it shows a modal");
+    assert.dom(".d-modal").doesNotExist("no modal");
+    assert.strictEqual(currentURL(), "/categories/new", "routes to the form");
   });
 
   test("Show the button on the `faq` category page", async function (assert) {
@@ -65,24 +65,17 @@ acceptance("New subcategory button", function (needs) {
       .exists("it shows the button on the homepage");
   });
 
-  test("Routes into the core newCategory flow with the parent injected", async function (assert) {
+  test("Navigates to the custom form with the category as parent", async function (assert) {
     await visit("/c/faq");
     await click("button.new-subcategory-button");
-    assert.dom(".d-modal").doesNotExist("it does not show a modal");
 
-    const owner = getOwner(this);
-    const router = owner.lookup("service:router");
-    assert.true(
-      router.currentRouteName.startsWith("newCategory"),
-      "is in the core newCategory flow"
-    );
-
-    const faq = owner.lookup("service:site").categories.findBy("slug", "faq");
-    const model = owner.lookup("route:new-category").currentModel;
+    const faq = getOwner(this)
+      .lookup("service:site")
+      .categories.findBy("slug", "faq");
     assert.strictEqual(
-      model.parent_category_id,
-      faq.id,
-      "the new category has the faq category as parent"
+      currentURL(),
+      `/categories/new?parentCategoryId=${faq.id}`,
+      "passes the category as parentCategoryId"
     );
   });
 });
