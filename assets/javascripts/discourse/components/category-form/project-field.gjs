@@ -14,7 +14,7 @@ export default class CategoryProjectField extends Component {
 
   <template>
     <@form.Field
-      @name="parentCategoryId"
+      @name="projectId"
       @type="custom"
       @title={{i18n "js.subcategory.project.label"}}
       @validation="required"

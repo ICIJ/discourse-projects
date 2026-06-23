@@ -60,6 +60,7 @@ en:
       subtitle: Create a category inside a project. Set its name, color and logos.
       section:
         details: Details
+        location: Location
         appearance: Appearance
       name:
         label: Title
