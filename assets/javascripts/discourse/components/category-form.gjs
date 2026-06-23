@@ -61,18 +61,20 @@ export default class CategoryForm extends Component {
       <CategoryTitleField @form={{form}} />
       <CategoryDescriptionField @form={{form}} />
       <CategoryColorField @form={{form}} />
-      <CategoryLogoField
-        @form={{form}}
-        @name="logo"
-        @title={{i18n "js.new_category.logo.label"}}
-        @uploadType="logo"
-      />
-      <CategoryLogoField
-        @form={{form}}
-        @name="logoDark"
-        @title={{i18n "js.new_category.logo_dark.label"}}
-        @uploadType="logo"
-      />
+      <div class="category-form__logos">
+        <CategoryLogoField
+          @form={{form}}
+          @name="logo"
+          @title={{i18n "js.new_category.logo.label"}}
+          @uploadType="logo"
+        />
+        <CategoryLogoField
+          @form={{form}}
+          @name="logoDark"
+          @title={{i18n "js.new_category.logo_dark.label"}}
+          @uploadType="logo"
+        />
+      </div>
       <form.Submit @label="new_category.submit" />
     </Form>
   </template>

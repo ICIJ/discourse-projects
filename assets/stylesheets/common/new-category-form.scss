@@ -11,4 +11,27 @@
     margin-top: 0;
     margin-bottom: 1.5rem;
   }
+
+  .category-form__logos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+
+    // Each logo field shares the row equally and can shrink on narrow widths.
+    .form-kit__field {
+      flex: 1 1 220px;
+    }
+
+    // Keep the uploader preview from ballooning to full width.
+    .category-logo-uploader {
+      max-width: 320px;
+    }
+  }
+
+  @media (width < 600px) {
+    .category-form__logos {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
 }
