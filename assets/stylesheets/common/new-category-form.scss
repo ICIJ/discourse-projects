@@ -76,6 +76,12 @@
     align-items: stretch;
   }
 
+  // The form is a flex column with its own 24px gap; we drive spacing with
+  // explicit margins instead, so drop the gap to avoid doubled spacing.
+  .form-kit {
+    gap: 0;
+  }
+
   .form-kit__container-content,
   .form-kit__control-input-wrapper,
   .form-kit__control-input,
@@ -129,6 +135,22 @@
     flex-direction: row;
     flex-wrap: wrap;
     gap: 1.25rem;
+  }
+
+  // Live preview of the resulting category badge (name + colour + style).
+  .category-form__preview {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .category-form__preview-label {
+    font-size: var(--font-down-1);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--primary-medium);
   }
 
   // Logo uploaders stacked, one per line.
