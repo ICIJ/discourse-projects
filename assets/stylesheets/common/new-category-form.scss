@@ -1,0 +1,14 @@
+// Presentation for the plugin's custom new-category form
+// (route: /categories/new, behind the `projects_custom_category_form` setting).
+// All rules are scoped to `.projects-new-category` so global FormKit styling
+// is untouched.
+.projects-new-category {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1rem 3rem;
+
+  > h1 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+  }
+}
