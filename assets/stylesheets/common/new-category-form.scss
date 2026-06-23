@@ -23,26 +23,48 @@
     line-height: 1.4;
   }
 
-  // Each block ("Details", project/parent, "Appearance") is its own card.
-  .category-form__section {
-    background: var(--secondary);
-    border: 1px solid var(--primary-low);
-    border-radius: var(--d-border-radius);
-    padding: 1.5rem;
-    box-shadow: 0 1px 3px rgb(0 0 0 / 6%);
+  // Tab bar
+  .category-form__tabs {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--primary-low);
+  }
 
-    & + .category-form__section {
-      margin-top: 1rem;
+  .category-form__tab {
+    appearance: none;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    padding: 0.5rem 1rem;
+    font-size: var(--font-0);
+    font-weight: 600;
+    color: var(--primary-medium);
+    cursor: pointer;
+
+    &:hover {
+      color: var(--primary);
+    }
+
+    &.is-active {
+      color: var(--primary);
+      border-bottom-color: var(--tertiary);
     }
   }
 
-  .category-form__section-title {
-    margin: 0 0 1.25rem;
-    font-size: var(--font-down-1);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--primary-medium);
+  // Each tab's content is shown in a card; only the active panel renders.
+  .category-form__panel {
+    display: none;
+
+    &.is-active {
+      display: block;
+      background: var(--secondary);
+      border: 1px solid var(--primary-low);
+      border-radius: var(--d-border-radius);
+      padding: 1.5rem;
+      box-shadow: 0 1px 3px rgb(0 0 0 / 6%);
+    }
   }
 
   // FormKit lays the form out as flex columns packed to the left with
@@ -73,14 +95,14 @@
     width: 100% !important;
   }
 
-  // Even rhythm between fields; the last row in a card has no trailing gap.
-  .category-form__section .form-kit__field {
+  // Even rhythm between rows inside a panel; the last row has no trailing gap.
+  .category-form__panel .form-kit__field {
     margin-bottom: 1.25rem;
   }
 
-  .category-form__section > .form-kit__field:last-child,
-  .category-form__section > .category-form__location:last-child,
-  .category-form__section > .category-form__logos:last-child {
+  .category-form__panel > .form-kit__field:last-child,
+  .category-form__panel > .category-form__location:last-child,
+  .category-form__panel > .category-form__logos:last-child {
     margin-bottom: 0;
   }
 
@@ -96,24 +118,29 @@
     }
   }
 
-  // Match the composer: the parent dropdown hides the redundant project badge
-  // (the project is already shown in the adjacent dropdown).
+  // Match the composer: the parent dropdown hides the redundant project badge.
   .subcategory-chooser .category-status > .badge-category__wrapper:first-child,
   .subcategory-chooser .name > .badge-category__wrapper:first-child {
     display: none;
   }
 
-  // Logo uploaders side-by-side; a zero flex-basis keeps them in one row at the
-  // form's actual width, and the media query below stacks them small.
-  .category-form__logos {
-    display: flex;
+  // Style options laid out as a horizontal choice.
+  .form-kit__control-radio-group {
+    flex-direction: row;
     flex-wrap: wrap;
     gap: 1.25rem;
+  }
+
+  // Logo uploaders stacked, one per line.
+  .category-form__logos {
     margin-bottom: 0;
 
     .form-kit__field {
-      flex: 1 1 0;
-      margin-bottom: 0;
+      margin-bottom: 1.25rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
 
     .category-logo-uploader {
@@ -121,7 +148,7 @@
     }
   }
 
-  // Primary action sits below the cards, right-aligned.
+  // Primary action sits below the card, right-aligned.
   .category-form__actions {
     display: flex;
     justify-content: flex-end;
@@ -131,7 +158,7 @@
   @media (width < 600px) {
     padding: 1rem 0.5rem 2rem;
 
-    .category-form__section {
+    .category-form__panel.is-active {
       padding: 1.25rem;
     }
 
@@ -142,11 +169,6 @@
       .form-kit__field {
         margin-bottom: 1.25rem;
       }
-    }
-
-    .category-form__logos {
-      flex-direction: column;
-      gap: 1rem;
     }
 
     .category-form__actions {
