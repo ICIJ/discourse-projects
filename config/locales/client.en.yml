@@ -55,6 +55,19 @@ en:
       continue: Continue
     project_banner:
       label: You're in Project
+    new_category:
+      title: New category
+      name:
+        label: Title
+      description:
+        label: Description
+      color:
+        label: Color
+      logo:
+        label: Logo
+      logo_dark:
+        label: Logo (dark)
+      submit: Create category
     subcategory:
       create: "%{projectLink} &#8250; New \"%{categoryName}\" Category"
       create_in_project: "%{projectLink} &#8250; New Category"
