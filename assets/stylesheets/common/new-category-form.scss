@@ -20,6 +20,7 @@
     // Each logo field shares the row equally and can shrink on narrow widths.
     .form-kit__field {
       flex: 1 1 220px;
+      margin-bottom: 0;
     }
 
     // Keep the uploader preview from ballooning to full width.
@@ -28,14 +29,14 @@
     }
   }
 
-  // Even vertical rhythm between the form's top-level rows. Targets direct
-  // children of the <form> element so fields nested inside the logo / actions
-  // wrappers are not double-spaced. `.form-kit__field` is FormKit's stable
-  // per-field class (also relied on in edit-category.scss); the `form` tag
-  // selector avoids depending on FormKit's (unverified) root class name.
-  form > .form-kit__field,
-  form > .category-form__logos,
-  form > .category-form__actions {
+  // Even vertical rhythm between rows. A descendant selector for fields is
+  // robust whether or not FormKit wraps them in an intermediate container;
+  // the two logo-row fields are exempted because the row's own flex `gap`
+  // already spaces them. `.form-kit__field` is FormKit's stable per-field
+  // class (also relied on in edit-category.scss).
+  .form-kit__field,
+  .category-form__logos,
+  .category-form__actions {
     margin-bottom: 1.25rem;
   }
 
