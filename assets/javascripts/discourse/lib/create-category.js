@@ -12,9 +12,6 @@ import { ajax } from "discourse/lib/ajax";
  * @param {number} [attrs.uploadedLogoId]
  * @param {number} [attrs.uploadedLogoDarkId]
  * @param {Object} [attrs.permissions]        { [groupName]: permissionType }
- * @param {string} [attrs.styleType]          "square" | "icon" | "emoji"
- * @param {string} [attrs.icon]               icon name when styleType is "icon"
- * @param {string} [attrs.emoji]              emoji name when styleType is "emoji"
  * @returns {Promise<Object>} the created category
  */
 export default async function createCategory(attrs) {
@@ -26,9 +23,6 @@ export default async function createCategory(attrs) {
     uploaded_logo_id: attrs.uploadedLogoId ?? null,
     uploaded_logo_dark_id: attrs.uploadedLogoDarkId ?? null,
     permissions: attrs.permissions ?? {},
-    style_type: attrs.styleType ?? "square",
-    icon: attrs.icon ?? null,
-    emoji: attrs.emoji ?? null,
   };
 
   const result = await ajax("/categories", {

@@ -27,8 +27,6 @@ export default class CategoryForm extends Component {
   @tracked activeTab = "general";
   // Scopes the in-project parent chooser; kept in sync with the project field.
   @tracked selectedProjectId = this.args.parentCategoryId ?? null;
-  // Drives which style value field (icon / emoji / none) is shown.
-  @tracked selectedStyle = "square";
 
   // Seed values for FormKit's @data — read once at construction; FormKit owns
   // the live field state after that.
@@ -38,9 +36,6 @@ export default class CategoryForm extends Component {
     name: "",
     description: "",
     color: DEFAULT_COLOR,
-    styleType: "square",
-    icon: null,
-    emoji: null,
     logo: null,
     logoDark: null,
   };
@@ -56,11 +51,6 @@ export default class CategoryForm extends Component {
     // A scoped parent only makes sense within the chosen project, so clear it
     // whenever the project changes.
     form.set("parentCategoryId", null);
-  }
-
-  @action
-  onStyleChange(value) {
-    this.selectedStyle = value;
   }
 
   @action
@@ -81,10 +71,6 @@ export default class CategoryForm extends Component {
       uploadedLogoId: data.logo?.id,
       uploadedLogoDarkId: data.logoDark?.id,
       permissions,
-      // Only the value matching the chosen style is meaningful.
-      styleType: data.styleType,
-      icon: data.styleType === "icon" ? data.icon : null,
-      emoji: data.styleType === "emoji" ? data.emoji : null,
     });
 
     if (this.args.onCreated) {
@@ -138,49 +124,6 @@ export default class CategoryForm extends Component {
           {{if (eq this.activeTab 'appearance') 'is-active'}}"
       >
         <CategoryColorField @form={{form}} />
-
-        <form.Field
-          @name="styleType"
-          @type="radio-group"
-          @title={{i18n "js.new_category.style.label"}}
-          @onSet={{this.onStyleChange}}
-          as |field|
-        >
-          <field.Control as |group|>
-            <group.Radio @value="icon">
-              {{i18n "js.new_category.style.icon"}}
-            </group.Radio>
-            <group.Radio @value="emoji">
-              {{i18n "js.new_category.style.emoji"}}
-            </group.Radio>
-            <group.Radio @value="square">
-              {{i18n "js.new_category.style.square"}}
-            </group.Radio>
-          </field.Control>
-        </form.Field>
-
-        {{#if (eq this.selectedStyle "icon")}}
-          <form.Field
-            @name="icon"
-            @type="icon"
-            @title={{i18n "js.new_category.icon.label"}}
-            as |field|
-          >
-            <field.Control />
-          </form.Field>
-        {{/if}}
-
-        {{#if (eq this.selectedStyle "emoji")}}
-          <form.Field
-            @name="emoji"
-            @type="emoji"
-            @title={{i18n "js.new_category.emoji.label"}}
-            as |field|
-          >
-            <field.Control />
-          </form.Field>
-        {{/if}}
-
         <div class="category-form__logos">
           <CategoryLogoField
             @form={{form}}

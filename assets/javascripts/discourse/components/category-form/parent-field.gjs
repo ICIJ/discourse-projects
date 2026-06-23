@@ -20,6 +20,7 @@ const CategoryParentField = <template>
         @onChange={{field.set}}
         @options={{hash
           none="js.subcategory.parent.placeholder"
+          clearable=true
           disabled=(not @projectId)
         }}
       />

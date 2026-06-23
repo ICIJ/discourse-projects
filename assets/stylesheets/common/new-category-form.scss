@@ -130,13 +130,6 @@
     display: none;
   }
 
-  // Style options laid out as a horizontal choice.
-  .form-kit__control-radio-group {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 1.25rem;
-  }
-
   // Logo uploaders stacked, one per line.
   .category-form__logos {
     margin-bottom: 0;
