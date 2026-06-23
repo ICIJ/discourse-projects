@@ -58,9 +58,18 @@ en:
     new_category:
       title: New category
       subtitle: Create a category inside a project. Set its name, color and logos.
-      section:
-        details: Details
+      tab:
+        general: General
         appearance: Appearance
+      style:
+        label: Style
+        square: Square
+        icon: Icon
+        emoji: Emoji
+      icon:
+        label: Icon
+      emoji:
+        label: Emoji
       name:
         label: Title
       description:
