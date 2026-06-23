@@ -28,6 +28,25 @@
     }
   }
 
+  // Even vertical rhythm between the form's top-level rows. Targets direct
+  // children of the <form> element so fields nested inside the logo / actions
+  // wrappers are not double-spaced. `.form-kit__field` is FormKit's stable
+  // per-field class (also relied on in edit-category.scss); the `form` tag
+  // selector avoids depending on FormKit's (unverified) root class name.
+  form > .form-kit__field,
+  form > .category-form__logos,
+  form > .category-form__actions {
+    margin-bottom: 1.25rem;
+  }
+
+  // Submit reads as the primary page action: separated by a full-width divider.
+  .category-form__actions {
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--primary-low);
+  }
+
   @media (width < 600px) {
     .category-form__logos {
       flex-direction: column;

@@ -75,7 +75,9 @@ export default class CategoryForm extends Component {
           @uploadType="logo"
         />
       </div>
-      <form.Submit @label="new_category.submit" />
+      <div class="category-form__actions">
+        <form.Submit @label="new_category.submit" />
+      </div>
     </Form>
   </template>
 }
