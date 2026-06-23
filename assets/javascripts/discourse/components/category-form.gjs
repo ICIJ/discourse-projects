@@ -83,17 +83,16 @@ export default class CategoryForm extends Component {
       </section>
 
       <section class="category-form__section">
-        <h2 class="category-form__section-title">
-          {{i18n "js.new_category.section.location"}}
-        </h2>
-        <CategoryProjectField
-          @form={{form}}
-          @onChange={{fn this.onProjectChange form}}
-        />
-        <CategoryParentField
-          @form={{form}}
-          @projectId={{this.selectedProjectId}}
-        />
+        <div class="category-form__location">
+          <CategoryProjectField
+            @form={{form}}
+            @onChange={{fn this.onProjectChange form}}
+          />
+          <CategoryParentField
+            @form={{form}}
+            @projectId={{this.selectedProjectId}}
+          />
+        </div>
       </section>
 
       <section class="category-form__section">

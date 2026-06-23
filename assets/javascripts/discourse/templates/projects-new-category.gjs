@@ -9,11 +9,9 @@ import CategoryForm from "../components/category-form";
         {{i18n "js.new_category.subtitle"}}
       </p>
     </header>
-    <div class="projects-new-category__card">
-      <CategoryForm
-        @parentCategoryId={{@controller.numericParentCategoryId}}
-        @onCreated={{@controller.onCreated}}
-      />
-    </div>
+    <CategoryForm
+      @parentCategoryId={{@controller.numericParentCategoryId}}
+      @onCreated={{@controller.onCreated}}
+    />
   </section>
 </template>
