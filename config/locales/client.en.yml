@@ -57,6 +57,10 @@ en:
       label: You're in Project
     new_category:
       title: New category
+      subtitle: Create a category inside a project. Set its name, color and logos.
+      section:
+        details: Details
+        appearance: Appearance
       name:
         label: Title
       description:
