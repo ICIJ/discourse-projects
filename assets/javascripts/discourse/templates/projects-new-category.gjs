@@ -3,10 +3,17 @@ import CategoryForm from "../components/category-form";
 
 <template>
   <section class="projects-new-category">
-    <h1>{{i18n "js.new_category.title"}}</h1>
-    <CategoryForm
-      @parentCategoryId={{@controller.numericParentCategoryId}}
-      @onCreated={{@controller.onCreated}}
-    />
+    <header class="projects-new-category__header">
+      <h1>{{i18n "js.new_category.title"}}</h1>
+      <p class="projects-new-category__subtitle">
+        {{i18n "js.new_category.subtitle"}}
+      </p>
+    </header>
+    <div class="projects-new-category__card">
+      <CategoryForm
+        @parentCategoryId={{@controller.numericParentCategoryId}}
+        @onCreated={{@controller.onCreated}}
+      />
+    </div>
   </section>
 </template>

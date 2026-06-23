@@ -3,57 +3,138 @@
 // All rules are scoped to `.projects-new-category` so global FormKit styling
 // is untouched.
 .projects-new-category {
-  max-width: 720px;
+  max-width: 640px;
   margin: 0 auto;
   padding: 2rem 1rem 3rem;
 
-  > h1 {
-    margin-top: 0;
+  &__header {
     margin-bottom: 1.5rem;
+
+    h1 {
+      margin: 0 0 0.25rem;
+      line-height: 1.2;
+    }
   }
 
+  &__subtitle {
+    margin: 0;
+    color: var(--primary-medium);
+    font-size: var(--font-up-1);
+    line-height: 1.4;
+  }
+
+  // The form sits in a card so it reads as an intentional panel, not a raw
+  // stack of inputs floating on the page background.
+  &__card {
+    background: var(--secondary);
+    border: 1px solid var(--primary-low);
+    border-radius: var(--d-border-radius);
+    padding: 1.75rem;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 6%);
+  }
+
+  // Grouped sections ("Details", "Appearance") with a divider between them.
+  .category-form__section + .category-form__section {
+    margin-top: 1.75rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--primary-low);
+  }
+
+  .category-form__section-title {
+    margin: 0 0 1.25rem;
+    font-size: var(--font-down-1);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--primary-medium);
+  }
+
+  // Even rhythm between fields; the last field in a section has no trailing gap.
+  .category-form__section .form-kit__field {
+    margin-bottom: 1.25rem;
+  }
+
+  .category-form__section > .form-kit__field:last-child,
+  .category-form__section > .category-form__logos:last-child {
+    margin-bottom: 0;
+  }
+
+  // FormKit lays the form out as a flex column packed to the left with
+  // fixed-width controls. Stretch its rows and widen the control wrappers so
+  // every field fills the card for a tidy, aligned form.
+  // Each field and the form are flex columns; stretching them makes every
+  // control fill the card width (FormKit otherwise left-packs fixed-width
+  // controls), so the form reads as a tidy, aligned panel.
+  .form-kit,
+  .form-kit__field,
+  .form-kit__container-content {
+    align-items: stretch;
+  }
+
+  .form-kit__container-content,
+  .form-kit__control-input-wrapper,
+  .form-kit__control-input,
+  .form-kit__control-textarea,
+  .form-kit__field .select-kit {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .form-kit__control-textarea {
+    min-height: 6rem;
+  }
+
+  .form-kit__field-textarea .form-kit__container-content,
+  .form-kit__field-textarea .form-kit__control-textarea {
+    width: 100% !important;
+  }
+
+  // Logo uploaders sit side-by-side; a zero flex-basis keeps them in one row
+  // at the form's actual width, and the media query below stacks them small.
   .category-form__logos {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.5rem;
+    gap: 1.25rem;
+    margin-bottom: 0;
 
-    // Each logo field shares the row equally. A zero basis (rather than a
-    // fixed basis) keeps them side-by-side even when the form is narrower than
-    // the column; the @media block below stacks them on small screens.
     .form-kit__field {
       flex: 1 1 0;
       margin-bottom: 0;
     }
 
-    // Keep the uploader preview from ballooning to full width.
     .category-logo-uploader {
-      max-width: 320px;
+      max-width: 100%;
     }
   }
 
-  // Even vertical rhythm between rows. A descendant selector for fields is
-  // robust whether or not FormKit wraps them in an intermediate container;
-  // the two logo-row fields are exempted because the row's own flex `gap`
-  // already spaces them. `.form-kit__field` is FormKit's stable per-field
-  // class (also relied on in edit-category.scss).
-  .form-kit__field,
-  .category-form__logos,
+  // Footer action bar: the primary action is separated and right-aligned.
   .category-form__actions {
-    margin-bottom: 1.25rem;
-  }
-
-  // Submit reads as the primary page action: separated by a full-width divider.
-  .category-form__actions {
-    margin-top: 0.5rem;
-    margin-bottom: 0;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1.75rem;
     padding-top: 1.5rem;
     border-top: 1px solid var(--primary-low);
   }
 
   @media (width < 600px) {
+    padding: 1rem 0.5rem 2rem;
+
+    &__card {
+      padding: 1.25rem;
+    }
+
     .category-form__logos {
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 1rem;
+    }
+
+    .category-form__actions {
+      justify-content: stretch;
+
+      .form-kit__button {
+        width: 100%;
+      }
     }
   }
 }

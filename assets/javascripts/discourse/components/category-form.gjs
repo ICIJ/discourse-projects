@@ -57,24 +57,36 @@ export default class CategoryForm extends Component {
 
   <template>
     <Form @data={{this.formData}} @onSubmit={{this.submit}} as |form|>
-      <CategoryProjectField @form={{form}} />
-      <CategoryTitleField @form={{form}} />
-      <CategoryDescriptionField @form={{form}} />
-      <CategoryColorField @form={{form}} />
-      <div class="category-form__logos">
-        <CategoryLogoField
-          @form={{form}}
-          @name="logo"
-          @title={{i18n "js.new_category.logo.label"}}
-          @uploadType="logo"
-        />
-        <CategoryLogoField
-          @form={{form}}
-          @name="logoDark"
-          @title={{i18n "js.new_category.logo_dark.label"}}
-          @uploadType="logo"
-        />
-      </div>
+      <section class="category-form__section">
+        <h2 class="category-form__section-title">
+          {{i18n "js.new_category.section.details"}}
+        </h2>
+        <CategoryProjectField @form={{form}} />
+        <CategoryTitleField @form={{form}} />
+        <CategoryDescriptionField @form={{form}} />
+      </section>
+
+      <section class="category-form__section">
+        <h2 class="category-form__section-title">
+          {{i18n "js.new_category.section.appearance"}}
+        </h2>
+        <CategoryColorField @form={{form}} />
+        <div class="category-form__logos">
+          <CategoryLogoField
+            @form={{form}}
+            @name="logo"
+            @title={{i18n "js.new_category.logo.label"}}
+            @uploadType="logo"
+          />
+          <CategoryLogoField
+            @form={{form}}
+            @name="logoDark"
+            @title={{i18n "js.new_category.logo_dark.label"}}
+            @uploadType="logo"
+          />
+        </div>
+      </section>
+
       <div class="category-form__actions">
         <form.Submit @label="new_category.submit" />
       </div>
