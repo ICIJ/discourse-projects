@@ -1,5 +1,4 @@
 import Component from "@glimmer/component";
-import { tracked } from "@glimmer/tracking";
 import { action } from "@ember/object";
 import Form from "discourse/components/form";
 import getURL from "discourse/lib/get-url";
@@ -19,39 +18,26 @@ const DEFAULT_COLOR = "0088CC";
 
 export default class CategoryForm extends Component {
   // @parentCategoryId, @onCreated(category)
-  @tracked permissions = {};
 
-  formData;
-
-  constructor() {
-    super(...arguments);
-    this.formData = {
-      parentCategoryId: this.args.parentCategoryId ?? null,
-      name: "",
-      description: "",
-      color: DEFAULT_COLOR,
-      logo: null,
-      logoDark: null,
-    };
-    if (this.args.parentCategoryId) {
-      this.loadPermissions(this.args.parentCategoryId);
-    }
-  }
-
-  @action
-  async loadPermissions(categoryId) {
-    this.permissions = categoryId
-      ? await fetchCategoryPermissions(categoryId)
-      : {};
-  }
-
-  @action
-  async onProjectChange(categoryId) {
-    await this.loadPermissions(categoryId);
-  }
+  // Seed values for FormKit's @data — read once at construction; FormKit owns
+  // the live field state after that.
+  formData = {
+    parentCategoryId: this.args.parentCategoryId ?? null,
+    name: "",
+    description: "",
+    color: DEFAULT_COLOR,
+    logo: null,
+    logoDark: null,
+  };
 
   @action
   async submit(data) {
+    // Fetch permissions at submit time so the result is always keyed to the
+    // actually-submitted parent — no async race between eager load and submit.
+    const permissions = data.parentCategoryId
+      ? await fetchCategoryPermissions(data.parentCategoryId)
+      : {};
+
     const category = await createCategory({
       name: data.name,
       parentCategoryId: data.parentCategoryId,
@@ -59,7 +45,7 @@ export default class CategoryForm extends Component {
       color: data.color,
       uploadedLogoId: data.logo?.id,
       uploadedLogoDarkId: data.logoDark?.id,
-      permissions: this.permissions,
+      permissions,
     });
 
     if (this.args.onCreated) {
@@ -71,7 +57,7 @@ export default class CategoryForm extends Component {
 
   <template>
     <Form @data={{this.formData}} @onSubmit={{this.submit}} as |form|>
-      <CategoryProjectField @form={{form}} @onChange={{this.onProjectChange}} />
+      <CategoryProjectField @form={{form}} />
       <CategoryTitleField @form={{form}} />
       <CategoryDescriptionField @form={{form}} />
       <CategoryColorField @form={{form}} />
