@@ -17,9 +17,11 @@
     flex-wrap: wrap;
     gap: 1.5rem;
 
-    // Each logo field shares the row equally and can shrink on narrow widths.
+    // Each logo field shares the row equally. A zero basis (rather than a
+    // fixed basis) keeps them side-by-side even when the form is narrower than
+    // the column; the @media block below stacks them on small screens.
     .form-kit__field {
-      flex: 1 1 220px;
+      flex: 1 1 0;
       margin-bottom: 0;
     }
 
