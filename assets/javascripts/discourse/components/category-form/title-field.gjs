@@ -6,7 +6,10 @@ const CategoryTitleField = <template>
     @type="input"
     @title={{i18n "js.new_category.name.label"}}
     @validation="required"
-  />
+    as |field|
+  >
+    <field.Control />
+  </@form.Field>
 </template>;
 
 export default CategoryTitleField;
