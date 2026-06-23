@@ -16,13 +16,6 @@ export default class ProjectService extends Service {
 
   @tracked all = [];
 
-  /**
-   * Parent category id stashed by the "new subcategory" entry points so the
-   * core `newCategory` route can inject it into the category being created.
-   * Consumed (set back to null) once by the route's model() override.
-   */
-  @tracked pendingParentCategoryId = null;
-
   async init() {
     super.init(...arguments);
     // Load all projects from the server once
