@@ -122,6 +122,12 @@
       min-width: 0;
       margin-bottom: 0;
     }
+
+    // The project's badge selected-name renders shorter than the parent's
+    // placeholder; pin both headers to the same height so they line up.
+    .select-kit-header {
+      min-height: 2.375em;
+    }
   }
 
   // Match the composer: the parent dropdown hides the redundant project badge.
