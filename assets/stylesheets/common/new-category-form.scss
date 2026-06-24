@@ -123,10 +123,14 @@
       margin-bottom: 0;
     }
 
-    // The project's badge selected-name renders shorter than the parent's
-    // placeholder; pin both headers to the same height so they line up.
+    // The project's badge selected-name and the parent's placeholder render at
+    // different natural heights (and a dark theme can pad them differently), so
+    // pin both headers to one fixed height (border-box, so padding is absorbed)
+    // with vertically-centred content.
     .select-kit-header {
-      min-height: 2.375em;
+      box-sizing: border-box;
+      height: 2.5em;
+      align-items: center;
     }
   }
 
