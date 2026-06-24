@@ -12,7 +12,11 @@ import CategoryForm from "../components/category-form";
     </header>
     {{! Re-mount the form whenever the preselection changes. /categories/new is
     a single route, so without a changing key Ember would reuse one form
-    instance and its once-seeded fields would keep a previous selection. }}
+    instance and its once-seeded fields would keep a previous selection. The
+    re-mount is driven entirely by the each block below, keyed via @identity on
+    the concatenated ids: when either id changes the array element's identity
+    changes, so Ember tears down the old form and builds a fresh one. The form
+    itself has no re-mount mechanism of its own. }}
     {{#each
       (array
         (concat
@@ -20,10 +24,8 @@ import CategoryForm from "../components/category-form";
         )
       )
       key="@identity"
-      as |seed|
     }}
       <CategoryForm
-        @key={{seed}}
         @projectId={{@controller.numericProjectId}}
         @parentCategoryId={{@controller.numericParentCategoryId}}
       />
