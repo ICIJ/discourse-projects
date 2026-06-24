@@ -10,7 +10,7 @@ jobs:
   ci:
     uses: discourse/.github/.github/workflows/discourse-plugin.yml@v1
     with:
-      core_ref: v3.5.2
+      core_ref: v2026.5.0
 
   bump:
     needs: ci 
