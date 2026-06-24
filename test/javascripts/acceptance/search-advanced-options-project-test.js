@@ -32,12 +32,13 @@ acceptance("Search avdanced options with a project filter", function (needs) {
 
   test("Show a project filter", async function (assert) {
     await visit("/search");
+    await click(".advanced-filters__toggle");
     assert.dom("#search-in-project").exists("it shows the filter");
   });
 
   test("Show a filter with the faq project selected", async function (assert) {
     await visit("/search");
-    await click(".advanced-filters > summary");
+    await click(".advanced-filters__toggle");
     await fillIn(".search-query", "none");
     const projectChooser = selectKit("#search-in-project");
     await projectChooser.expand();
@@ -53,7 +54,7 @@ acceptance("Search avdanced options with a project filter", function (needs) {
 
   test("Show a filter with the dev category selected", async function (assert) {
     await visit("/search");
-    await click(".advanced-filters > summary");
+    await click(".advanced-filters__toggle");
     await fillIn(".search-query", "none");
     const categoryChooser = selectKit("#search-in-category");
 
@@ -70,7 +71,7 @@ acceptance("Search avdanced options with a project filter", function (needs) {
 
   test("Show a filter with the dev category selected then back to blog", async function (assert) {
     await visit("/search");
-    await click(".advanced-filters > summary");
+    await click(".advanced-filters__toggle");
     await fillIn(".search-query", "none");
     const categoryChooser = selectKit("#search-in-category");
     const projectChooser = selectKit("#search-in-project");
@@ -98,7 +99,7 @@ acceptance("Search avdanced options with a project filter", function (needs) {
 
   test("Show a filter with the support category selected", async function (assert) {
     await visit("/search");
-    await click(".advanced-filters > summary");
+    await click(".advanced-filters__toggle");
     await fillIn(".search-query", "none");
     const categoryChooser = selectKit("#search-in-category");
     const projectChooser = selectKit("#search-in-project");
