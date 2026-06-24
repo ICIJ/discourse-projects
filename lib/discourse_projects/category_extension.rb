@@ -24,12 +24,18 @@ module DiscourseProjects
                if: -> { SiteSetting.projects_category_requires_parent }
     end
 
-    # Valid when the category has a parent, or is a (parent-less) project, or is
-    # the uncategorized catch-all. Otherwise it is an orphan and rejected.
+    # A category must keep a project as its parent. Rejected when:
+    #   - it has no parent and isn't a (genuine) project, or
+    #   - an existing parent is being removed — detaching a child would turn it
+    #     into a top-level category, which `project?` would wrongly accept for a
+    #     read-restricted child.
+    # The uncategorized catch-all is exempt.
     def must_belong_to_a_project
       return unless is_categorized
       return if parent_category_id.present?
-      return if project?
+
+      detaching_existing_parent = parent_category_id_was.present?
+      return if !detaching_existing_parent && project?
 
       errors.add(:base, I18n.t("discourse_projects.errors.category_requires_parent"))
     end
