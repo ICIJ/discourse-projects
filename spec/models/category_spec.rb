@@ -98,6 +98,15 @@ RSpec.describe Category do
         expect(category).not_to be_valid
         expect(category.errors[:base]).to include(message)
       end
+
+      it "rejects detaching a read-restricted subcategory (which would otherwise look like a project)" do
+        parent = Fabricate(:category, read_restricted: true, parent_category: nil)
+        category = Fabricate(:category, read_restricted: true, parent_category: parent)
+        category.parent_category_id = nil
+        expect(category.project?).to be_truthy # it now *looks* like a project...
+        expect(category).not_to be_valid       # ...but detaching is still rejected
+        expect(category.errors[:base]).to include(message)
+      end
     end
 
     context "when projects_category_requires_parent is disabled" do
