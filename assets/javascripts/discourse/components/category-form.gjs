@@ -7,6 +7,7 @@ import { eq } from "truth-helpers";
 import Form from "discourse/components/form";
 import getURL from "discourse/lib/get-url";
 import DiscourseURL from "discourse/lib/url";
+import Category from "discourse/models/category";
 import { i18n } from "discourse-i18n";
 import createCategory from "../lib/create-category";
 import fetchCategoryPermissions from "../lib/fetch-category-permissions";
@@ -27,19 +28,48 @@ export default class CategoryForm extends Component {
 
   @tracked activeTab = "general";
   // Scopes the in-project parent chooser; kept in sync with the project field.
-  @tracked selectedProjectId = this.args.projectId ?? null;
+  @tracked selectedProjectId = this.seededProjectId;
 
   // Seed values for FormKit's @data — read once at construction; FormKit owns
   // the live field state after that.
   formData = {
-    projectId: this.args.projectId ?? null,
-    parentCategoryId: this.args.parentCategoryId ?? null,
+    projectId: this.seededProjectId,
+    parentCategoryId: this.seededParentCategoryId,
     name: "",
     description: "",
     color: DEFAULT_COLOR,
     logo: null,
     logoDark: null,
   };
+
+  // Only honour a preselected project if it actually resolves to a project; a
+  // non-project id would leave the (project-only) chooser blank. When the id
+  // isn't loaded yet we keep it — we only drop seeds we can prove are wrong.
+  get seededProjectId() {
+    const projectId = this.args.projectId ?? null;
+    if (!projectId) {
+      return null;
+    }
+    const category = Category.findById(projectId);
+    return category && !category.is_project ? null : projectId;
+  }
+
+  // Only honour a preselected in-project parent if it belongs to the chosen
+  // project; otherwise the descendant-scoped parent chooser can't resolve it
+  // (e.g. ?projectId=A&parentCategoryId=B where B lives outside A).
+  get seededParentCategoryId() {
+    const projectId = this.seededProjectId;
+    const parentId = this.args.parentCategoryId ?? null;
+    if (!projectId || !parentId) {
+      return null;
+    }
+    // Only drop a seed we can prove belongs to a different project. An
+    // unresolved project ancestor (parent not loaded, or its `.project` not
+    // populated) is not proof of mismatch, so we keep the seed — mirroring
+    // seededProjectId, which also only drops seeds it can prove are wrong.
+    const parentProjectId = Category.findById(parentId)?.project?.id;
+    return parentProjectId && parentProjectId !== projectId ? null : parentId;
+  }
 
   @action
   setTab(tab) {
