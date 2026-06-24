@@ -6,6 +6,7 @@ import { observes } from "@ember-decorators/object";
 import discourseComputed, { debounce } from "discourse/lib/decorators";
 import DiscourseURL from "discourse/lib/url";
 import Category from "discourse/models/category";
+import categoryContextQueryParams from "../lib/category-context-query-params";
 
 export default class ProjectMembersController extends Controller {
   @service composer;
@@ -69,10 +70,10 @@ export default class ProjectMembersController extends Controller {
 
   @action
   createCategory() {
-    // We're on a project's page, so pre-select it as the new category's project.
-    // parentCategoryId is nulled so a prior selection can't stick.
+    // We're on a project's page, so pre-select it as the new category's project
+    // (see categoryContextQueryParams for the project/parent mapping).
     this.router.transitionTo("projectsNewCategory", {
-      queryParams: { projectId: this.category?.id, parentCategoryId: null },
+      queryParams: categoryContextQueryParams(this.category),
     });
   }
 

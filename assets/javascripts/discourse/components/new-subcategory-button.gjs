@@ -4,6 +4,7 @@ import { action } from "@ember/object";
 import { service } from "@ember/service";
 import icon from "discourse/helpers/d-icon";
 import { i18n } from "discourse-i18n";
+import categoryContextQueryParams from "../lib/category-context-query-params";
 
 export default class NewSubcategoryButton extends Component {
   @service siteSettings;
@@ -16,28 +17,10 @@ export default class NewSubcategoryButton extends Component {
     });
   }
 
-  // Pre-fills the form from where the button was clicked:
-  //   - from a project: preselect that project;
-  //   - from a category inside a project: preselect the project AND that
-  //     category as the in-project parent;
-  //   - from anywhere else (e.g. the homepage): no preselection.
-  // Both params are always specified (nulled when unused) so a previous
-  // selection never leaks in through Ember's sticky query params.
+  // Pre-fills the form from where the button was clicked (see
+  // categoryContextQueryParams for the project/parent mapping).
   get queryParams() {
-    const category = this.currentCategory;
-
-    if (category?.is_project) {
-      return { projectId: category.id, parentCategoryId: null };
-    }
-
-    if (category) {
-      return {
-        projectId: category.project?.id ?? null,
-        parentCategoryId: category.id,
-      };
-    }
-
-    return { projectId: null, parentCategoryId: null };
+    return categoryContextQueryParams(this.currentCategory);
   }
 
   get currentCategory() {
