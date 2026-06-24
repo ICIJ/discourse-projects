@@ -1,3 +1,4 @@
+import { array, concat } from "@ember/helper";
 import { i18n } from "discourse-i18n";
 import CategoryForm from "../components/category-form";
 
@@ -9,9 +10,23 @@ import CategoryForm from "../components/category-form";
         {{i18n "js.new_category.subtitle"}}
       </p>
     </header>
-    <CategoryForm
-      @parentCategoryId={{@controller.numericParentCategoryId}}
-      @onCreated={{@controller.onCreated}}
-    />
+    {{! Re-mount the form whenever the preselection changes. /categories/new is
+    a single route, so without a changing key Ember would reuse one form
+    instance and its once-seeded fields would keep a previous selection. }}
+    {{#each
+      (array
+        (concat
+          @controller.numericProjectId "/" @controller.numericParentCategoryId
+        )
+      )
+      key="@identity"
+      as |seed|
+    }}
+      <CategoryForm
+        @key={{seed}}
+        @projectId={{@controller.numericProjectId}}
+        @parentCategoryId={{@controller.numericParentCategoryId}}
+      />
+    {{/each}}
   </section>
 </template>

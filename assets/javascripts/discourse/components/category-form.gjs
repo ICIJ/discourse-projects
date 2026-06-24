@@ -22,17 +22,18 @@ import CategoryTitleField from "./category-form/title-field";
 const DEFAULT_COLOR = "0088CC";
 
 export default class CategoryForm extends Component {
-  // @parentCategoryId (a pre-selected project), @onCreated(category)
+  // @projectId (a pre-selected project), @parentCategoryId (a pre-selected
+  // in-project parent), @onCreated(category)
 
   @tracked activeTab = "general";
   // Scopes the in-project parent chooser; kept in sync with the project field.
-  @tracked selectedProjectId = this.args.parentCategoryId ?? null;
+  @tracked selectedProjectId = this.args.projectId ?? null;
 
   // Seed values for FormKit's @data — read once at construction; FormKit owns
   // the live field state after that.
   formData = {
-    projectId: this.args.parentCategoryId ?? null,
-    parentCategoryId: null,
+    projectId: this.args.projectId ?? null,
+    parentCategoryId: this.args.parentCategoryId ?? null,
     name: "",
     description: "",
     color: DEFAULT_COLOR,
@@ -47,6 +48,7 @@ export default class CategoryForm extends Component {
 
   @action
   onProjectChange(form, value) {
+    form.set("projectId", value);
     this.selectedProjectId = value;
     // A scoped parent only makes sense within the chosen project, so clear it
     // whenever the project changes.

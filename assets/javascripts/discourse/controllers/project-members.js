@@ -69,7 +69,11 @@ export default class ProjectMembersController extends Controller {
 
   @action
   createCategory() {
-    this.router.transitionTo("newCategory");
+    // We're on a project's page, so pre-select it as the new category's project.
+    // parentCategoryId is nulled so a prior selection can't stick.
+    this.router.transitionTo("projectsNewCategory", {
+      queryParams: { projectId: this.category?.id, parentCategoryId: null },
+    });
   }
 
   @debounce(500)
