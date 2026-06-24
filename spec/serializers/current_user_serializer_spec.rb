@@ -40,10 +40,10 @@ RSpec.describe CurrentUserSerializer do
         described_class.new(current_user, scope: Guardian.new(current_user), root: false)
       end
 
-      describe "with moderator not managing categories and groups" do
+      describe "with moderator not managing categories" do
 
-        before do 
-          SiteSetting.moderators_manage_categories_and_groups = false
+        before do
+          SiteSetting.moderators_manage_categories = false
         end
 
         it "returns false" do
@@ -51,13 +51,13 @@ RSpec.describe CurrentUserSerializer do
         end
       end
 
-      describe "with moderator managing categories and groups" do
+      describe "with moderator managing categories" do
 
-        before do 
-          SiteSetting.moderators_manage_categories_and_groups = true
+        before do
+          SiteSetting.moderators_manage_categories = true
         end
 
-        it "returns false" do
+        it "returns true" do
           expect(serializer.can_create_category).to be_truthy
         end
       end
