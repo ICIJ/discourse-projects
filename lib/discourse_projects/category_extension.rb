@@ -7,15 +7,31 @@ module DiscourseProjects
     extend ActiveSupport::Concern
 
     prepended do
-      scope :categorized, -> { 
+      scope :categorized, -> {
         where.not(id: SiteSetting.uncategorized_category_id)
       }
 
-      scope :projects, -> { 
+      scope :projects, -> {
         scope = where(parent_category: [nil, ''])
         scope = scope.where(read_restricted: true) if SiteSetting.projects_private?
         scope.categorized
       }
+
+      # A category must belong to a project (have a parent) unless it is itself
+      # a project. Enforced on every save (create and edit), so the rule can't
+      # be sidestepped via the edit form or the API. Gated by a site setting.
+      validate :must_belong_to_a_project,
+               if: -> { SiteSetting.projects_category_requires_parent }
+    end
+
+    # Valid when the category has a parent, or is a (parent-less) project, or is
+    # the uncategorized catch-all. Otherwise it is an orphan and rejected.
+    def must_belong_to_a_project
+      return unless is_categorized
+      return if parent_category_id.present?
+      return if project?
+
+      errors.add(:base, I18n.t("discourse_projects.errors.category_requires_parent"))
     end
 
     def ancestors

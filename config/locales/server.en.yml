@@ -24,7 +24,7 @@ en:
 
     # Categories
     projects_custom_category_form: Replace the core new-category page with a simpler project-scoped category creation form.
-    projects_category_requires_parent: Require new categories to have a parent category
+    projects_category_requires_parent: Require categories to have a parent category (unless they are projects), enforced on create and edit
     projects_sort_categories_alphabetically: Sort categories alphabetically instead of by position
     projects_hide_projects_from_categories_page: Hide top-level project categories from /categories, showing only subcategories
     projects_limit_latest_to_category: "Scope the \"Latest\" topic list on category pages to the current category and its subcategories instead of showing all topics site-wide"
@@ -40,3 +40,4 @@ en:
   discourse_projects:
     errors:
       topic_in_project_category: "Topics cannot be created directly in a project. Please select a subcategory."
+      category_requires_parent: "A category must belong to a project. Please select a parent category."
