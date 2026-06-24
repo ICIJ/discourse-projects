@@ -59,7 +59,7 @@ plugins:
     default: true
     client: true
   projects_category_requires_parent:
-    default: true
+    default: false
     client: true
   projects_sort_categories_alphabetically:
     default: true
