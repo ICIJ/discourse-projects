@@ -65,7 +65,7 @@ acceptance("New subcategory button", function (needs) {
       .exists("it shows the button on the homepage");
   });
 
-  test("Navigates to the custom form with the category as parent", async function (assert) {
+  test("Navigates to the custom form with the project preselected", async function (assert) {
     await visit("/c/faq");
     await click("button.new-subcategory-button");
 
@@ -74,8 +74,8 @@ acceptance("New subcategory button", function (needs) {
       .categories.findBy("slug", "faq");
     assert.strictEqual(
       currentURL(),
-      `/categories/new?parentCategoryId=${faq.id}`,
-      "passes the category as parentCategoryId"
+      `/categories/new?projectId=${faq.id}`,
+      "preselects the project (faq is itself a project)"
     );
   });
 });

@@ -27,7 +27,7 @@ acceptance("New category creator", function (needs) {
     await fillIn(".form-kit__field[data-name='name'] input", "Orphan");
     await click(".form-kit__button[type='submit']");
     assert
-      .dom(".form-kit__field[data-name='parentCategoryId'] .form-kit__errors")
+      .dom(".form-kit__field[data-name='projectId'] .form-kit__errors")
       .exists("the project field shows a required error");
   });
 });

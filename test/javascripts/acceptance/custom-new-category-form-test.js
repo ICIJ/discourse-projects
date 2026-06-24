@@ -53,7 +53,7 @@ acceptance("Custom new category form", function (needs) {
   });
 
   test("submitting creates the category with inherited parent permissions", async function (assert) {
-    await visit("/categories/new?parentCategoryId=2");
+    await visit("/categories/new?projectId=2");
     await fillIn(".form-kit__field[data-name='name'] input", "My Category");
     await click(".form-kit__button[type='submit']");
 

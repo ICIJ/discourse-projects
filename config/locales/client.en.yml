@@ -50,9 +50,6 @@ en:
       label: Projects
       placeholder: 'Search...'
       select: Select a projects
-    parent_category_chooser:
-      title: Select a project
-      continue: Continue
     project_banner:
       label: You're in Project
     new_category:
@@ -73,9 +70,6 @@ en:
         label: Logo (dark)
       submit: Create category
     subcategory:
-      create: "%{projectLink} &#8250; New \"%{categoryName}\" Category"
-      create_in_project: "%{projectLink} &#8250; New Category"
-      project_tab: Project
       project:
         label: Project
         placeholder: Select a project...

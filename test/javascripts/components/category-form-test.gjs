@@ -12,9 +12,7 @@ module("Projects | Component | category-form", function (hooks) {
   });
 
   test("renders all fields and a submit button", async function (assert) {
-    await render(
-      <template><CategoryForm @parentCategoryId={{null}} /></template>
-    );
+    await render(<template><CategoryForm @projectId={{null}} /></template>);
     assert
       .dom(".form-kit__field[data-name='parentCategoryId']")
       .exists("project");
@@ -61,14 +59,11 @@ module("Projects | Component | category-form", function (hooks) {
       createdCategory = cat;
     };
 
-    const parentCategoryId = 42;
+    const projectId = 42;
 
     await render(
       <template>
-        <CategoryForm
-          @parentCategoryId={{parentCategoryId}}
-          @onCreated={{handleCreated}}
-        />
+        <CategoryForm @projectId={{projectId}} @onCreated={{handleCreated}} />
       </template>
     );
 
