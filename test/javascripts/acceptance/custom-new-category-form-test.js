@@ -53,11 +53,13 @@ acceptance("Custom new category form", function (needs) {
   });
 
   test("submitting creates the category with inherited parent permissions", async function (assert) {
-    await visit("/categories/new?projectId=2");
+    // projectId 4 is the "faq" project in the fixtures (is_project); a non-project
+    // id would be dropped by the form's seed validation and block submission.
+    await visit("/categories/new?projectId=4");
     await fillIn(".form-kit__field[data-name='name'] input", "My Category");
     await click(".form-kit__button[type='submit']");
 
-    assert.strictEqual(posted.parent_category_id, 2, "parent from query param");
+    assert.strictEqual(posted.parent_category_id, 4, "parent from query param");
     assert.strictEqual(posted.name, "My Category", "title sent");
     assert.deepEqual(
       posted.permissions,

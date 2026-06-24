@@ -44,6 +44,6 @@ acceptance("Project categories link in top menu", function (needs) {
 
   test("Show the link the `faq` category page", async function (assert) {
     await visit("/c/faq");
-    assert.dom("li.link-to-project-categories").exist("it shows the link");
+    assert.dom("li.link-to-project-categories").exists("it shows the link");
   });
 });
