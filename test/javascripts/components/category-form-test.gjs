@@ -13,9 +13,10 @@ module("Projects | Component | category-form", function (hooks) {
 
   test("renders all fields and a submit button", async function (assert) {
     await render(<template><CategoryForm @projectId={{null}} /></template>);
+    assert.dom(".form-kit__field[data-name='projectId']").exists("project");
     assert
       .dom(".form-kit__field[data-name='parentCategoryId']")
-      .exists("project");
+      .exists("parent");
     assert.dom(".form-kit__field[data-name='name']").exists("title");
     assert
       .dom(".form-kit__field[data-name='description']")

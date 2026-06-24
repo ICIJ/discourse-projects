@@ -47,7 +47,7 @@ acceptance("Custom new category form", function (needs) {
     assert.dom(".d-modal").doesNotExist("no project-picker modal");
     assert.dom(".projects-new-category").exists("renders the plugin page");
     assert
-      .dom(".form-kit__field[data-name='parentCategoryId']")
+      .dom(".form-kit__field[data-name='projectId']")
       .exists("project field");
     assert.dom(".form-kit__field[data-name='name']").exists("title field");
   });
