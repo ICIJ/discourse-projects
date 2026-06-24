@@ -1,4 +1,5 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
+import categoryContextQueryParams from "../lib/category-context-query-params";
 
 /**
  * Redirects the core admin newCategory.* routes to the plugin form at
@@ -21,30 +22,10 @@ function initialize(api) {
     if (transition.to?.name?.startsWith("newCategory")) {
       transition.abort();
       router.replaceWith("projectsNewCategory", {
-        queryParams: categoryContextQueryParams(projectService),
+        queryParams: categoryContextQueryParams(projectService?.category),
       });
     }
   });
-}
-
-// Forward the category the user was viewing so the form preselects it:
-//   - a project        -> preselect that project;
-//   - a category inside a project -> preselect the project AND that category
-//     as the in-project parent.
-// Both keys are always set (nulled when unused) so a previous selection can't
-// linger via Ember's sticky query params.
-function categoryContextQueryParams(projectService) {
-  const category = projectService?.category;
-
-  if (category?.is_project) {
-    return { projectId: category.id, parentCategoryId: null };
-  }
-
-  if (category?.project?.id) {
-    return { projectId: category.project.id, parentCategoryId: category.id };
-  }
-
-  return { projectId: null, parentCategoryId: null };
 }
 
 export default {
