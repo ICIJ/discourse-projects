@@ -1,3 +1,4 @@
+import { getOwner } from "@ember/owner";
 import { click, currentURL, fillIn, visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import { cloneJSON } from "discourse/lib/object";
@@ -72,6 +73,26 @@ acceptance("Custom new category form", function (needs) {
   test("the redirect also catches the setup sub-route", async function (assert) {
     await visit("/new-category/setup");
     assert.strictEqual(currentURL(), "/categories/new");
+  });
+
+  test("the core New category button never routes through newCategory", async function (assert) {
+    await visit("/categories");
+
+    // Non-staff never load the admin bundle, so the admin newCategory routes
+    // are not registered and transitionTo asserts. The test env always loads
+    // the admin bundle, so simulate the missing route.
+    const router = getOwner(this).lookup("service:router");
+    const transitionTo = router.transitionTo.bind(router);
+    router.transitionTo = (name, ...rest) => {
+      if (typeof name === "string" && name.startsWith("newCategory")) {
+        throw new Error(`Assertion Failed: The route ${name} was not found`);
+      }
+      return transitionTo(name, ...rest);
+    };
+
+    await click("#create-category");
+
+    assert.strictEqual(currentURL(), "/categories/new", "goes to the form");
   });
 });
 
