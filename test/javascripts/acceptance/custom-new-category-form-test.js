@@ -11,9 +11,25 @@ acceptance("Custom new category form", function (needs) {
     return { ...cat, is_project: ["blog", "faq"].includes(cat.slug) };
   });
 
+  // discovery-fixtures has no subcategory under a project: its only
+  // subcategory is "spec" under "feature", which is not a project here. Add one
+  // under the faq project (id 4). The `project` field is what the JS model
+  // reads (plugin.rb serializes it onto basic_category), and the form resolves
+  // a parent's project through it.
+  const faqChild = {
+    id: 500,
+    name: "FAQ Child",
+    slug: "faq-child",
+    color: "AB9364",
+    text_color: "FFFFFF",
+    parent_category_id: 4,
+    is_project: false,
+    project: { id: 4, name: "faq", slug: "faq" },
+  };
+
   let posted = null;
 
-  needs.site(cloneJSON({ categories }));
+  needs.site(cloneJSON({ categories: [...categories, faqChild] }));
   needs.user({ can_create_category: true });
   needs.settings({
     projects_enabled: true,
@@ -36,6 +52,12 @@ acceptance("Custom new category form", function (needs) {
       posted = JSON.parse(request.requestBody);
       return helper.response({ category: { id: 99, slug: "new-cat" } });
     });
+    // Cancel lands on a real category page, which needs a topic list. Any
+    // well-formed list will do; reuse the one fixture that exists.
+    const topicList = () =>
+      helper.response(cloneJSON(discoveryFixtures["/c/bug/1/l/latest.json"]));
+    server.get("/c/faq/4/l/latest.json", topicList);
+    server.get("/c/faq/faq-child/500/l/latest.json", topicList);
   });
 
   test("redirects /new-category to the custom form (no type chooser, no modal)", async function (assert) {
@@ -93,6 +115,54 @@ acceptance("Custom new category form", function (needs) {
     await click("#create-category");
 
     assert.strictEqual(currentURL(), "/categories/new", "goes to the form");
+  });
+
+  test("cancel returns to the in-project parent category", async function (assert) {
+    await visit("/categories/new?projectId=4&parentCategoryId=500");
+    await click(".category-form__cancel");
+
+    assert.strictEqual(
+      currentURL(),
+      "/c/faq/faq-child/500",
+      "back to the parent category the form was opened from"
+    );
+  });
+
+  test("cancel returns to the project when only a project is preselected", async function (assert) {
+    await visit("/categories/new?projectId=4");
+    await click(".category-form__cancel");
+
+    assert.strictEqual(currentURL(), "/c/faq/4", "back to the project");
+  });
+
+  test("cancel returns to the projects index with no preselection", async function (assert) {
+    await visit("/categories/new");
+    await click(".category-form__cancel");
+
+    assert.strictEqual(currentURL(), "/projects", "back to the projects index");
+  });
+
+  test("cancel on a dirty form confirms before leaving", async function (assert) {
+    await visit("/categories/new?projectId=4");
+    await fillIn(".form-kit__field[data-name='name'] input", "Half typed");
+    await click(".category-form__cancel");
+
+    assert
+      .dom(".dialog-body")
+      .exists("FormKit's dirty-form guard asks for confirmation");
+    assert.strictEqual(
+      currentURL(),
+      "/categories/new?projectId=4",
+      "still on the form until the user confirms"
+    );
+
+    await click(".dialog-footer .btn-primary");
+
+    assert.strictEqual(
+      currentURL(),
+      "/c/faq/4",
+      "confirming leaves for the project"
+    );
   });
 });
 

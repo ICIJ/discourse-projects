@@ -71,6 +71,15 @@ export default class CategoryForm extends Component {
     return parentProjectId && parentProjectId !== projectId ? null : parentId;
   }
 
+  // Cancel returns the user to the context the form was opened from: the
+  // in-project parent when there is one, else the project, else the projects
+  // index. Reuses the seeded getters so a parent that provably belongs to a
+  // different project falls back to the project rather than being trusted.
+  get cancelUrl() {
+    const id = this.seededParentCategoryId ?? this.seededProjectId;
+    return Category.findById(id)?.url ?? getURL("/projects");
+  }
+
   @action
   setTab(tab) {
     this.activeTab = tab;
@@ -83,6 +92,14 @@ export default class CategoryForm extends Component {
     // A scoped parent only makes sense within the chosen project, so clear it
     // whenever the project changes.
     form.set("parentCategoryId", null);
+  }
+
+  @action
+  cancel() {
+    // A plain transition. FormKit's own routeWillChange guard puts up the
+    // "you didn't submit your changes" confirm when the form is dirty, so
+    // there is nothing to confirm here.
+    DiscourseURL.routeTo(this.cancelUrl);
   }
 
   @action
@@ -173,6 +190,11 @@ export default class CategoryForm extends Component {
       </div>
 
       <div class="category-form__actions">
+        <form.Button
+          class="btn-flat category-form__cancel"
+          @label="cancel"
+          @action={{this.cancel}}
+        />
         <form.Submit @label="new_category.submit" />
       </div>
     </Form>

@@ -155,10 +155,11 @@
     }
   }
 
-  // Primary action sits below the card, right-aligned.
+  // Actions sit below the card, right-aligned, cancel then create.
   .category-form__actions {
     display: flex;
     justify-content: flex-end;
+    gap: 0.5rem;
     margin-top: 1.5rem;
   }
 
@@ -181,8 +182,9 @@
     .category-form__actions {
       justify-content: stretch;
 
+      // Two buttons at full width each would overflow; share the row instead.
       .form-kit__button {
-        width: 100%;
+        flex: 1;
       }
     }
   }
