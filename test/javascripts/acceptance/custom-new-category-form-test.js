@@ -2,6 +2,7 @@ import { getOwner } from "@ember/owner";
 import { click, currentURL, fillIn, visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import { cloneJSON } from "discourse/lib/object";
+import PreloadStore from "discourse/lib/preload-store";
 import discoveryFixtures from "discourse/tests/fixtures/discovery-fixtures";
 import { acceptance } from "discourse/tests/helpers/qunit-helpers";
 
@@ -34,6 +35,14 @@ acceptance("Custom new category form", function (needs) {
   needs.settings({
     projects_enabled: true,
     projects_custom_category_form: true,
+    // Pins /categories to the single-source branch of
+    // DiscoveryCategoriesRoute#findCategories, which builds its model from
+    // CategoryList.list alone. The default style (categories_and_latest_topics)
+    // instead goes through _findCategoriesAndTopics, which only honours
+    // preloaded data when BOTH "categories_list" and "topic_list" are present
+    // and otherwise falls back to /categories_and_latest. See the
+    // #create-category note in the button test below.
+    desktop_category_page_style: "categories_only",
   });
 
   needs.pretender((server, helper) => {
@@ -98,7 +107,26 @@ acceptance("Custom new category form", function (needs) {
   });
 
   test("the core New category button never routes through newCategory", async function (assert) {
+    // Core renders #create-category on `@showCategoryAdmin`, which is fed by the
+    // category list model's `can_create_category`, NOT by currentUser
+    // (app/templates/discovery/categories.gjs). The shared fixture ships it as
+    // false, so needs.user({ can_create_category: true }) leaves the button
+    // unrendered. Overriding /categories.json in needs.pretender does not work
+    // either: Pretender matches the first-registered handler for an identical
+    // path, and create-pretender.js already claimed it. Preload the list
+    // instead. CategoryList.list reads PreloadStore's "categories_list" before
+    // falling back to ajax (only because desktop_category_page_style is pinned
+    // to categories_only above), and getAndRemove deletes the key on read, so
+    // this cannot leak into another test.
+    const preloaded = cloneJSON(fixture);
+    preloaded.category_list.can_create_category = true;
+    PreloadStore.store("categories_list", preloaded);
+
     await visit("/categories");
+
+    assert
+      .dom("#create-category")
+      .exists("core's New category button is rendered");
 
     // Non-staff never load the admin bundle, so the admin newCategory routes
     // are not registered and transitionTo asserts. The test env always loads
