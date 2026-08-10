@@ -1,3 +1,4 @@
+import { getOwner } from "@ember/owner";
 import { click, currentURL, fillIn, visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import { cloneJSON } from "discourse/lib/object";
@@ -69,6 +70,17 @@ acceptance("Custom edit category form", function (needs) {
     assert
       .dom(".category-form__delete")
       .hasClass("btn-default", "delete offered but blocked");
+
+    // cannot_delete_reason only exists on the full CategorySerializer payload
+    // from /c/500/show.json — a model sourced from the site's category list
+    // (SiteCategorySerializer, or CategoryList) would leave this button inert.
+    await click(".category-form__delete");
+    assert
+      .dom(".category-form__delete-reason")
+      .hasText(
+        "Can't delete this category because it has 3 topics.",
+        "server's delete-block reason rendered"
+      );
   });
 
   test("saving sends a PUT and returns to the category", async function (assert) {
@@ -91,5 +103,49 @@ acceptance("Custom edit category form", function (needs) {
 
     assert.strictEqual(currentURL(), "/c/faq/faq-child/500");
     assert.strictEqual(put, null, "nothing was saved");
+  });
+});
+
+acceptance("Custom edit category form (staff)", function (needs) {
+  const fixture = discoveryFixtures["/categories.json"];
+  const categories = fixture.category_list.categories.map((cat) => {
+    return { ...cat, is_project: ["blog", "faq"].includes(cat.slug) };
+  });
+
+  needs.site(cloneJSON({ categories: [...categories, OWNED] }));
+  needs.user({ admin: true });
+  needs.settings({
+    projects_enabled: true,
+    projects_custom_category_form: true,
+  });
+
+  test("staff are sent to core's admin form instead of the plugin page", async function (assert) {
+    // beforeModel's staff branch resolves the category via
+    // Category.asyncFindById before it can build core's edit URL — the same
+    // branch a plain findById would silently mis-resolve for a category
+    // outside the lazy-loaded set, or after /categories has nulled a category's
+    // parent_category_id (see the route's coreEditUrl comment). Capturing the
+    // router call (rather than letting the transition complete into core's
+    // admin edit-category page, which needs its own unrelated fixtures) is
+    // the same technique the create-form test uses to observe a redirect
+    // target without following it.
+    const router = getOwner(this).lookup("service:router");
+    const replaceWith = router.replaceWith.bind(router);
+    let redirectedTo = null;
+    router.replaceWith = (url) => {
+      redirectedTo = url;
+      return replaceWith("/404");
+    };
+
+    await visit("/categories/500/edit");
+
+    assert.strictEqual(
+      redirectedTo,
+      "/c/faq/faq-child/edit",
+      "sent to core's admin edit form, with the full slug path"
+    );
+    assert
+      .dom(".projects-edit-category")
+      .doesNotExist("plugin page not rendered for staff");
   });
 });
