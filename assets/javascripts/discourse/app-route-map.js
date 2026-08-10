@@ -4,4 +4,5 @@ export default function () {
   });
   this.route("projects");
   this.route("projectsNewCategory", { path: "/categories/new" });
+  this.route("projectsEditCategory", { path: "/categories/:category_id/edit" });
 }
