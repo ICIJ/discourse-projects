@@ -11,7 +11,9 @@ import Category from "discourse/models/category";
 import { i18n } from "discourse-i18n";
 import createCategory from "../lib/create-category";
 import fetchCategoryPermissions from "../lib/fetch-category-permissions";
+import updateCategory from "../lib/update-category";
 import CategoryColorField from "./category-form/color-field";
+import CategoryDescriptionDisplay from "./category-form/description-display";
 import CategoryDescriptionField from "./category-form/description-field";
 import CategoryLogoField from "./category-form/logo-field";
 import CategoryParentField from "./category-form/parent-field";
@@ -24,7 +26,7 @@ const DEFAULT_COLOR = "0088CC";
 
 export default class CategoryForm extends Component {
   // @projectId (a pre-selected project), @parentCategoryId (a pre-selected
-  // in-project parent), @onCreated(category)
+  // in-project parent), @onCreated(category), @category (edit mode)
 
   @tracked activeTab = "general";
   // Scopes the in-project parent chooser; kept in sync with the project field.
@@ -32,20 +34,40 @@ export default class CategoryForm extends Component {
 
   // Seed values for FormKit's @data — read once at construction; FormKit owns
   // the live field state after that.
-  formData = {
-    projectId: this.seededProjectId,
-    parentCategoryId: this.seededParentCategoryId,
-    name: "",
-    description: "",
-    color: DEFAULT_COLOR,
-    logo: null,
-    logoDark: null,
-  };
+  formData = this.isEditing
+    ? {
+        projectId: this.seededProjectId,
+        parentCategoryId: this.seededParentCategoryId,
+        name: this.args.category.name,
+        color: this.args.category.color,
+        logo: this.args.category.uploaded_logo,
+        logoDark: this.args.category.uploaded_logo_dark,
+      }
+    : {
+        projectId: this.seededProjectId,
+        parentCategoryId: this.seededParentCategoryId,
+        name: "",
+        description: "",
+        color: DEFAULT_COLOR,
+        logo: null,
+        logoDark: null,
+      };
+
+  // Edit mode reuses the same fields, minus the ones a creator must not change:
+  // project and parent are locked, and the description is read-only because it
+  // lives in the definition topic as markdown we do not have here.
+  get isEditing() {
+    return !!this.args.category;
+  }
 
   // Only honour a preselected project if it actually resolves to a project; a
   // non-project id would leave the (project-only) chooser blank. When the id
   // isn't loaded yet we keep it — we only drop seeds we can prove are wrong.
   get seededProjectId() {
+    if (this.isEditing) {
+      return this.args.category.project?.id ?? null;
+    }
+
     const projectId = this.args.projectId ?? null;
     if (!projectId) {
       return null;
@@ -58,6 +80,14 @@ export default class CategoryForm extends Component {
   // project; otherwise the descendant-scoped parent chooser can't resolve it
   // (e.g. ?projectId=A&parentCategoryId=B where B lives outside A).
   get seededParentCategoryId() {
+    if (this.isEditing) {
+      // A category sitting directly under its project has the project as its
+      // parent; the create form models that as "no in-project parent", so mirror
+      // it rather than showing the project twice.
+      const parentId = this.args.category.parent_category_id ?? null;
+      return parentId === this.seededProjectId ? null : parentId;
+    }
+
     const projectId = this.seededProjectId;
     const parentId = this.args.parentCategoryId ?? null;
     if (!projectId || !parentId) {
@@ -76,6 +106,10 @@ export default class CategoryForm extends Component {
   // index. Reuses the seeded getters so a parent that provably belongs to a
   // different project falls back to the project rather than being trusted.
   get cancelUrl() {
+    if (this.isEditing) {
+      return this.args.category.url;
+    }
+
     const id = this.seededParentCategoryId ?? this.seededProjectId;
     return Category.findById(id)?.url ?? getURL("/projects");
   }
@@ -104,6 +138,17 @@ export default class CategoryForm extends Component {
 
   @action
   async submit(data) {
+    if (this.isEditing) {
+      await updateCategory(this.args.category.id, {
+        name: data.name,
+        color: data.color,
+        uploadedLogoId: data.logo?.id,
+        uploadedLogoDarkId: data.logoDark?.id,
+      });
+      DiscourseURL.routeTo(this.args.category.url);
+      return;
+    }
+
     // The optional in-project parent, when set, is the actual parent; otherwise
     // the category sits directly under the project. Permissions inherit from
     // that effective parent so a subcategory of a private project stays private.
@@ -155,15 +200,21 @@ export default class CategoryForm extends Component {
           {{if (eq this.activeTab 'general') 'is-active'}}"
       >
         <CategoryTitleField @form={{form}} />
-        <CategoryDescriptionField @form={{form}} />
+        {{#if this.isEditing}}
+          <CategoryDescriptionDisplay @form={{form}} @category={{@category}} />
+        {{else}}
+          <CategoryDescriptionField @form={{form}} />
+        {{/if}}
         <div class="category-form__location">
           <CategoryProjectField
             @form={{form}}
             @onChange={{fn this.onProjectChange form}}
+            @disabled={{this.isEditing}}
           />
           <CategoryParentField
             @form={{form}}
             @projectId={{this.selectedProjectId}}
+            @disabled={{this.isEditing}}
           />
         </div>
       </div>
@@ -195,7 +246,13 @@ export default class CategoryForm extends Component {
           @label="cancel"
           @action={{this.cancel}}
         />
-        <form.Submit @label="new_category.submit" />
+        <form.Submit
+          @label={{if
+            this.isEditing
+            "edit_category.submit"
+            "new_category.submit"
+          }}
+        />
       </div>
     </Form>
   </template>

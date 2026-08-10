@@ -69,6 +69,14 @@ en:
       logo_dark:
         label: Logo (dark)
       submit: Create category
+    edit_category:
+      title: Edit category
+      subtitle: Update this category's name, color and logos.
+      description:
+        label: Description
+        edit: Edit description
+      submit: Save changes
+      delete: Delete category
     subcategory:
       project:
         label: Project

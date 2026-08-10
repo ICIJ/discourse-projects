@@ -1,5 +1,8 @@
 import { click, fillIn, render } from "@ember/test-helpers";
 import { module, test } from "qunit";
+import sinon from "sinon";
+import DiscourseURL from "discourse/lib/url";
+import Category from "discourse/models/category";
 import { setupRenderingTest } from "discourse/tests/helpers/component-test";
 import pretender, { response } from "discourse/tests/helpers/create-pretender";
 import CategoryForm from "discourse/plugins/discourse-projects/discourse/components/category-form";
@@ -78,5 +81,74 @@ module("Projects | Component | category-form", function (hooks) {
       "POST /categories carries inherited permissions resolved at submit time"
     );
     assert.ok(createdCategory, "onCreated callback is invoked");
+  });
+
+  test("edit mode pre-fills from the category and locks its location", async function (assert) {
+    const category = Category.create({
+      id: 501,
+      name: "Existing",
+      slug: "existing",
+      color: "AB9364",
+      parent_category_id: 4,
+      project: { id: 4, name: "faq", slug: "faq" },
+      description: "<p>The blurb</p>",
+      topic_url: "/t/about-existing/9",
+    });
+
+    await render(<template><CategoryForm @category={{category}} /></template>);
+
+    assert
+      .dom(".form-kit__field[data-name='name'] input")
+      .hasValue("Existing", "title pre-filled");
+    assert
+      .dom(".form-kit__field[data-name='projectId'] .select-kit")
+      .hasClass("is-disabled", "project chooser locked");
+    assert
+      .dom(".form-kit__field[data-name='parentCategoryId'] .select-kit")
+      .hasClass("is-disabled", "parent chooser locked");
+    assert
+      .dom(".form-kit__field[data-name='description']")
+      .doesNotExist("the markdown textarea is replaced in edit mode");
+    assert
+      .dom(".category-form__description")
+      .includesText("The blurb", "cooked description rendered read-only");
+    assert
+      .dom(".category-form__edit-description")
+      .exists("a button opens the definition topic in the composer");
+  });
+
+  test("edit mode saves through PUT /categories/:id", async function (assert) {
+    // Rendering tests don't have a real router; stub the post-save redirect
+    // the same way core does (select-kit/category-drop-test.gjs).
+    sinon.stub(DiscourseURL, "routeTo");
+
+    let body;
+    pretender.put("/categories/501", (request) => {
+      body = JSON.parse(request.requestBody);
+      return response({ category: { id: 501, name: "Renamed" } });
+    });
+
+    const category = Category.create({
+      id: 501,
+      name: "Existing",
+      slug: "existing",
+      color: "AB9364",
+      parent_category_id: 4,
+      project: { id: 4, name: "faq", slug: "faq" },
+      description: "<p>The blurb</p>",
+      topic_url: "/t/about-existing/9",
+    });
+
+    await render(<template><CategoryForm @category={{category}} /></template>);
+
+    await fillIn(".form-kit__field[data-name='name'] input", "Renamed");
+    await click(".form-kit__button[type='submit']");
+
+    assert.strictEqual(body.name, "Renamed", "new title sent");
+    assert.strictEqual(body.color, "AB9364", "existing colour preserved");
+    assert.notOk(
+      "parent_category_id" in body,
+      "the category is never moved from the edit form"
+    );
   });
 });

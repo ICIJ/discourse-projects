@@ -1,5 +1,5 @@
 import { hash } from "@ember/helper";
-import { not } from "truth-helpers";
+import { not, or } from "truth-helpers";
 import { i18n } from "discourse-i18n";
 import SubcategoryChooser from "../subcategory-chooser";
 
@@ -21,7 +21,7 @@ const CategoryParentField = <template>
         @options={{hash
           none="js.subcategory.parent.placeholder"
           clearable=true
-          disabled=(not @projectId)
+          disabled=(or @disabled (not @projectId))
         }}
       />
     </field.Control>
