@@ -24,10 +24,11 @@ module DiscourseProjects
     # only short-circuits for users who cannot create categories at all; for
     # everyone who can, the entire target population of this feature, it
     # still runs one `Category.find_by` per visible category on every page
-    # load. That cost is bounded on this deployment because
-    # `lazy_load_categories_groups` is off, keeping `Site#categories` small,
-    # but it is not bounded in general. A batched `own_category_ids` lookup
-    # would fix that and has been deferred to a follow-up.
+    # load. How many that is depends on lazy category loading: with it enabled
+    # `Site#categories` holds only the viewer's preloaded set, but with it
+    # disabled core includes every visible category (app/models/site.rb), so
+    # the cost is unbounded. A batched `own_category_ids` lookup would fix
+    # that and has been deferred to a follow-up.
     def can_edit_serialized_category?(category_id:, read_restricted:)
       return true if super
       return false unless can_create_category?
