@@ -249,4 +249,79 @@ module("Projects | Component | category-form", function (hooks) {
       .dom(".form-kit__button[type='submit']")
       .exists("submit is still there");
   });
+
+  test("a blocked delete with no server reason reveals nothing on click", async function (assert) {
+    // SiteCategorySerializer omits cannot_delete_reason entirely (unlike the
+    // full CategorySerializer sent to the creator); the button must not pop
+    // an empty alert when that happens.
+    const category = Category.create({
+      id: 501,
+      name: "Existing",
+      slug: "existing",
+      parent_category_id: 4,
+      can_delete: false,
+    });
+
+    await render(<template><CategoryForm @category={{category}} /></template>);
+    await click(".category-form__delete");
+
+    assert
+      .dom(".category-form__delete-reason")
+      .doesNotExist("no reason from the server means nothing to show");
+  });
+
+  test("confirming delete issues the DELETE and navigates away", async function (assert) {
+    sinon.stub(DiscourseURL, "routeTo");
+    sinon
+      .stub(this.owner.lookup("service:dialog"), "deleteConfirm")
+      .callsFake((params) => params.didConfirm());
+
+    let deleted = false;
+    pretender.delete("/categories/501", () => {
+      deleted = true;
+      return response({});
+    });
+
+    const category = Category.create({
+      id: 501,
+      name: "Existing",
+      slug: "existing",
+      parent_category_id: 4,
+      can_delete: true,
+    });
+
+    await render(<template><CategoryForm @category={{category}} /></template>);
+    await click(".category-form__delete");
+
+    assert.true(deleted, "the DELETE hits the category's own URL");
+    assert.true(
+      DiscourseURL.routeTo.calledOnce,
+      "navigates away once the category is gone"
+    );
+  });
+
+  test("a failed delete does not navigate", async function (assert) {
+    sinon.stub(DiscourseURL, "routeTo");
+    sinon
+      .stub(this.owner.lookup("service:dialog"), "deleteConfirm")
+      .callsFake((params) => params.didConfirm());
+
+    pretender.delete("/categories/501", () => response(500, {}));
+
+    const category = Category.create({
+      id: 501,
+      name: "Existing",
+      slug: "existing",
+      parent_category_id: 4,
+      can_delete: true,
+    });
+
+    await render(<template><CategoryForm @category={{category}} /></template>);
+    await click(".category-form__delete");
+
+    assert.false(
+      DiscourseURL.routeTo.called,
+      "a failed delete must not navigate"
+    );
+  });
 });

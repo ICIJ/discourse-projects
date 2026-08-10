@@ -25,7 +25,18 @@ export default class CategoryFormFooter extends Component {
 
   @service dialog;
 
-  @tracked showDeleteReason = false;
+  @tracked showTooltip = false;
+
+  // Mirrors core (admin/controllers/edit-category/tabs.js:103-106): the
+  // button always toggles the tooltip, but the alert only actually renders
+  // when the server sent a reason. `CategorySerializer#include_can_delete?`
+  // only emits `can_delete` when true, and serializers like
+  // `SiteCategorySerializer` omit `cannot_delete_reason` entirely — without
+  // this guard, clicking the button on such a category would pop an empty
+  // yellow box.
+  get showDeleteReason() {
+    return this.showTooltip && !!this.args.category?.cannot_delete_reason;
+  }
 
   get deleteReason() {
     return trustHTML(this.args.category?.cannot_delete_reason ?? "");
@@ -40,7 +51,7 @@ export default class CategoryFormFooter extends Component {
 
   @action
   toggleDeleteReason() {
-    this.showDeleteReason = !this.showDeleteReason;
+    this.showTooltip = !this.showTooltip;
   }
 
   @action
