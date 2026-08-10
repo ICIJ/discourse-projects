@@ -3,6 +3,7 @@ import { click, currentURL, fillIn, visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import { cloneJSON } from "discourse/lib/object";
 import PreloadStore from "discourse/lib/preload-store";
+import categoryFixtures from "discourse/tests/fixtures/category-fixtures";
 import discoveryFixtures from "discourse/tests/fixtures/discovery-fixtures";
 import { acceptance } from "discourse/tests/helpers/qunit-helpers";
 
@@ -105,6 +106,23 @@ acceptance("Custom edit category form", function (needs) {
     assert.strictEqual(currentURL(), "/c/faq/faq-child/500");
     assert.strictEqual(put, null, "nothing was saved");
   });
+
+  test("a non-staff user visiting core's edit URL lands on the plugin form", async function (assert) {
+    await visit("/c/faq/faq-child/500/edit");
+
+    assert.strictEqual(
+      currentURL(),
+      "/categories/500/edit",
+      "redirected to the plugin form"
+    );
+    assert.dom(".projects-edit-category").exists();
+  });
+
+  test("the redirect also catches a tab sub-route", async function (assert) {
+    await visit("/c/faq/faq-child/500/edit/general");
+
+    assert.strictEqual(currentURL(), "/categories/500/edit");
+  });
 });
 
 acceptance("Custom edit category form (staff)", function (needs) {
@@ -128,6 +146,20 @@ acceptance("Custom edit category form (staff)", function (needs) {
     );
     server.get("/c/999/show.json", () =>
       helper.response(404, { errors: ["not found"] })
+    );
+    // core's editCategory route model hook, hit once the redirect initializer
+    // exempts staff and lets the transition through to core's admin route.
+    // Based on the full CategorySerializer fixture (rather than OWNED) so the
+    // admin form's own rendering — e.g. available_category_types — has what
+    // it needs.
+    server.get("/c/faq/faq-child/500/find_by_slug.json", () =>
+      helper.response({
+        category: {
+          ...categoryFixtures["/c/1/show.json"].category,
+          ...OWNED,
+          can_edit: true,
+        },
+      })
     );
   });
 
@@ -193,5 +225,18 @@ acceptance("Custom edit category form (staff)", function (needs) {
     await visit("/categories/999/edit");
 
     assert.strictEqual(currentURL(), "/404");
+  });
+
+  test("staff keep core's edit route", async function (assert) {
+    await visit("/c/faq/faq-child/500/edit");
+
+    assert
+      .dom(".projects-edit-category")
+      .doesNotExist("the plugin form is not used for staff");
+    assert.notStrictEqual(
+      currentURL(),
+      "/categories/500/edit",
+      "no redirect to the plugin form"
+    );
   });
 });
