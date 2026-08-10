@@ -3,7 +3,7 @@ import { tracked } from "@glimmer/tracking";
 import { fn } from "@ember/helper";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
-import { eq } from "truth-helpers";
+import { eq, not } from "truth-helpers";
 import Form from "discourse/components/form";
 import getURL from "discourse/lib/get-url";
 import DiscourseURL from "discourse/lib/url";
@@ -210,6 +210,7 @@ export default class CategoryForm extends Component {
             @form={{form}}
             @onChange={{fn this.onProjectChange form}}
             @disabled={{this.isEditing}}
+            @required={{not this.isEditing}}
           />
           <CategoryParentField
             @form={{form}}

@@ -151,4 +151,35 @@ module("Projects | Component | category-form", function (hooks) {
       "the category is never moved from the edit form"
     );
   });
+
+  test("edit mode submits when the category itself is a project (no @project)", async function (assert) {
+    // Category#project is nil for a category that IS a project, so
+    // seededProjectId seeds null. The locked project chooser must not block
+    // submit with a "required" validation error the user can't fix.
+    sinon.stub(DiscourseURL, "routeTo");
+
+    let putCalled = false;
+    pretender.put("/categories/501", () => {
+      putCalled = true;
+      return response({ category: { id: 501, name: "Renamed" } });
+    });
+
+    const category = Category.create({
+      id: 501,
+      name: "Existing",
+      slug: "existing",
+      color: "AB9364",
+      parent_category_id: null,
+      project: null,
+      description: "<p>The blurb</p>",
+      topic_url: "/t/about-existing/9",
+    });
+
+    await render(<template><CategoryForm @category={{category}} /></template>);
+
+    await fillIn(".form-kit__field[data-name='name'] input", "Renamed");
+    await click(".form-kit__button[type='submit']");
+
+    assert.true(putCalled, "the PUT fires despite the empty project field");
+  });
 });
