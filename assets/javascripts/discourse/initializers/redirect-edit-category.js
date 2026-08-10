@@ -51,7 +51,7 @@ function initialize(api) {
 // core itself does, through Category.findBySlugPathWithID (which also
 // happens to handle the id-bearing form, for direct/bookmarked URLs), rather
 // than parsing an id out of the path.
-function editedCategoryId(transition) {
+export function editedCategoryId(transition) {
   const name = transition.to?.name;
   let slugPath;
 
@@ -62,7 +62,18 @@ function editedCategoryId(transition) {
     slugPath = transition.to.parent?.params?.slug;
   } else if (name === "discovery.category") {
     const path = transition.to.params?.category_slug_path_with_id;
-    slugPath = EDIT_SUFFIX.test(path) ? path.replace(EDIT_SUFFIX, "") : null;
+    // core reserves only "none" as a category slug (Category::RESERVED_SLUGS
+    // in app/models/category.rb), so a category can genuinely be slugged
+    // "edit" — its own page (the full path resolving on its own) must be
+    // left alone. Only a trailing /edit that doesn't belong to a real
+    // category of that name is core's glob swallowing an edit URL.
+    if (
+      path &&
+      EDIT_SUFFIX.test(path) &&
+      !Category.findBySlugPathWithID(path)
+    ) {
+      slugPath = path.replace(EDIT_SUFFIX, "");
+    }
   }
 
   if (!slugPath) {
