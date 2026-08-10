@@ -15,6 +15,7 @@ import updateCategory from "../lib/update-category";
 import CategoryColorField from "./category-form/color-field";
 import CategoryDescriptionDisplay from "./category-form/description-display";
 import CategoryDescriptionField from "./category-form/description-field";
+import CategoryFormFooter from "./category-form/footer";
 import CategoryLogoField from "./category-form/logo-field";
 import CategoryParentField from "./category-form/parent-field";
 import CategoryProjectField from "./category-form/project-field";
@@ -241,20 +242,11 @@ export default class CategoryForm extends Component {
         </div>
       </div>
 
-      <div class="category-form__actions">
-        <form.Button
-          class="btn-flat category-form__cancel"
-          @label="cancel"
-          @action={{this.cancel}}
-        />
-        <form.Submit
-          @label={{if
-            this.isEditing
-            "edit_category.submit"
-            "new_category.submit"
-          }}
-        />
-      </div>
+      <CategoryFormFooter
+        @form={{form}}
+        @category={{@category}}
+        @onCancel={{this.cancel}}
+      />
     </Form>
   </template>
 }

@@ -182,4 +182,71 @@ module("Projects | Component | category-form", function (hooks) {
 
     assert.true(putCalled, "the PUT fires despite the empty project field");
   });
+
+  test("a deletable category gets a danger delete button", async function (assert) {
+    const category = Category.create({
+      id: 501,
+      name: "Existing",
+      slug: "existing",
+      color: "AB9364",
+      parent_category_id: 4,
+      project: { id: 4, name: "faq", slug: "faq" },
+      description: "<p>The blurb</p>",
+      topic_url: "/t/about-existing/9",
+      can_delete: true,
+    });
+
+    await render(<template><CategoryForm @category={{category}} /></template>);
+
+    assert
+      .dom(".category-form__delete")
+      .hasClass("btn-danger", "delete is offered as a destructive action");
+    assert
+      .dom(".category-form__delete-reason")
+      .doesNotExist("nothing to explain when deletion is allowed");
+  });
+
+  test("a blocked delete stays visible and explains itself on click", async function (assert) {
+    const category = Category.create({
+      id: 501,
+      name: "Existing",
+      slug: "existing",
+      color: "AB9364",
+      parent_category_id: 4,
+      project: { id: 4, name: "faq", slug: "faq" },
+      description: "<p>The blurb</p>",
+      topic_url: "/t/about-existing/9",
+      can_delete: false,
+      cannot_delete_reason:
+        "Can't delete this category because it has 3 topics.",
+    });
+
+    await render(<template><CategoryForm @category={{category}} /></template>);
+
+    assert
+      .dom(".category-form__delete")
+      .hasClass("btn-default", "the button stays available, not destructive");
+    assert
+      .dom(".category-form__delete-reason")
+      .doesNotExist("the reason is hidden until asked for");
+
+    await click(".category-form__delete");
+
+    assert
+      .dom(".category-form__delete-reason")
+      .includesText(
+        "it has 3 topics",
+        "clicking reveals the server's reason above the actions"
+      );
+  });
+
+  test("create mode has no delete button", async function (assert) {
+    await render(<template><CategoryForm @projectId={{null}} /></template>);
+
+    assert.dom(".category-form__delete").doesNotExist();
+    assert.dom(".category-form__cancel").exists("cancel is still there");
+    assert
+      .dom(".form-kit__button[type='submit']")
+      .exists("submit is still there");
+  });
 });
