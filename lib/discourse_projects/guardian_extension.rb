@@ -19,9 +19,15 @@ module DiscourseProjects
     # button needs the same ownership rule applied here, or a non-staff creator
     # never sees an entry point to their own category.
     #
-    # Called once per visible category on every page load (Site#categories),
-    # so the ownership branch below must bail before touching the database
-    # for the common case of a user who cannot create categories at all.
+    # Called once per visible category on every page load (Site#categories,
+    # core app/models/site.rb:157-160). The `can_create_category?` bail below
+    # only short-circuits for users who cannot create categories at all; for
+    # everyone who can, the entire target population of this feature, it
+    # still runs one `Category.find_by` per visible category on every page
+    # load. That cost is bounded on this deployment because
+    # `lazy_load_categories_groups` is off, keeping `Site#categories` small,
+    # but it is not bounded in general. A batched `own_category_ids` lookup
+    # would fix that and has been deferred to a follow-up.
     def can_edit_serialized_category?(category_id:, read_restricted:)
       return true if super
       return false unless can_create_category?
