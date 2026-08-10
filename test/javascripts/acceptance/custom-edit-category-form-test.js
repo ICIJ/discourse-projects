@@ -2,6 +2,7 @@ import { getOwner } from "@ember/owner";
 import { click, currentURL, fillIn, visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import { cloneJSON } from "discourse/lib/object";
+import PreloadStore from "discourse/lib/preload-store";
 import discoveryFixtures from "discourse/tests/fixtures/discovery-fixtures";
 import { acceptance } from "discourse/tests/helpers/qunit-helpers";
 
@@ -117,35 +118,80 @@ acceptance("Custom edit category form (staff)", function (needs) {
   needs.settings({
     projects_enabled: true,
     projects_custom_category_form: true,
+    desktop_category_page_style: "categories_only",
+    projects_hide_projects_from_categories_page: true,
   });
+
+  needs.pretender((server, helper) => {
+    server.get("/c/500/show.json", () =>
+      helper.response({ category: { ...OWNED, can_edit: true } })
+    );
+    server.get("/c/999/show.json", () =>
+      helper.response(404, { errors: ["not found"] })
+    );
+  });
+
+  function captureRedirect(context) {
+    const router = getOwner(context).lookup("service:router");
+    const replaceWith = router.replaceWith.bind(router);
+    const redirect = { to: null };
+    router.replaceWith = (url) => {
+      redirect.to = url;
+      return replaceWith("/404");
+    };
+    return redirect;
+  }
 
   test("staff are sent to core's admin form instead of the plugin page", async function (assert) {
     // beforeModel's staff branch resolves the category via
-    // Category.asyncFindById before it can build core's edit URL — the same
-    // branch a plain findById would silently mis-resolve for a category
-    // outside the lazy-loaded set, or after /categories has nulled a category's
-    // parent_category_id (see the route's coreEditUrl comment). Capturing the
-    // router call (rather than letting the transition complete into core's
-    // admin edit-category page, which needs its own unrelated fixtures) is
-    // the same technique the create-form test uses to observe a redirect
-    // target without following it.
-    const router = getOwner(this).lookup("service:router");
-    const replaceWith = router.replaceWith.bind(router);
-    let redirectedTo = null;
-    router.replaceWith = (url) => {
-      redirectedTo = url;
-      return replaceWith("/404");
-    };
+    // Category.reloadById before it can build core's edit URL, rather than
+    // trusting whatever copy is sitting in the site's category list (see the
+    // route's coreEditUrl comment). Capturing the router call (rather than
+    // letting the transition complete into core's admin edit-category page,
+    // which needs its own unrelated fixtures) is the same technique the
+    // create-form test uses to observe a redirect target without following
+    // it.
+    const redirect = captureRedirect(this);
 
     await visit("/categories/500/edit");
 
     assert.strictEqual(
-      redirectedTo,
+      redirect.to,
       "/c/faq/faq-child/edit",
       "sent to core's admin edit form, with the full slug path"
     );
     assert
       .dom(".projects-edit-category")
       .doesNotExist("plugin page not rendered for staff");
+  });
+
+  test("the staff redirect survives the /categories page's parent-nulling mutation", async function (assert) {
+    // categories-as-top-level.js nulls parent_category_id on every category
+    // it hands to CategoryList.categoriesFrom, which then pushes those nulled
+    // copies through Site#updateCategory (core category-list.js:39) —
+    // mutating the global Category record unconditionally, regardless of
+    // lazy_load_categories. Visiting /categories first reproduces that
+    // mutation on OWNED's global copy, so the redirect must not be reading
+    // that copy to still land on the full slug path.
+    const preloaded = cloneJSON(fixture);
+    preloaded.category_list.categories = [...categories, OWNED];
+    PreloadStore.store("categories_list", preloaded);
+    await visit("/categories");
+
+    const redirect = captureRedirect(this);
+
+    await visit("/categories/500/edit");
+
+    assert.strictEqual(
+      redirect.to,
+      "/c/faq/faq-child/edit",
+      "full slug path survives the /categories mutation"
+    );
+  });
+
+  test("an unknown category id lands on /404", async function (assert) {
+    await visit("/categories/999/edit");
+
+    assert.strictEqual(currentURL(), "/404");
   });
 });

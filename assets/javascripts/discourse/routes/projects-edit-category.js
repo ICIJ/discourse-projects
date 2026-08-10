@@ -24,19 +24,26 @@ export default class ProjectsEditCategoryRoute extends DiscourseRoute {
     }
   }
 
-  // /c/<slug path>/edit, resolved via asyncFindById rather than findById: with
-  // lazy_load_categories on, site.categories only holds sidebar categories
-  // and their ancestors (core app/models/site.rb:106-133), so a plain
-  // findById can miss an otherwise-valid id. asyncFindById also re-fetches a
-  // category the site hasn't already loaded, rather than trusting whatever
-  // copy is sitting in site.categories — which categories-as-top-level.js can
-  // have mutated to a null parent_category_id (via CategoryList visiting
-  // /categories), producing a wrong, unprefixed slug. Falls back to /404 when
-  // we cannot name it.
+  // Core's edit route is path-based, so we need the category's full slug
+  // path. Reading it from Site's copy is not safe: categories-as-top-level.js
+  // nulls parent_category_id on CategoryList copies, and core's
+  // CategoryList.categoriesFrom pushes those through Site#updateCategory, so
+  // after any visit to /categories the global record can carry no parent and
+  // slugFor yields an unprefixed slug that core's route will not match.
+  // Category.asyncFindById does not help here either — it short-circuits to
+  // that same synchronous, possibly-mutated lookup unless lazy_load_categories
+  // is on and the id is uncached. Re-fetch instead: /c/:id/show.json is
+  // authoritative, and feeding it back through updateCategory repairs the
+  // mutated record on the way past. Falls back to /404 when we cannot name it.
   async coreEditUrl(transition) {
     const id = parseInt(transition.to.params.category_id, 10);
-    const category = await Category.asyncFindById(id);
-    return category ? `/c/${Category.slugFor(category)}/edit` : "/404";
+
+    try {
+      const { category } = await Category.reloadById(id);
+      return `/c/${Category.slugFor(this.site.updateCategory(category))}/edit`;
+    } catch {
+      return "/404";
+    }
   }
 
   // /c/:id/show.json is `can_see`-gated only, and returns the full
