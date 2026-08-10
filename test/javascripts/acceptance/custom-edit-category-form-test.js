@@ -118,6 +118,20 @@ acceptance("Custom edit category form", function (needs) {
     assert.dom(".projects-edit-category").exists();
   });
 
+  test("a non-staff user visiting core's real (id-less) edit URL lands on the plugin form", async function (assert) {
+    // Category.slugFor never emits a numeric id (only a blank-slug category
+    // falls back to one), so this is the URL every real "Edit category" entry
+    // point actually produces.
+    await visit("/c/faq/faq-child/edit");
+
+    assert.strictEqual(
+      currentURL(),
+      "/categories/500/edit",
+      "redirected to the plugin form"
+    );
+    assert.dom(".projects-edit-category").exists();
+  });
+
   test("the redirect also catches a tab sub-route", async function (assert) {
     await visit("/c/faq/faq-child/500/edit/general");
 
@@ -233,10 +247,10 @@ acceptance("Custom edit category form (staff)", function (needs) {
     assert
       .dom(".projects-edit-category")
       .doesNotExist("the plugin form is not used for staff");
-    assert.notStrictEqual(
+    assert.strictEqual(
       currentURL(),
-      "/categories/500/edit",
-      "no redirect to the plugin form"
+      "/c/faq/faq-child/500/edit/general",
+      "core's admin edit form, not the plugin form"
     );
   });
 });

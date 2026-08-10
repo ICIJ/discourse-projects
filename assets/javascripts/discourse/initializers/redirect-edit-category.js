@@ -1,10 +1,11 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
+import Category from "discourse/models/category";
 
-// Matches a category slug path whose last segment is `edit`, optionally
-// followed by a tab: "faq/faq-child/500/edit" or ".../500/edit/general". The
-// capture is the category id, which always precedes `edit` because a real slug
-// path ends in the numeric id.
-const EDIT_SLUG_PATH = /(?:^|\/)(\d+)\/edit(?:\/[^/]+)?\/?$/;
+// A discovery.category slug path ends in "/edit" or "/edit/<tab>" when core's
+// glob route swallowed what should have been the (never-registered, for
+// non-staff) editCategory route. Stripping that suffix leaves a normal slug
+// path for Category.findBySlugPathWithID to resolve.
+const EDIT_SUFFIX = /\/edit(?:\/[^/]+)?\/?$/;
 
 /**
  * Sends non-staff users from core's category edit route to the plugin form at
@@ -43,23 +44,37 @@ function initialize(api) {
 }
 
 // The id of the category the transition is trying to edit, or null.
+//
+// Category.slugFor never emits a numeric id — only a category with a blank
+// slug falls back to one — so every real "Edit category" entry point
+// produces an id-less slug path (e.g. "faq/faq-child"). Resolve it the way
+// core itself does, through Category.findBySlugPathWithID (which also
+// happens to handle the id-bearing form, for direct/bookmarked URLs), rather
+// than parsing an id out of the path.
 function editedCategoryId(transition) {
   const name = transition.to?.name;
+  let slugPath;
 
   if (name?.startsWith("editCategory")) {
     // The admin route's dynamic segment (`slug`) lives on the `editCategory`
     // RouteInfo itself, never on its `.index`/`.tabs` children — RouteInfo
     // params only carry the segments owned by that specific route level.
-    const slug = transition.to.parent?.params?.slug;
-    return slug?.match(/(?:^|\/)(\d+)\/?$/)?.[1] ?? null;
-  }
-
-  if (name === "discovery.category") {
+    slugPath = transition.to.parent?.params?.slug;
+  } else if (name === "discovery.category") {
     const path = transition.to.params?.category_slug_path_with_id;
-    return path?.match(EDIT_SLUG_PATH)?.[1] ?? null;
+    slugPath = EDIT_SUFFIX.test(path) ? path.replace(EDIT_SUFFIX, "") : null;
   }
 
-  return null;
+  if (!slugPath) {
+    return null;
+  }
+
+  // Category.findBySlugPathWithID only searches the site's already-loaded
+  // category list; an uncached category (possible with lazy_load_categories
+  // on a direct URL visit) resolves to null here. That's fine: falling
+  // through to core's normal handling of that URL is no worse than before
+  // this initializer existed.
+  return Category.findBySlugPathWithID(slugPath)?.id ?? null;
 }
 
 export default {
