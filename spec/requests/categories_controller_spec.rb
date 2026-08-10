@@ -95,4 +95,76 @@ describe CategoriesController do
       end
     end
   end
+
+  describe "creator-only category editing" do
+    fab!(:owner, :user)
+    fab!(:stranger, :user)
+    fab!(:group)
+    fab!(:project) { Fabricate(:private_category, group: group, user: owner) }
+    fab!(:owned) { Fabricate(:category, user: owner, parent_category: project) }
+
+    before do
+      SiteSetting.projects_enabled = true
+      # See the guardian spec: category creation is granted by a sibling plugin.
+      Guardian.any_instance.stubs(:can_create_category?).returns(true)
+      # Both users need to see the private project's subcategory.
+      group.add(owner)
+      group.add(stranger)
+    end
+
+    it "lets the creator rename their own category" do
+      sign_in(owner)
+
+      put "/categories/#{owned.id}.json", params: { name: "Renamed" }
+
+      expect(response.status).to eq(200)
+      expect(owned.reload.name).to eq("Renamed")
+    end
+
+    it "refuses a rename by another user" do
+      sign_in(stranger)
+
+      put "/categories/#{owned.id}.json", params: { name: "Hijacked" }
+
+      expect(response.status).to eq(403)
+      expect(owned.reload.name).not_to eq("Hijacked")
+    end
+
+    it "lets the creator delete their own empty category" do
+      sign_in(owner)
+
+      delete "/categories/#{owned.id}.json"
+
+      expect(response.status).to eq(200)
+      expect(Category.find_by(id: owned.id)).to be_nil
+    end
+
+    it "refuses a delete by another user" do
+      sign_in(stranger)
+
+      delete "/categories/#{owned.id}.json"
+
+      expect(response.status).to eq(403)
+      expect(Category.find_by(id: owned.id)).to be_present
+    end
+
+    it "refuses to delete a category that holds topics" do
+      sign_in(owner)
+      owned.update!(topic_count: 3)
+
+      delete "/categories/#{owned.id}.json"
+
+      expect(response.status).to eq(403)
+      expect(Category.find_by(id: owned.id)).to be_present
+    end
+
+    it "refuses to delete a project" do
+      sign_in(owner)
+
+      delete "/categories/#{project.id}.json"
+
+      expect(response.status).to eq(403)
+      expect(Category.find_by(id: project.id)).to be_present
+    end
+  end
 end

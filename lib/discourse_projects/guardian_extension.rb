@@ -1,14 +1,23 @@
 # frozen_string_literal: true
 
 module DiscourseProjects
-  # Extends the Guardian to allow non-admin users who can create
-  # categories to also edit them, as long as the category is not
-  # a project. Without this, Discourse redirects to the editCategory
-  # route after creating a subcategory, which returns a 404 for
-  # non-admin users.
+  # Extends the Guardian so a user who is allowed to create categories can also
+  # edit the ones they created. Projects (top-level categories) stay staff-only.
+  #
+  # Delete needs no override of its own: core's `can_delete_category?` is
+  # `can_edit_category? && topic_count <= 0 && !uncategorized? && !has_children?`
+  # (lib/guardian/category_guardian.rb), so restricting edit to the creator
+  # restricts delete to the creator too, and core's "must be empty and
+  # childless" rule stays in force.
   module GuardianExtension
     def can_edit_category?(category)
-      (can_create_category? and not category.project?) || super
+      super || (can_create_category? && !category.project? && own_category?(category))
+    end
+
+    private
+
+    def own_category?(category)
+      authenticated? && category.user_id == user.id
     end
   end
 end
