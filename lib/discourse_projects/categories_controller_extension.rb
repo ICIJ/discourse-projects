@@ -15,6 +15,11 @@ module DiscourseProjects
     end
 
     def update
+      # Checked before the placement guard below: core's `fetch_category`
+      # does no visibility check, so without this a non-staff user could
+      # probe a category they cannot edit for its real parent id by reading
+      # 422 (differs) vs 403 (matches) off the placement error alone.
+      guardian.ensure_can_edit!(@category)
       return render_cannot_move if moving_category?
       super
     end

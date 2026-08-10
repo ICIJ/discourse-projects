@@ -18,8 +18,13 @@ module DiscourseProjects
     # from `can_edit_category?` (core app/models/site.rb), so the client's edit
     # button needs the same ownership rule applied here, or a non-staff creator
     # never sees an entry point to their own category.
+    #
+    # Called once per visible category on every page load (Site#categories),
+    # so the ownership branch below must bail before touching the database
+    # for the common case of a user who cannot create categories at all.
     def can_edit_serialized_category?(category_id:, read_restricted:)
       return true if super
+      return false unless can_create_category?
 
       category = Category.find_by(id: category_id)
       return false if category.nil?

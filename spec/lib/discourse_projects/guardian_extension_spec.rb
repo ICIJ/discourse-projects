@@ -133,5 +133,21 @@ RSpec.describe DiscourseProjects::GuardianExtension do
 
       expect(result).to be_truthy
     end
+
+    # `Site#categories` calls this once per visible category on every page
+    # load (core app/models/site.rb:158), so a user who can never satisfy the
+    # ownership branch must not cost a query.
+    it "does not query the database for a guardian who cannot create categories" do
+      allow(Category).to receive(:find_by)
+
+      result =
+        guardian_for(owner, can_create: false).can_edit_serialized_category?(
+          category_id: category.id,
+          read_restricted: category.read_restricted,
+        )
+
+      expect(result).to be_falsey
+      expect(Category).not_to have_received(:find_by)
+    end
   end
 end

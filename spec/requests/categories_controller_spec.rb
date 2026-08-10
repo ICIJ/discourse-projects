@@ -170,6 +170,7 @@ describe CategoriesController do
 
   describe "non-staff category placement" do
     fab!(:owner, :user)
+    fab!(:stranger, :user)
     fab!(:group)
     fab!(:other_group, :group)
     fab!(:project) { Fabricate(:private_category, group: group, user: owner) }
@@ -264,6 +265,20 @@ describe CategoriesController do
 
       put "/categories/#{admin_category.id}.json", params: { parent_category_id: "" }
       expect(response.status).to eq(200)
+    end
+
+    # Without an edit-permission check ahead of the placement guard, these two
+    # would return different statuses (422 vs 403) depending on whether the
+    # submitted parent_category_id happens to match the real one — letting a
+    # stranger probe a category they cannot see for its real parent id.
+    it "returns 403 for a non-staff stranger, whichever parent_category_id they submit" do
+      sign_in(stranger)
+
+      put "/categories/#{owned.id}.json", params: { parent_category_id: hidden_project.id }
+      expect(response.status).to eq(403)
+
+      put "/categories/#{owned.id}.json", params: { parent_category_id: project.id }
+      expect(response.status).to eq(403)
     end
   end
 end
