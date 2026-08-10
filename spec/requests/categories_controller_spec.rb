@@ -167,4 +167,103 @@ describe CategoriesController do
       expect(Category.find_by(id: project.id)).to be_present
     end
   end
+
+  describe "non-staff category placement" do
+    fab!(:owner, :user)
+    fab!(:group)
+    fab!(:other_group, :group)
+    fab!(:project) { Fabricate(:private_category, group: group, user: owner) }
+    fab!(:hidden_project) { Fabricate(:private_category, group: other_group, user: admin) }
+    fab!(:owned) { Fabricate(:category, user: owner, parent_category: project) }
+
+    before do
+      SiteSetting.projects_enabled = true
+      # See the guardian spec: category creation is granted by a sibling plugin.
+      Guardian.any_instance.stubs(:can_create_category?).returns(true)
+      group.add(owner)
+    end
+
+    it "rejects a non-staff create with no parent_category_id" do
+      sign_in(owner)
+
+      expect { post "/categories.json", params: { name: "Orphan Category" } }.not_to change(
+        Category,
+        :count,
+      )
+
+      expect(response.status).to eq(422)
+    end
+
+    it "rejects a non-staff create with a parent the user cannot see" do
+      sign_in(owner)
+
+      expect {
+        post "/categories.json",
+             params: { name: "Sneaky Category", parent_category_id: hidden_project.id }
+      }.not_to change(Category, :count)
+
+      expect(response.status).to eq(422)
+    end
+
+    it "lets a non-staff create with a visible parent succeed" do
+      sign_in(owner)
+
+      post "/categories.json", params: { name: "Legit Category", parent_category_id: project.id }
+
+      expect(response.status).to eq(200)
+      expect(Category.find_by(name: "Legit Category").parent_category_id).to eq(project.id)
+    end
+
+    it "rejects a non-staff detaching their category from its project" do
+      sign_in(owner)
+
+      put "/categories/#{owned.id}.json", params: { parent_category_id: "" }
+
+      expect(response.status).to eq(422)
+      expect(owned.reload.parent_category_id).to eq(project.id)
+    end
+
+    it "rejects a non-staff moving their category to another project" do
+      sign_in(owner)
+
+      put "/categories/#{owned.id}.json", params: { parent_category_id: hidden_project.id }
+
+      expect(response.status).to eq(422)
+      expect(owned.reload.parent_category_id).to eq(project.id)
+    end
+
+    it "lets a non-staff update that does not mention parent_category_id succeed" do
+      sign_in(owner)
+
+      put "/categories/#{owned.id}.json", params: { name: "Renamed Category" }
+
+      expect(response.status).to eq(200)
+      expect(owned.reload.name).to eq("Renamed Category")
+    end
+
+    it "lets a non-staff update that repeats the current parent_category_id succeed" do
+      sign_in(owner)
+
+      put "/categories/#{owned.id}.json",
+          params: { name: "Still Same Project", parent_category_id: project.id }
+
+      expect(response.status).to eq(200)
+      expect(owned.reload.parent_category_id).to eq(project.id)
+    end
+
+    it "does not restrict an admin from either check" do
+      sign_in(admin)
+
+      post "/categories.json", params: { name: "Admin Top Level Category" }
+      expect(response.status).to eq(200)
+      admin_category = Category.find_by(name: "Admin Top Level Category")
+
+      put "/categories/#{admin_category.id}.json",
+          params: { parent_category_id: hidden_project.id }
+      expect(response.status).to eq(200)
+
+      put "/categories/#{admin_category.id}.json", params: { parent_category_id: "" }
+      expect(response.status).to eq(200)
+    end
+  end
 end

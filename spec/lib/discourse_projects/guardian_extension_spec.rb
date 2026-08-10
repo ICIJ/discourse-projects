@@ -38,12 +38,26 @@ RSpec.describe DiscourseProjects::GuardianExtension do
       expect(guardian_for(owner).can_edit_category?(project)).to be_falsey
     end
 
-    it "does not let an anonymous visitor edit anything" do
-      expect(Guardian.new.can_edit_category?(category)).to be_falsey
+    # A bare `Guardian.new` never reaches `own_category?` at all: core's
+    # `can_create_category?` already returns false for it, so the expression
+    # short-circuits before touching `user.id`. Stubbing `can_create_category?`
+    # true is what actually exercises the `authenticated?` guard.
+    it "does not let an anonymous visitor with create rights edit anything" do
+      anonymous_guardian = Guardian.new.tap { |g| g.stubs(:can_create_category?).returns(true) }
+
+      expect(anonymous_guardian.can_edit_category?(category)).to be_falsey
     end
 
     it "still lets an admin edit a project" do
       expect(Guardian.new(admin).can_edit_category?(project)).to be_truthy
+    end
+
+    it "does not let the creator edit their category once removed from the group that grants them visibility" do
+      restricted = Fabricate(:private_category, group: group, user: owner, parent_category: project)
+      group.add(owner)
+      group.remove(owner)
+
+      expect(guardian_for(owner).can_edit_category?(restricted)).to be_falsey
     end
   end
 
@@ -68,6 +82,56 @@ RSpec.describe DiscourseProjects::GuardianExtension do
 
     it "does not let the creator delete a project" do
       expect(guardian_for(owner).can_delete_category?(project)).to be_falsey
+    end
+
+    it "does not let the creator delete their category once removed from the group that grants them visibility" do
+      restricted = Fabricate(:private_category, group: group, user: owner, parent_category: project)
+      group.add(owner)
+      group.remove(owner)
+
+      expect(guardian_for(owner).can_delete_category?(restricted)).to be_falsey
+    end
+  end
+
+  describe "#can_edit_serialized_category?" do
+    it "delegates to can_edit_category? for the creator of their own subcategory" do
+      guardian = guardian_for(owner)
+
+      result =
+        guardian.can_edit_serialized_category?(
+          category_id: category.id,
+          read_restricted: category.read_restricted,
+        )
+
+      expect(result).to be_truthy
+    end
+
+    it "does not let another user edit it" do
+      guardian = guardian_for(other)
+
+      result =
+        guardian.can_edit_serialized_category?(
+          category_id: category.id,
+          read_restricted: category.read_restricted,
+        )
+
+      expect(result).to be_falsey
+    end
+
+    it "returns false rather than raising when the category no longer exists" do
+      guardian = guardian_for(owner)
+
+      result = guardian.can_edit_serialized_category?(category_id: -1, read_restricted: true)
+
+      expect(result).to be_falsey
+    end
+
+    it "still lets an admin edit through the core super check, without loading the category" do
+      guardian = Guardian.new(admin)
+
+      result = guardian.can_edit_serialized_category?(category_id: -1, read_restricted: true)
+
+      expect(result).to be_truthy
     end
   end
 end

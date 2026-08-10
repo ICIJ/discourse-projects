@@ -33,6 +33,7 @@ after_initialize do
     CategorySerializer.prepend DiscourseProjects::CategorySerializerExtension
     Topic.prepend DiscourseProjects::TopicExtension
     Guardian.prepend DiscourseProjects::GuardianExtension
+    CategoriesController.prepend DiscourseProjects::CategoriesControllerExtension
   end
 
   add_to_serializer(:current_user, :can_create_category) do

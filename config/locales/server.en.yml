@@ -41,3 +41,4 @@ en:
     errors:
       topic_in_project_category: "Topics cannot be created directly in a project. Please select a subcategory."
       category_requires_parent: "A category must belong to a project. Please select a parent category."
+      cannot_move_category: "You cannot move a category to a different project."

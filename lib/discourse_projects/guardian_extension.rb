@@ -14,10 +14,27 @@ module DiscourseProjects
       super || (can_create_category? && !category.project? && own_category?(category))
     end
 
+    # `/site.json` serializes each category's `can_edit` from this method, not
+    # from `can_edit_category?` (core app/models/site.rb), so the client's edit
+    # button needs the same ownership rule applied here, or a non-staff creator
+    # never sees an entry point to their own category.
+    def can_edit_serialized_category?(category_id:, read_restricted:)
+      return true if super
+
+      category = Category.find_by(id: category_id)
+      return false if category.nil?
+
+      can_edit_category?(category)
+    end
+
     private
 
+    # Mirrors core's own moderator conjunct on `can_edit_category?`
+    # (`can_see_category?`, lib/guardian/category_guardian.rb): a creator
+    # removed from the group granting them visibility loses edit and delete
+    # too, not only staff.
     def own_category?(category)
-      authenticated? && category.user_id == user.id
+      authenticated? && category.user_id == user.id && can_see_category?(category)
     end
   end
 end
