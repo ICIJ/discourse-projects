@@ -59,13 +59,6 @@
     border-radius: var(--d-input-border-radius) 0 0 var(--d-input-border-radius);
     text-decoration: none;
 
-    // No caret next to it when the category has no siblings (cell.gjs's
-    // hasSiblingCategories skips the dropdown entirely) — round all four
-    // corners instead of leaving the right ones square against nothing.
-    &:only-child {
-      border-radius: var(--d-input-border-radius);
-    }
-
     &:hover {
       background: var(--primary-very-low);
     }
@@ -90,9 +83,17 @@
     }
 
     // Core gives the caret padding-left: 5px to separate it from the header's
-    // label (select-kit.scss:171-177). These headers have no label, and the
-    // caret's box is right-aligned by that rule's margin-left: auto, so the
-    // padding only shifts the glyph off centre.
+    // label (select-kit.scss:171-177). margin-left: auto on that same rule
+    // pushes the caret flush against the header's own right padding whenever
+    // there is free space for it to consume — in which case the padding sits
+    // entirely inside the caret's box and removing it cannot move the glyph.
+    // These headers show no label (showFullTitle: false), so the header
+    // shrink-wraps to the caret alone and there is no free space: the caret's
+    // box is the header's whole content width, and its left padding is what
+    // holds the glyph away from the header's own left edge. Removing it here
+    // pulls the glyph flush left instead. Where the header does get free
+    // space — fullWidthOnMobile: true, e.g. a header still showing a full
+    // label — margin-left: auto absorbs it and this rule is a no-op.
     .angle-icon {
       padding-left: 0;
     }
