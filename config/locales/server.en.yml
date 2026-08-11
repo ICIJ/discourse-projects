@@ -13,7 +13,7 @@ en:
 
     # Breadcrumb
     projects_breadcrumb_project_dropdown: Show a project dropdown in the breadcrumb instead of the default category dropdown
-    projects_breadcrumb_subcategory_links: Show subcategories as styled links in the breadcrumb instead of dropdowns
+    projects_breadcrumb_subcategory_links: Show every subcategory level in the breadcrumb as a split button (name links to the category, caret switches to a sibling), replacing core's own category dropdowns
 
     # Navigation
     projects_link_to_subcategories: "Redirect project category pages to their subcategories view. When enabled, visiting a project root URL (e.g. /c/my-project/123/) automatically redirects to /c/my-project/123/subcategories."
