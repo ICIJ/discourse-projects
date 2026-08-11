@@ -5,6 +5,7 @@ import categoryFixtures from "discourse/tests/fixtures/category-fixtures";
 import discoveryFixtures from "discourse/tests/fixtures/discovery-fixtures";
 import { acceptance } from "discourse/tests/helpers/qunit-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
+import { i18n } from "discourse-i18n";
 
 acceptance("Project dropdown breadcrumb", function (needs) {
   const fixture = discoveryFixtures["/categories.json"];
@@ -138,6 +139,9 @@ acceptance("Project dropdown breadcrumb", function (needs) {
       .doesNotExist("no home link when no project is selected");
     assert
       .dom("li.project-dropdown .select-kit-selected-name")
-      .exists("the dropdown still shows its own label");
+      .hasText(
+        i18n("js.project_dropdown.label"),
+        "the dropdown still shows its own label"
+      );
   });
 });
