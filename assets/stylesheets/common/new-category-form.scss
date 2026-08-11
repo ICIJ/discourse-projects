@@ -164,8 +164,11 @@
   }
 
   // Actions sit below the card, right-aligned, cancel then create.
+  // align-items: center, not the flex default of stretch — otherwise every
+  // button grows to the height of the tallest one in the row.
   .category-form__actions {
     display: flex;
+    align-items: center;
     justify-content: flex-end;
     gap: 0.5rem;
     margin-top: 1.5rem;
