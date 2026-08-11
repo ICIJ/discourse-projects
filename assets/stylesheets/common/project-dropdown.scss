@@ -43,7 +43,7 @@
 // that state there is no link, the dropdown keeps its own label, and it should
 // keep looking exactly like the neighbouring dropdowns.
 .category-breadcrumb li.breadcrumb-chain__cell:has(.breadcrumb-chain__link) {
-  border: 1px solid var(--d-nav-border-color--active);
+  border: 1px solid var(--primary-400);
   border-radius: var(--d-input-border-radius);
   background: var(--secondary);
 
@@ -65,11 +65,16 @@
   }
 
   // Undo the box the header brings with it: the transparent border from the
-  // form-item-sizing mixin, the colour that makes it visible, the radius, and
-  // the active colour applied under .has-selection.
+  // form-item-sizing mixin, the colour that makes it visible, and the radius.
+  // Both this divider and the pill's own border above use var(--primary-400),
+  // the colour core gives an ordinary dropdown border (combo-box.scss:28-30),
+  // rather than var(--d-nav-border-color--active): on this devenv's theme
+  // that active token is pure red, which a multi-level trail would repeat as
+  // a stack of error states. var(--primary-400) also matches the tag
+  // dropdown and any unselected picker beside the chain.
   .select-kit .select-kit-header {
     border: 0;
-    border-left: 1px solid var(--d-nav-border-color--active);
+    border-left: 1px solid var(--primary-400);
     border-radius: 0 var(--d-input-border-radius) var(--d-input-border-radius) 0;
     background: transparent;
 
