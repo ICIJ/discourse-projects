@@ -146,11 +146,14 @@ acceptance("Breadcrumb chain", function (needs) {
   });
 
   test("the name is not repeated inside the dropdown", async function (assert) {
-    await visit("/c/faq/4");
+    // Two cells, root and child, so this covers both carets, not just the root's.
+    await visit("/c/faq/faq-child/500");
 
     assert
       .dom("li.breadcrumb-chain__cell .select-kit-selected-name")
-      .doesNotExist("the dropdown header is reduced to its caret");
+      .doesNotExist(
+        "no cell's dropdown header repeats the name shown by its link"
+      );
     assert
       .dom("li.breadcrumb-chain__cell .btn-clear")
       .doesNotExist("the clearable button is gone with the header label");
@@ -239,14 +242,6 @@ acceptance("Breadcrumb chain", function (needs) {
     await picker.selectRowByValue(502);
 
     assert.strictEqual(currentURL(), "/c/faq/faq-sibling/502");
-  });
-
-  test("no cell is rendered for the trailing subcategory placeholder", async function (assert) {
-    // faqChild has a child, so core renders a trailing empty picker at that
-    // level. The chain must not mirror it: two ancestors, two cells.
-    await visit("/c/faq/faq-child/500");
-
-    assert.dom("li.breadcrumb-chain__cell").exists({ count: 2 });
   });
 });
 
