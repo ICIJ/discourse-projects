@@ -57,14 +57,20 @@ export default class BreadcrumbChainCell extends Component {
   }
 
   /**
-   * `options` is the category list at this level, the cell's own category
-   * always included alongside any real siblings (bread-crumbs.gjs's
-   * categoryBreadcrumbs always filters the current subCategory itself into
-   * its own level's list). So a category with nothing to switch to is still
-   * one entry, not zero — the threshold is "more than one".
+   * `options` (bread-crumbs.gjs:31-34) is filtered out of site.categories, which
+   * under lazy_load_categories holds only whatever has been fetched so far — the
+   * current category and its ancestors, never their siblings (site.rb:107-124).
+   * `options.length` is then wrong on any lazy-loading site: it reports 1 (just
+   * this category) even where real siblings exist, hiding the caret for every
+   * child category site-wide.
+   *
+   * `parentCategory.subcategory_count` reads the same fact without that gap. It
+   * comes from a request-time DB count (Category.preload_user_fields!,
+   * category.rb:272-284) that runs whenever a category route resolves
+   * (categories_controller.rb's `find` action, line 403), lazy loading or not.
    */
   get hasSiblingCategories() {
-    return this.args.breadcrumb.options.length > 1;
+    return this.args.breadcrumb.parentCategory.subcategory_count > 1;
   }
 
   /**
