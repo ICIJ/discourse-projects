@@ -1,8 +1,14 @@
-// When project dropdown is enabled, hide the core category dropdown that follows
+// When the project dropdown is enabled, hide every core category dropdown that
+// follows it: both the duplicate project selector and the subcategory picker.
+// The project cell is the only category control the breadcrumb needs.
+//
+// Matches on `~ li:has(.category-drop)` rather than a positional `+ li`, because
+// the outlet leaves three sibling <li>s here (the project cell, the duplicate
+// selector, the subcategory picker) and `+ li` reaches only the first of them.
+// The :has() also leaves tag dropdowns alone, since those are not .category-drop.
 .breadcrumb-project-dropdown {
   .category-breadcrumb {
-    li.project-dropdown + li.bread-crumbs-left-outlet + li,
-    li.bread-crumbs-left-outlet.project-dropdown + li {
+    li.bread-crumbs-left-outlet.project-dropdown ~ li:has(.category-drop) {
       display: none;
     }
   }
@@ -22,12 +28,10 @@
   .category-breadcrumb {
     align-items: center;
 
-    // When project dropdown is enabled, hide ALL core category dropdowns
-    li.bread-crumbs-left-outlet.project-dropdown ~ li:has(.category-drop) {
-      display: none;
-    }
-
-    // When project dropdown is disabled, hide ALL category dropdowns
+    // When the project dropdown is enabled, the .breadcrumb-project-dropdown
+    // block above already hides every core category dropdown.
+    //
+    // When it is disabled, hide ALL category dropdowns here
     // (all categories including the project are shown as links)
     &:not(:has(li.project-dropdown)) li:has(.category-drop) {
       display: none;
