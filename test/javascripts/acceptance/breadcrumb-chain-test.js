@@ -54,19 +54,6 @@ acceptance("Breadcrumb chain", function (needs) {
     project: { id: 4, name: "faq", slug: "faq" },
   };
 
-  // subcategory_count/has_children are always present on a real payload —
-  // Category.preload_user_fields! computes them with a request-time DB count
-  // regardless of lazy loading (category.rb:272-284) — but the base fixture
-  // predates that becoming load-bearing here (cell.gjs's hasSiblingCategories
-  // reads parentCategory.subcategory_count). Set them to match the children
-  // just added: two under the project (faqChild, faqSibling), one under
-  // faqChild (faqGrandchild).
-  const faqProject = categories.find((cat) => cat.slug === "faq");
-  faqProject.has_children = true;
-  faqProject.subcategory_count = 2;
-  faqChild.has_children = true;
-  faqChild.subcategory_count = 1;
-
   needs.site(
     cloneJSON({
       categories: [...categories, faqChild, faqGrandchild, faqSibling],
@@ -245,19 +232,6 @@ acceptance("Breadcrumb chain", function (needs) {
     ]);
   });
 
-  test("a cell with no sibling categories renders no caret", async function (assert) {
-    // 500 (faqChild) has a sibling, 502 (faqSibling); 501 (faqGrandchild) is
-    // 500's only child, so its own level has nothing to switch to.
-    await visit("/c/faq/faq-child/faq-grandchild/501");
-
-    assert
-      .dom("li.breadcrumb-chain__cell[data-category-id='500'] .select-kit")
-      .exists("the cell with a sibling still has a caret");
-    assert
-      .dom("li.breadcrumb-chain__cell[data-category-id='501'] .select-kit")
-      .doesNotExist("the cell with no sibling has no caret");
-  });
-
   test("a child caret lists its siblings, not its children", async function (assert) {
     await visit("/c/faq/faq-child/500");
 
@@ -381,81 +355,5 @@ acceptance("Breadcrumb chain with child cells off", function (needs) {
     assert
       .dom(".category-breadcrumb__subcategory-selector")
       .exists("core's own child dropdown is still in the DOM");
-  });
-});
-
-acceptance("Breadcrumb chain with a lazily-loaded sibling", function (needs) {
-  const fixture = discoveryFixtures["/categories.json"];
-  const categories = fixture.category_list.categories.map((cat) => {
-    // Only "faq" is a project here; this scenario only needs the one.
-    return { ...cat, is_project: cat.slug === "faq" };
-  });
-
-  // site.rb only preloads a lazily-loaded site's sidebar categories and their
-  // ancestors (site.rb:107-124), never full sibling sets, so site.categories
-  // below stands in for a project whose second child — a real sibling — has
-  // not been fetched yet. subcategory_count still reports the true count: it
-  // comes from a request-time DB query (Category.preload_user_fields!,
-  // category.rb:272-284) that lazy loading does not affect.
-  const faqProject = categories.find((cat) => cat.slug === "faq");
-  faqProject.has_children = true;
-  faqProject.subcategory_count = 2;
-
-  // The only child that has reached site.categories. Its sibling is
-  // deliberately left out of the fixture below, standing in for the one
-  // lazy loading has not fetched.
-  const faqChild = {
-    id: 500,
-    name: "FAQ Child",
-    slug: "faq-child",
-    color: "AB9364",
-    text_color: "FFFFFF",
-    parent_category_id: 4,
-    is_project: false,
-    project: { id: 4, name: "faq", slug: "faq" },
-  };
-
-  needs.site(cloneJSON({ categories: [...categories, faqChild] }));
-  needs.user();
-  needs.settings({
-    projects_enabled: true,
-    projects_breadcrumb_project_dropdown: true,
-    projects_breadcrumb_subcategory_links: true,
-  });
-
-  needs.pretender((server, helper) => {
-    const projects = categories.filter((cat) => cat.is_project);
-
-    server.get("/projects.json", () => helper.response({ projects }));
-
-    server.get("/c/:category-slug/:category-id/l/latest.json", () =>
-      helper.response(cloneJSON(discoveryFixtures["/latest.json"]))
-    );
-
-    server.get("/c/faq/faq-child/500/l/latest.json", () =>
-      helper.response(cloneJSON(discoveryFixtures["/latest.json"]))
-    );
-
-    server.get("/c/:category-id/show.json", () =>
-      helper.response(cloneJSON(categoryFixtures["/c/1/show.json"]))
-    );
-  });
-
-  test("a child cell still shows its caret when its sibling has not reached site.categories yet", async function (assert) {
-    await visit("/c/faq/faq-child/500");
-
-    // Flipped live, the same technique the module above uses for this same
-    // setting. In this fixture-driven harness the flag itself does not starve
-    // site.categories — the fixture above already does that — but a real
-    // lazy-loading site starves it this exact way (site.rb:107-124), so this
-    // documents the condition being exercised rather than just asserting the
-    // outcome.
-    this.owner.lookup("service:site").set("lazy_load_categories", true);
-
-    assert
-      .dom("li.breadcrumb-chain__cell[data-category-id='500'] .select-kit")
-      .exists(
-        "the caret renders from the project's subcategory_count even though its sibling is missing from site.categories"
-      );
   });
 });

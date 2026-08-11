@@ -57,23 +57,6 @@ export default class BreadcrumbChainCell extends Component {
   }
 
   /**
-   * `options` (bread-crumbs.gjs:31-34) is filtered out of site.categories, which
-   * under lazy_load_categories holds only whatever has been fetched so far — the
-   * current category and its ancestors, never their siblings (site.rb:107-124).
-   * `options.length` is then wrong on any lazy-loading site: it reports 1 (just
-   * this category) even where real siblings exist, hiding the caret for every
-   * child category site-wide.
-   *
-   * `parentCategory.subcategory_count` reads the same fact without that gap. It
-   * comes from a request-time DB count (Category.preload_user_fields!,
-   * category.rb:272-284) that runs whenever a category route resolves
-   * (categories_controller.rb's `find` action, line 403), lazy loading or not.
-   */
-  get hasSiblingCategories() {
-    return this.args.breadcrumb.parentCategory.subcategory_count > 1;
-  }
-
-  /**
    * A child caret lists the siblings at its own level, mirroring the root caret,
    * which lists sibling projects. Core already computed that list as the
    * breadcrumb entry's `options` (bread-crumbs.gjs:34-38), so nothing is
@@ -98,7 +81,7 @@ export default class BreadcrumbChainCell extends Component {
           @category={{this.category}}
           @options={{this.dropdownOptions}}
         />
-      {{else if this.hasSiblingCategories}}
+      {{else}}
         {{! @tag keeps an active tag filter across a sibling switch instead of
           landing on the unfiltered category (getCategoryAndTagUrl builds the
           URL from whatever tag it is given, url.js:582-592). }}
