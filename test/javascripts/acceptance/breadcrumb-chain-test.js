@@ -232,6 +232,19 @@ acceptance("Breadcrumb chain", function (needs) {
     ]);
   });
 
+  test("a cell with no sibling categories renders no caret", async function (assert) {
+    // 500 (faqChild) has a sibling, 502 (faqSibling); 501 (faqGrandchild) is
+    // 500's only child, so its own level has nothing to switch to.
+    await visit("/c/faq/faq-child/faq-grandchild/501");
+
+    assert
+      .dom("li.breadcrumb-chain__cell[data-category-id='500'] .select-kit")
+      .exists("the cell with a sibling still has a caret");
+    assert
+      .dom("li.breadcrumb-chain__cell[data-category-id='501'] .select-kit")
+      .doesNotExist("the cell with no sibling has no caret");
+  });
+
   test("a child caret lists its siblings, not its children", async function (assert) {
     await visit("/c/faq/faq-child/500");
 

@@ -59,6 +59,13 @@
     border-radius: var(--d-input-border-radius) 0 0 var(--d-input-border-radius);
     text-decoration: none;
 
+    // No caret next to it when the category has no siblings (cell.gjs's
+    // hasSiblingCategories skips the dropdown entirely) — round all four
+    // corners instead of leaving the right ones square against nothing.
+    &:only-child {
+      border-radius: var(--d-input-border-radius);
+    }
+
     &:hover {
       background: var(--primary-very-low);
     }

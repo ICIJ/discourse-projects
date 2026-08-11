@@ -57,6 +57,17 @@ export default class BreadcrumbChainCell extends Component {
   }
 
   /**
+   * `options` is the category list at this level, the cell's own category
+   * always included alongside any real siblings (bread-crumbs.gjs's
+   * categoryBreadcrumbs always filters the current subCategory itself into
+   * its own level's list). So a category with nothing to switch to is still
+   * one entry, not zero — the threshold is "more than one".
+   */
+  get hasSiblingCategories() {
+    return this.args.breadcrumb.options.length > 1;
+  }
+
+  /**
    * A child caret lists the siblings at its own level, mirroring the root caret,
    * which lists sibling projects. Core already computed that list as the
    * breadcrumb entry's `options` (bread-crumbs.gjs:34-38), so nothing is
@@ -81,7 +92,7 @@ export default class BreadcrumbChainCell extends Component {
           @category={{this.category}}
           @options={{this.dropdownOptions}}
         />
-      {{else}}
+      {{else if this.hasSiblingCategories}}
         {{! @tag keeps an active tag filter across a sibling switch instead of
           landing on the unfiltered category (getCategoryAndTagUrl builds the
           URL from whatever tag it is given, url.js:582-592). }}
