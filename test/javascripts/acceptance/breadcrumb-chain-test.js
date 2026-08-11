@@ -94,6 +94,21 @@ acceptance("Breadcrumb chain", function (needs) {
     server.get("/c/:category-id/show.json", () =>
       helper.response(cloneJSON(categoryFixtures["/c/1/show.json"]))
     );
+
+    // Exercised only by the lazy_load_categories test below: CategoryDrop.search()
+    // fetches over the wire instead of reading `categories` directly when that
+    // setting is on.
+    server.post("/categories/search", (request) => {
+      const { parent_category_id } = helper.parsePostData(request.requestBody);
+      const siblings = [faqChild, faqGrandchild, faqSibling].filter(
+        (cat) => cat.parent_category_id === Number(parent_category_id)
+      );
+      return helper.response({
+        categories: siblings,
+        categories_count: siblings.length,
+        ancestors: [],
+      });
+    });
   });
 
   test("the project name is a link to the project page", async function (assert) {
@@ -230,6 +245,46 @@ acceptance("Breadcrumb chain", function (needs) {
     assert
       .dom(`${cell} .select-kit-row[data-value='501']`)
       .doesNotExist("its own child is not listed");
+  });
+
+  test("a child caret drops the all-categories and no-categories shortcuts", async function (assert) {
+    await visit("/c/faq/faq-child/500");
+
+    const cell = "li.breadcrumb-chain__cell[data-category-id='500']";
+    await selectKit(`${cell} .select-kit`).expand();
+
+    assert
+      .dom(`${cell} .select-kit-row[data-value='all-categories']`)
+      .doesNotExist("the all-categories shortcut is not listed");
+    assert
+      .dom(`${cell} .select-kit-row[data-value='no-categories']`)
+      .doesNotExist("the no-categories shortcut is not listed");
+    assert
+      .dom(`${cell} .select-kit-row[data-value='502']`)
+      .exists("a real sibling is still listed");
+  });
+
+  test("a child caret drops the shortcuts when lazy_load_categories is on", async function (assert) {
+    await visit("/c/faq/faq-child/500");
+
+    // Flip after the visit, not via needs.site: CategoryDrop.search() reads this
+    // live on every expand (select-kit.js's _open() always calls triggerSearch()),
+    // so only the caret's own fetch-based path needs it, not the page's initial
+    // load. Same technique core's own tests use (category-test.js, composer-test.js).
+    this.owner.lookup("service:site").set("lazy_load_categories", true);
+
+    const cell = "li.breadcrumb-chain__cell[data-category-id='500']";
+    await selectKit(`${cell} .select-kit`).expand();
+
+    assert
+      .dom(`${cell} .select-kit-row[data-value='all-categories']`)
+      .doesNotExist("the all-categories shortcut is not listed");
+    assert
+      .dom(`${cell} .select-kit-row[data-value='no-categories']`)
+      .doesNotExist("the no-categories shortcut is not listed");
+    assert
+      .dom(`${cell} .select-kit-row[data-value='502']`)
+      .exists("a real sibling is still listed");
   });
 
   test("selecting a sibling navigates to it", async function (assert) {

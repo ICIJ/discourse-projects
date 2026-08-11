@@ -2,8 +2,8 @@ import Component from "@glimmer/component";
 import { htmlSafe } from "@ember/template";
 import { categoryLinkHTML } from "discourse/helpers/category-link";
 import { i18n } from "discourse-i18n";
-import CategoryDrop from "select-kit/components/category-drop";
 import ProjectDropdown from "../project-dropdown";
+import SiblingDropdown from "./sibling-dropdown";
 
 /**
  * One breadcrumb cell, rendered as a split button: the category name links to
@@ -85,7 +85,7 @@ export default class BreadcrumbChainCell extends Component {
         {{! @tag keeps an active tag filter across a sibling switch instead of
           landing on the unfiltered category (getCategoryAndTagUrl builds the
           URL from whatever tag it is given, url.js:582-592). }}
-        <CategoryDrop
+        <SiblingDropdown
           @category={{this.category}}
           @categories={{@breadcrumb.options}}
           @tag={{@tag}}
