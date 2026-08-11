@@ -185,6 +185,14 @@
   .category-form__description {
     margin-bottom: 1.25rem;
 
+    // The blanket `align-items: stretch` above makes this container lay the
+    // description and its Edit button out side by side, stretching the button
+    // to the height of the text. Block layout drops the button onto its own
+    // line at its natural height.
+    .form-kit__container-content {
+      display: block;
+    }
+
     .readonly-field {
       margin-bottom: 0.5rem;
     }
