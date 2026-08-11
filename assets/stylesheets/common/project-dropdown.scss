@@ -88,5 +88,13 @@
     &:hover {
       background: var(--primary-low);
     }
+
+    // Core gives the caret padding-left: 5px to separate it from the header's
+    // label (select-kit.scss:171-177). These headers have no label, and the
+    // caret's box is right-aligned by that rule's margin-left: auto, so the
+    // padding only shifts the glyph off centre.
+    .angle-icon {
+      padding-left: 0;
+    }
   }
 }
