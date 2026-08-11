@@ -2,6 +2,7 @@ import Component from "@glimmer/component";
 import { htmlSafe } from "@ember/template";
 import { categoryLinkHTML } from "discourse/helpers/category-link";
 import { i18n } from "discourse-i18n";
+import CategoryDrop from "select-kit/components/category-drop";
 import ProjectDropdown from "../project-dropdown";
 
 /**
@@ -42,7 +43,26 @@ export default class BreadcrumbChainCell extends Component {
   get dropdownOptions() {
     return {
       showFullTitle: !this.category,
-      headerAriaLabel: i18n("js.breadcrumb_chain.switch_project"),
+      headerAriaLabel: i18n(
+        this.args.isRoot
+          ? "js.breadcrumb_chain.switch_project"
+          : "js.breadcrumb_chain.switch_category"
+      ),
+    };
+  }
+
+  /**
+   * A child caret lists the siblings at its own level, mirroring the root caret,
+   * which lists sibling projects. Core already computed that list as the
+   * breadcrumb entry's `options` (bread-crumbs.gjs:34-38), so nothing is
+   * recomputed here — which also avoids reading site.categories, incomplete when
+   * lazy_load_categories is on.
+   */
+  get childDropdownOptions() {
+    return {
+      ...this.dropdownOptions,
+      subCategory: true,
+      parentCategory: this.args.breadcrumb.parentCategory,
     };
   }
 
@@ -51,10 +71,18 @@ export default class BreadcrumbChainCell extends Component {
       {{#if this.category}}
         {{this.link}}
       {{/if}}
-      <ProjectDropdown
-        @category={{this.category}}
-        @options={{this.dropdownOptions}}
-      />
+      {{#if @isRoot}}
+        <ProjectDropdown
+          @category={{this.category}}
+          @options={{this.dropdownOptions}}
+        />
+      {{else}}
+        <CategoryDrop
+          @category={{this.category}}
+          @categories={{@breadcrumb.options}}
+          @options={{this.childDropdownOptions}}
+        />
+      {{/if}}
     </li>
   </template>
 }

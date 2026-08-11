@@ -30,11 +30,40 @@ acceptance("Breadcrumb chain", function (needs) {
     project: { id: 4, name: "faq", slug: "faq" },
   };
 
-  needs.site(cloneJSON({ categories: [...categories, faqChild] }));
+  // A second level below faqChild, so there is a two-deep trail to assert on.
+  const faqGrandchild = {
+    id: 501,
+    name: "FAQ Grandchild",
+    slug: "faq-grandchild",
+    color: "5C8AC7",
+    text_color: "FFFFFF",
+    parent_category_id: 500,
+    is_project: false,
+    project: { id: 4, name: "faq", slug: "faq" },
+  };
+
+  // A second child of the faq project, so faqChild has a sibling to switch to.
+  const faqSibling = {
+    id: 502,
+    name: "FAQ Sibling",
+    slug: "faq-sibling",
+    color: "9EB83B",
+    text_color: "FFFFFF",
+    parent_category_id: 4,
+    is_project: false,
+    project: { id: 4, name: "faq", slug: "faq" },
+  };
+
+  needs.site(
+    cloneJSON({
+      categories: [...categories, faqChild, faqGrandchild, faqSibling],
+    })
+  );
   needs.user();
   needs.settings({
     projects_enabled: true,
     projects_breadcrumb_project_dropdown: true,
+    projects_breadcrumb_subcategory_links: true,
   });
 
   needs.pretender((server, helper) => {
@@ -49,6 +78,16 @@ acceptance("Breadcrumb chain", function (needs) {
     // The two-segment route above does not match a nested slug path, so the
     // subcategory page needs its own literal route.
     server.get("/c/faq/faq-child/500/l/latest.json", () =>
+      helper.response(cloneJSON(discoveryFixtures["/latest.json"]))
+    );
+
+    server.get("/c/faq/faq-child/faq-grandchild/501/l/latest.json", () =>
+      helper.response(cloneJSON(discoveryFixtures["/latest.json"]))
+    );
+
+    // faqSibling is also nested under faq (parent_category_id: 4), so it needs
+    // the same literal route as faqChild above.
+    server.get("/c/faq/faq-sibling/502/l/latest.json", () =>
       helper.response(cloneJSON(discoveryFixtures["/latest.json"]))
     );
 
@@ -72,14 +111,18 @@ acceptance("Breadcrumb chain", function (needs) {
     await visit("/c/faq/faq-child/500");
 
     assert
-      .dom("li.breadcrumb-chain__cell a.breadcrumb-chain__link")
+      .dom(
+        "li.breadcrumb-chain__cell[data-category-id='4'] a.breadcrumb-chain__link"
+      )
       .hasAttribute(
         "href",
         "/c/faq/4",
         "the link points at the project, not the subcategory"
       );
 
-    await click("li.breadcrumb-chain__cell a.breadcrumb-chain__link");
+    await click(
+      "li.breadcrumb-chain__cell[data-category-id='4'] a.breadcrumb-chain__link"
+    );
 
     assert.strictEqual(currentURL(), "/c/faq/4");
   });
@@ -143,5 +186,124 @@ acceptance("Breadcrumb chain", function (needs) {
         i18n("js.project_dropdown.label"),
         "the dropdown still shows its own label"
       );
+  });
+
+  test("a subcategory gets its own cell linking to itself", async function (assert) {
+    await visit("/c/faq/faq-child/500");
+
+    assert.dom("li.breadcrumb-chain__cell").exists({ count: 2 });
+
+    const links = [
+      ...document.querySelectorAll("a.breadcrumb-chain__link"),
+    ].map((a) => a.getAttribute("href"));
+    assert.deepEqual(links, ["/c/faq/4", "/c/faq/faq-child/500"]);
+  });
+
+  test("a two-deep trail renders a cell per level, in order", async function (assert) {
+    await visit("/c/faq/faq-child/faq-grandchild/501");
+
+    assert.dom("li.breadcrumb-chain__cell").exists({ count: 3 });
+
+    const links = [
+      ...document.querySelectorAll("a.breadcrumb-chain__link"),
+    ].map((a) => a.getAttribute("href"));
+    assert.deepEqual(links, [
+      "/c/faq/4",
+      "/c/faq/faq-child/500",
+      "/c/faq/faq-child/faq-grandchild/501",
+    ]);
+  });
+
+  test("a child caret lists its siblings, not its children", async function (assert) {
+    await visit("/c/faq/faq-child/500");
+
+    const cell = "li.breadcrumb-chain__cell[data-category-id='500']";
+    await selectKit(`${cell} .select-kit`).expand();
+
+    // 502 is faqChild's sibling under the faq project; 501 is faqChild's own child.
+    assert
+      .dom(`${cell} .select-kit-row[data-value='502']`)
+      .exists("the sibling is listed");
+    assert
+      .dom(`${cell} .select-kit-row[data-value='501']`)
+      .doesNotExist("its own child is not listed");
+  });
+
+  test("selecting a sibling navigates to it", async function (assert) {
+    await visit("/c/faq/faq-child/500");
+
+    const picker = selectKit(
+      "li.breadcrumb-chain__cell[data-category-id='500'] .select-kit"
+    );
+    await picker.expand();
+    await picker.selectRowByValue(502);
+
+    assert.strictEqual(currentURL(), "/c/faq/faq-sibling/502");
+  });
+
+  test("no cell is rendered for the trailing subcategory placeholder", async function (assert) {
+    // faqChild has a child, so core renders a trailing empty picker at that
+    // level. The chain must not mirror it: two ancestors, two cells.
+    await visit("/c/faq/faq-child/500");
+
+    assert.dom("li.breadcrumb-chain__cell").exists({ count: 2 });
+  });
+});
+
+acceptance("Breadcrumb chain with child cells off", function (needs) {
+  const fixture = discoveryFixtures["/categories.json"];
+  const categories = fixture.category_list.categories.map((cat) => {
+    return {
+      ...cat,
+      is_project: ["blog", "faq"].includes(cat.slug),
+      // The base fixture has no children for "faq". Core only renders its own
+      // subcategory selector for the faqChild level below when the parent's
+      // has_children flag is set (bread-crumbs.gjs's hasOptions getter), so
+      // without this the assertion below has nothing to find regardless of
+      // this plugin.
+      has_children: cat.slug === "faq" ? true : cat.has_children,
+    };
+  });
+
+  const faqChild = {
+    id: 500,
+    name: "FAQ Child",
+    slug: "faq-child",
+    color: "AB9364",
+    text_color: "FFFFFF",
+    parent_category_id: 4,
+    is_project: false,
+    project: { id: 4, name: "faq", slug: "faq" },
+  };
+
+  needs.site(cloneJSON({ categories: [...categories, faqChild] }));
+  needs.user();
+  needs.settings({
+    projects_enabled: true,
+    projects_breadcrumb_project_dropdown: true,
+    projects_breadcrumb_subcategory_links: false,
+  });
+
+  needs.pretender((server, helper) => {
+    const projects = categories.filter((cat) => cat.is_project);
+    server.get("/projects.json", () => helper.response({ projects }));
+    server.get("/c/:category-slug/:category-id/l/latest.json", () =>
+      helper.response(cloneJSON(discoveryFixtures["/latest.json"]))
+    );
+    server.get("/c/faq/faq-child/500/l/latest.json", () =>
+      helper.response(cloneJSON(discoveryFixtures["/latest.json"]))
+    );
+    server.get("/c/:category-id/show.json", () =>
+      helper.response(cloneJSON(categoryFixtures["/c/1/show.json"]))
+    );
+  });
+
+  test("only the root cell is rendered and core's child dropdown remains", async function (assert) {
+    await visit("/c/faq/faq-child/500");
+
+    assert.dom("li.breadcrumb-chain__cell").exists({ count: 1 });
+    assert
+      .dom(".category-breadcrumb__subcategory-selector")
+      .exists("core's own child dropdown is still in the DOM");
   });
 });

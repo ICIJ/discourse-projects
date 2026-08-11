@@ -37,9 +37,22 @@ export default class BreadcrumbChain extends Component {
     return this.siteSettings.projects_breadcrumb_project_dropdown;
   }
 
+  /**
+   * Child cells are opt-in. With the setting off, the chain renders the root cell
+   * alone and core's own child dropdowns show through untouched.
+   */
+  get childCells() {
+    return this.siteSettings.projects_breadcrumb_subcategory_links
+      ? this.cells.slice(1)
+      : [];
+  }
+
   <template>
     {{#if this.shouldRender}}
-      <BreadcrumbChainCell @breadcrumb={{this.rootCell}} />
+      <BreadcrumbChainCell @breadcrumb={{this.rootCell}} @isRoot={{true}} />
+      {{#each this.childCells as |breadcrumb|}}
+        <BreadcrumbChainCell @breadcrumb={{breadcrumb}} />
+      {{/each}}
     {{/if}}
   </template>
 }
