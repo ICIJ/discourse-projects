@@ -118,3 +118,47 @@
     }
   }
 }
+
+// The project cell is a split button: the name links to the project's page and
+// the caret opens the switcher. The visible box moves off the select-kit header
+// and onto the <li> so both halves sit inside one border.
+//
+// Scoped with :has() so the cell is untouched when no project is selected: in
+// that state there is no link, the dropdown keeps its own label, and it should
+// keep looking exactly like the neighbouring dropdowns.
+.category-breadcrumb li.project-dropdown:has(.project-dropdown__home) {
+  border: 1px solid var(--d-nav-border-color--active);
+  border-radius: var(--d-input-border-radius);
+  background: var(--secondary);
+
+  .project-dropdown__home {
+    display: flex;
+    align-items: center;
+    padding: 0 0.5em;
+
+    // The anchor sits outside the select-kit, so it misses the sizing the
+    // header gets from .select-kit.combo-box.category-drop .badge-category__wrapper.
+    font-size: var(--font-0);
+    font-weight: normal;
+    border-radius: var(--d-input-border-radius) 0 0 var(--d-input-border-radius);
+    text-decoration: none;
+
+    &:hover {
+      background: var(--primary-very-low);
+    }
+  }
+
+  // Undo the box the header brings with it: the transparent border from the
+  // form-item-sizing mixin, the colour that makes it visible, the radius, and
+  // the active colour applied under .has-selection.
+  .select-kit .select-kit-header {
+    border: 0;
+    border-left: 1px solid var(--d-nav-border-color--active);
+    border-radius: 0 var(--d-input-border-radius) var(--d-input-border-radius) 0;
+    background: transparent;
+
+    &:hover {
+      background: var(--primary-low);
+    }
+  }
+}
