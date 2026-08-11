@@ -1,4 +1,3 @@
-import { computed } from "@ember/object";
 import CategoryDrop, {
   ALL_CATEGORIES_ID,
   NO_CATEGORIES_ID,
@@ -7,30 +6,29 @@ import CategoryDrop, {
 /**
  * Drop the "all categories"/"no subcategories" shortcut rows that core's
  * categoriesWithShortcuts prepends (select-kit/components/category-drop.js).
- * A child breadcrumb caret only ever lists siblings, and the shortcut row
- * navigated to the parent category, which the previous chain cell's own
- * link already exposes, so nothing is lost by leaving them out here.
+ * A child breadcrumb caret only ever lists siblings.
  *
- * Both `content` and `search` need filtering, not just `content`: when
- * site.lazy_load_categories is on, category-drop.js's search() fetches over
- * the wire and concats `shortcuts` again on every expand, bypassing `content`
- * entirely (category-drop.js:198-227). Don't drop the search() override
- * thinking it's redundant with content's.
+ * The all-categories row's onChange routes to the parent category with no
+ * filter (category-drop.js:250-273, getCategoryAndTagUrl(category, true,
+ * tag)) — the same page the previous chain cell's own link already exposes,
+ * so nothing is lost leaving that row out here. The no-categories row is not
+ * equivalent: its onChange passes subcategories=false, which appends "/none"
+ * to the parent's path (url.js:575-576), landing on the parent filtered to
+ * its own topics only. No other control in the chain reaches that filtered
+ * page, so dropping this row does lose it — accepted, not unnoticed.
+ *
+ * modifyContent is core's single choke point for the rendered rows: every
+ * search — the lazy-loading fetch or the plain sync one — resolves through
+ * _searchWrapper, which always runs the result through
+ * `this.selectKit.modifyContent(content)` right before it becomes
+ * mainCollection (select-kit.js:754, :788). Overriding modifyContent instead
+ * of search() means a future change to search() cannot reintroduce the rows.
  */
 export default class SiblingDropdown extends CategoryDrop {
-  _withoutShortcuts(categories) {
-    return categories.filter(
+  modifyContent(content) {
+    return content.filter(
       (category) =>
         category.id !== ALL_CATEGORIES_ID && category.id !== NO_CATEGORIES_ID
     );
-  }
-
-  @computed("categoriesWithShortcuts")
-  get content() {
-    return this._withoutShortcuts(this.categoriesWithShortcuts);
-  }
-
-  async search(filter) {
-    return this._withoutShortcuts(await super.search(filter));
   }
 }
