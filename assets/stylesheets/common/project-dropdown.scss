@@ -82,18 +82,9 @@
       background: var(--primary-low);
     }
 
-    // Core gives the caret padding-left: 5px to separate it from the header's
-    // label (select-kit.scss:171-177). margin-left: auto on that same rule
-    // pushes the caret flush against the header's own right padding whenever
-    // there is free space for it to consume — in which case the padding sits
-    // entirely inside the caret's box and removing it cannot move the glyph.
-    // These headers show no label (showFullTitle: false), so the header
-    // shrink-wraps to the caret alone and there is no free space: the caret's
-    // box is the header's whole content width, and its left padding is what
-    // holds the glyph away from the header's own left edge. Removing it here
-    // pulls the glyph flush left instead. Where the header does get free
-    // space — fullWidthOnMobile: true, e.g. a header still showing a full
-    // label — margin-left: auto absorbs it and this rule is a no-op.
+    // Core's 5px separates the caret from a label (select-kit.scss:171-177).
+    // These headers have none, so it only offsets the glyph. No-op where the
+    // header does show a label and margin-left: auto absorbs the free space.
     .angle-icon {
       padding-left: 0;
     }
