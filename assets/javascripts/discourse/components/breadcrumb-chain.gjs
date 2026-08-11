@@ -33,6 +33,15 @@ export default class BreadcrumbChain extends Component {
     return this.cells[0];
   }
 
+  /**
+   * Core passes this same value into the bread-crumbs-left outlet and forwards
+   * it to every CategoryDrop, so switching to a sibling category keeps an
+   * active tag filter instead of landing on the unfiltered category.
+   */
+  get tag() {
+    return this.args.outletArgs?.tag;
+  }
+
   get shouldRender() {
     return this.siteSettings.projects_breadcrumb_project_dropdown;
   }
@@ -49,9 +58,13 @@ export default class BreadcrumbChain extends Component {
 
   <template>
     {{#if this.shouldRender}}
-      <BreadcrumbChainCell @breadcrumb={{this.rootCell}} @isRoot={{true}} />
+      <BreadcrumbChainCell
+        @breadcrumb={{this.rootCell}}
+        @isRoot={{true}}
+        @tag={{this.tag}}
+      />
       {{#each this.childCells as |breadcrumb|}}
-        <BreadcrumbChainCell @breadcrumb={{breadcrumb}} />
+        <BreadcrumbChainCell @breadcrumb={{breadcrumb}} @tag={{this.tag}} />
       {{/each}}
     {{/if}}
   </template>

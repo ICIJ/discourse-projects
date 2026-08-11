@@ -39,15 +39,20 @@ export default class BreadcrumbChainCell extends Component {
   /**
    * Reduce the picker to its caret when the name is already shown as a link.
    * With no category there is no link, so it keeps its own label.
+   *
+   * The category cell's label is interpolated so several carets in a row don't
+   * all announce the same "Switch category" name to a screen reader. This
+   * mirrors how core's own header names each caret after its own category
+   * (select_kit.filter_by: "Filter by: %{name}").
    */
   get dropdownOptions() {
     return {
       showFullTitle: !this.category,
-      headerAriaLabel: i18n(
-        this.args.isRoot
-          ? "js.breadcrumb_chain.switch_project"
-          : "js.breadcrumb_chain.switch_category"
-      ),
+      headerAriaLabel: this.args.isRoot
+        ? i18n("js.breadcrumb_chain.switch_project")
+        : i18n("js.breadcrumb_chain.switch_category", {
+            categoryName: this.category.displayName,
+          }),
     };
   }
 
@@ -77,9 +82,13 @@ export default class BreadcrumbChainCell extends Component {
           @options={{this.dropdownOptions}}
         />
       {{else}}
+        {{! @tag keeps an active tag filter across a sibling switch instead of
+          landing on the unfiltered category (getCategoryAndTagUrl builds the
+          URL from whatever tag it is given, url.js:582-592). }}
         <CategoryDrop
           @category={{this.category}}
           @categories={{@breadcrumb.options}}
+          @tag={{@tag}}
           @options={{this.childDropdownOptions}}
         />
       {{/if}}

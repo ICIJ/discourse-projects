@@ -52,7 +52,7 @@ en:
       select: Select a projects
     breadcrumb_chain:
       switch_project: Switch project
-      switch_category: Switch category
+      switch_category: 'Switch category: %{categoryName}'
     project_banner:
       label: You're in Project
     new_category:
