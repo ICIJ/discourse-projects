@@ -15,7 +15,6 @@ import ProjectDropdownSelectedName from "./project-dropdown/project-dropdown-sel
 @pluginApiIdentifiers(["project-dropdown"])
 @classNames("category-drop")
 @selectKitOptions({
-  clearable: true,
   selectedNameComponent: ProjectDropdownSelectedName,
   filterPlaceholder: "project_dropdown.placeholder",
 })
