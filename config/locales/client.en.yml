@@ -50,7 +50,8 @@ en:
       label: Projects
       placeholder: 'Search...'
       select: Select a projects
-      switch: Switch project
+    breadcrumb_chain:
+      switch_project: Switch project
     project_banner:
       label: You're in Project
     new_category:

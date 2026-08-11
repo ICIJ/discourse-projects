@@ -7,7 +7,7 @@ import { acceptance } from "discourse/tests/helpers/qunit-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 import { i18n } from "discourse-i18n";
 
-acceptance("Project dropdown breadcrumb", function (needs) {
+acceptance("Breadcrumb chain", function (needs) {
   const fixture = discoveryFixtures["/categories.json"];
   const categories = fixture.category_list.categories.map((cat) => {
     // Only "blog" and "faq" are treated as projects.
@@ -61,10 +61,10 @@ acceptance("Project dropdown breadcrumb", function (needs) {
     await visit("/c/faq/4");
 
     assert
-      .dom("li.project-dropdown a.project-dropdown__home")
+      .dom("li.breadcrumb-chain__cell a.breadcrumb-chain__link")
       .exists("the project cell has a home link");
     assert
-      .dom("li.project-dropdown a.project-dropdown__home")
+      .dom("li.breadcrumb-chain__cell a.breadcrumb-chain__link")
       .hasAttribute("href", "/c/faq/4");
   });
 
@@ -72,14 +72,14 @@ acceptance("Project dropdown breadcrumb", function (needs) {
     await visit("/c/faq/faq-child/500");
 
     assert
-      .dom("li.project-dropdown a.project-dropdown__home")
+      .dom("li.breadcrumb-chain__cell a.breadcrumb-chain__link")
       .hasAttribute(
         "href",
         "/c/faq/4",
         "the link points at the project, not the subcategory"
       );
 
-    await click("li.project-dropdown a.project-dropdown__home");
+    await click("li.breadcrumb-chain__cell a.breadcrumb-chain__link");
 
     assert.strictEqual(currentURL(), "/c/faq/4");
   });
@@ -92,10 +92,10 @@ acceptance("Project dropdown breadcrumb", function (needs) {
     await visit("/c/uncategorized/17");
 
     assert
-      .dom("li.project-dropdown a.project-dropdown__home")
+      .dom("li.breadcrumb-chain__cell a.breadcrumb-chain__link")
       .exists("the home link renders for the uncategorized category");
     assert
-      .dom("li.project-dropdown a.project-dropdown__home")
+      .dom("li.breadcrumb-chain__cell a.breadcrumb-chain__link")
       .hasText(
         "uncategorized",
         "allowUncategorized keeps the category name instead of an empty anchor"
@@ -106,24 +106,24 @@ acceptance("Project dropdown breadcrumb", function (needs) {
     await visit("/c/faq/4");
 
     assert
-      .dom("li.project-dropdown .select-kit-selected-name")
+      .dom("li.breadcrumb-chain__cell .select-kit-selected-name")
       .doesNotExist("the dropdown header is reduced to its caret");
     assert
-      .dom("li.project-dropdown .btn-clear")
+      .dom("li.breadcrumb-chain__cell .btn-clear")
       .doesNotExist("the clearable button is gone with the header label");
   });
 
   test("the caret still opens the project switcher", async function (assert) {
     await visit("/c/faq/4");
 
-    const switcher = selectKit("li.project-dropdown .select-kit");
+    const switcher = selectKit("li.breadcrumb-chain__cell .select-kit");
     await switcher.expand();
 
     assert.true(switcher.isExpanded(), "the caret opens the switcher");
     // 13 is the "blog" project. Asserting on the row rather than on a row count
     // keeps the test from breaking if select-kit adds a shortcut row.
     assert
-      .dom("li.project-dropdown .select-kit-row[data-value='13']")
+      .dom("li.breadcrumb-chain__cell .select-kit-row[data-value='13']")
       .exists("the other project is listed");
   });
 
@@ -135,10 +135,10 @@ acceptance("Project dropdown breadcrumb", function (needs) {
     await visit("/latest");
 
     assert
-      .dom("li.project-dropdown a.project-dropdown__home")
+      .dom("li.breadcrumb-chain__cell a.breadcrumb-chain__link")
       .doesNotExist("no home link when no project is selected");
     assert
-      .dom("li.project-dropdown .select-kit-selected-name")
+      .dom("li.breadcrumb-chain__cell .select-kit-selected-name")
       .hasText(
         i18n("js.project_dropdown.label"),
         "the dropdown still shows its own label"

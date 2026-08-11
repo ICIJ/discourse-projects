@@ -1,22 +1,17 @@
-// When the project dropdown is enabled, our split button replaces core's
-// top-level selector, so hide that duplicate. Also hide any picker with nothing
-// selected — the trailing "categories" placeholder for choosing a subcategory.
+// Core renders its own category cells alongside the chain. Hide the ones the
+// chain replaces, keyed on classes core applies at its own call site
+// (bread-crumbs.gjs:105-108) so these can never match a chain cell — which does
+// contain a .category-drop of its own and would otherwise be hidden too.
 //
-// Cells carrying an active subcategory are deliberately kept: they are the rest
-// of the breadcrumb trail.
-//
-// Core marks the top-level cell `category-breadcrumb__category-selector` and
-// child cells `category-breadcrumb__subcategory-selector`
-// (bread-crumbs.gjs:105-108), and select-kit adds `has-selection` only when a
-// category is actually selected (select-kit.js:132, set at :409). Uses `~` with
-// :has() rather than a positional `+ li` because the outlet leaves several
-// sibling <li>s here. Tag dropdowns are untouched: they are not .category-drop.
+// select-kit adds `has-selection` only when a category is actually selected
+// (select-kit.js:132, set at :409), which is what distinguishes core's active
+// cells from its trailing "pick a subcategory" placeholder.
 .breadcrumb-project-dropdown {
   .category-breadcrumb {
-    li.bread-crumbs-left-outlet.project-dropdown
-      ~ li:has(.category-breadcrumb__category-selector),
-    li.bread-crumbs-left-outlet.project-dropdown
-      ~ li:has(.category-drop:not(.has-selection)) {
+    // The duplicate top-level selector; the chain's root cell replaces it.
+    li:has(.category-breadcrumb__category-selector),
+    // The trailing "pick a subcategory" placeholder.
+    li:has(.category-breadcrumb__subcategory-selector:not(.has-selection)) {
       display: none;
     }
   }
@@ -36,16 +31,8 @@
   .category-breadcrumb {
     align-items: center;
 
-    // Subcategories are rendered as links here, so every core category dropdown
-    // goes — including the ones carrying an active subcategory, which the block
-    // above deliberately keeps. Without this they would render twice.
-    li.bread-crumbs-left-outlet.project-dropdown ~ li:has(.category-drop) {
-      display: none;
-    }
-
-    // When the project dropdown is disabled, hide ALL category dropdowns
-    // (all categories including the project are shown as links)
-    &:not(:has(li.project-dropdown)) li:has(.category-drop) {
+    // The chain renders every level, so core's active child cells go too.
+    li:has(.category-breadcrumb__subcategory-selector) {
       display: none;
     }
 
@@ -142,12 +129,12 @@
 // Scoped with :has() so the cell is untouched when no project is selected: in
 // that state there is no link, the dropdown keeps its own label, and it should
 // keep looking exactly like the neighbouring dropdowns.
-.category-breadcrumb li.project-dropdown:has(.project-dropdown__home) {
+.category-breadcrumb li.breadcrumb-chain__cell:has(.breadcrumb-chain__link) {
   border: 1px solid var(--d-nav-border-color--active);
   border-radius: var(--d-input-border-radius);
   background: var(--secondary);
 
-  .project-dropdown__home {
+  .breadcrumb-chain__link {
     display: flex;
     align-items: center;
     padding: 0 0.5em;
