@@ -34,7 +34,7 @@ plugins:
     default: true
     client: true
   projects_breadcrumb_subcategory_links:
-    default: false
+    default: true
     client: true
 
   # Navigation
