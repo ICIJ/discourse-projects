@@ -83,6 +83,24 @@ acceptance("Project dropdown breadcrumb", function (needs) {
     assert.strictEqual(currentURL(), "/c/faq/4");
   });
 
+  test("the home link renders for the uncategorized category", async function (assert) {
+    // id 17 / slug "uncategorized" comes from the /categories.json fixture
+    // already loaded above; site.uncategorized_category_id defaults to 17 too
+    // (tests/fixtures/site-fixtures.js), so this is Discourse's real
+    // uncategorized category, not a stand-in.
+    await visit("/c/uncategorized/17");
+
+    assert
+      .dom("li.project-dropdown a.project-dropdown__home")
+      .exists("the home link renders for the uncategorized category");
+    assert
+      .dom("li.project-dropdown a.project-dropdown__home")
+      .hasText(
+        "uncategorized",
+        "allowUncategorized keeps the category name instead of an empty anchor"
+      );
+  });
+
   test("the name is not repeated inside the dropdown", async function (assert) {
     await visit("/c/faq/4");
 

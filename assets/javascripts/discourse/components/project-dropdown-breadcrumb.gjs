@@ -35,6 +35,7 @@ export default class ProjectDropdownBreadcrumb extends Component {
     return htmlSafe(
       categoryLinkHTML(this.category, {
         hideParent: true,
+        allowUncategorized: true,
         extraClasses: "project-dropdown__home",
       })
     );
