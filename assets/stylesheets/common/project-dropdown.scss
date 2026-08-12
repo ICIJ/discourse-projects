@@ -47,6 +47,17 @@
   border-radius: var(--d-input-border-radius);
   background: var(--secondary);
 
+  // .navigation-container (list-controls.scss) is a wrapping flex row shared
+  // with .navigation-controls, with align-items: stretch by default. That
+  // stretch reaches all the way to this cell — .category-breadcrumb is a flex
+  // item of that row, and its own children (li, this one included) default to
+  // stretch too — so the pill's height used to depend on whatever else shared
+  // its flex line: the (taller) buttons when they fit alongside it, just the
+  // breadcrumb's own line when they wrapped away. align-self here breaks that
+  // chain: the cell sizes to its own content instead, so it is the same
+  // height whether or not the buttons wrap.
+  align-self: center;
+
   .breadcrumb-chain__link {
     display: flex;
     align-items: center;
