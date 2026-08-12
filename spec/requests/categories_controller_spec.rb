@@ -19,13 +19,14 @@ describe CategoriesController do
     end
 
     # Helper: extract the preloaded topic_list JSON from an HTML response.
-    # Discourse embeds serialized data in a <div#data-preloaded> element.
+    # Discourse embeds serialized data in a <script#data-preloaded> element since
+    # core 2026.7, and in a <div#data-preloaded[data-preloaded]> before that.
     # The structure is: { "topic_list" => JSON string of { "topic_list" => { "topics" => [...] } } }
     def preloaded_topic_list(response)
       html = Nokogiri::HTML5(response.body)
-      preloaded = html.at_css("div#data-preloaded")
+      preloaded = html.at_css("script#data-preloaded, div#data-preloaded")
       return nil unless preloaded
-      data = JSON.parse(preloaded["data-preloaded"])
+      data = JSON.parse(preloaded["data-preloaded"] || preloaded.text)
       return nil unless data["topic_list"]
       JSON.parse(data["topic_list"])["topic_list"]
     end

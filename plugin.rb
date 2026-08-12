@@ -46,10 +46,10 @@ after_initialize do
   end
 
   add_to_serializer(:basic_category, :project) do
-    DiscourseProjects::ProjectSerializer.new object.project, root: false
+    DiscourseProjects::ProjectSerializer.new object.project, root: false, scope: scope
   end
 
   add_to_serializer(:topic_list_item, :project) do
-    DiscourseProjects::ProjectSerializer.new object.project, root: false
+    DiscourseProjects::ProjectSerializer.new object.project, root: false, scope: scope
   end
 end

@@ -1,0 +1,16 @@
+# Which plugin ref an older Discourse core should check out.
+# Cores that match nothing here track the latest release, which targets the
+# core pinned in .github/workflows/discourse-plugin.yml.
+#
+# Only refs CI has actually built are listed. The release job is gated on
+# `needs: ci`, so a version tag exists only if the build it was cut from passed.
+
+# Last release cut while CI built against core v2026.5.0.
+# Capped below 2026.5.2: that patch backported the subcategory-count security
+# fix (discourse/discourse@827f20a1), which v0.14.1 crashes on because it
+# builds ProjectSerializer without a scope. Those cores need a later release.
+<= 2026.5.1: v0.14.1
+
+# Last release cut while CI built against core v3.5.2. CI moved to v2026.5.0
+# before v0.11.0, so v0.10.1 is the newest ref proven on the 3.x line.
+<= 3.5.2: v0.10.1

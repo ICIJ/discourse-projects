@@ -12,7 +12,7 @@ module DiscourseProjects
     end
 
     def fetch_projects_json
-      serializer = ActiveModel::ArraySerializer.new(fetch_projects, each_serializer: DiscourseProjects::ProjectSerializer)
+      serializer = ActiveModel::ArraySerializer.new(fetch_projects, each_serializer: DiscourseProjects::ProjectSerializer, scope: @guardian)
       MultiJson.dump(serializer)
     end
   end
