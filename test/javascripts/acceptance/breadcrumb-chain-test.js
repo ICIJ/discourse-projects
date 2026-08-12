@@ -43,6 +43,11 @@ acceptance("Breadcrumb chain", function (needs) {
   };
 
   // A second child of the faq project, so faqChild has a sibling to switch to.
+  // It also carries the fields an "icon" style_type category has in
+  // production (11 of 1340 categories there): Category's `icon` tracked
+  // field (frontend/discourse/app/models/category.js:484) is set straight
+  // from this JSON with no style_type gating, so select-kit sees the same
+  // truthy `item.icon` here it would see for a real one.
   const faqSibling = {
     id: 502,
     name: "FAQ Sibling",
@@ -52,6 +57,8 @@ acceptance("Breadcrumb chain", function (needs) {
     parent_category_id: 4,
     is_project: false,
     project: { id: 4, name: "faq", slug: "faq" },
+    style_type: "icon",
+    icon: "square-full",
   };
 
   needs.site(
@@ -172,6 +179,23 @@ acceptance("Breadcrumb chain", function (needs) {
     assert
       .dom("li.breadcrumb-chain__cell .btn-clear")
       .doesNotExist("the clearable button is gone with the header label");
+  });
+
+  test("an icon-style category does not leak its icon into the collapsed header", async function (assert) {
+    // faqSibling carries the fields a real "icon" style_type category has
+    // (see its definition above). A truthy `icon` reaches select-kit's own
+    // selected-name.gjs, which renders it in the header even though
+    // showFullTitle is false, duplicating the icon the cell's link already
+    // shows via categoryLinkHTML.
+    await visit("/c/faq/faq-sibling/502");
+
+    assert
+      .dom(
+        "li.breadcrumb-chain__cell[data-category-id='502'] .select-kit-selected-name"
+      )
+      .doesNotExist(
+        "the icon-style category's icon is not duplicated in its collapsed header"
+      );
   });
 
   test("the caret still opens the project switcher", async function (assert) {

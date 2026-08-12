@@ -3,6 +3,7 @@ import { htmlSafe } from "@ember/template";
 import { categoryLinkHTML } from "discourse/helpers/category-link";
 import { i18n } from "discourse-i18n";
 import ProjectDropdown from "../project-dropdown";
+import BlankSelectedName from "./blank-selected-name";
 import SiblingDropdown from "./sibling-dropdown";
 
 /**
@@ -44,16 +45,32 @@ export default class BreadcrumbChainCell extends Component {
    * all announce the same "Switch category" name to a screen reader. This
    * mirrors how core's own header names each caret after its own category
    * (select_kit.filter_by: "Filter by: %{name}").
+   *
+   * Collapsing the header this way does not stop it from rendering an icon:
+   * select-kit's own selected-name.gjs draws `item.icon` even when
+   * showFullTitle is false, regardless of the category's style_type. For a
+   * category styled with an icon rather than a color square, that duplicates
+   * the icon the link next to it already shows via categoryLinkHTML.
+   * BlankSelectedName replaces the header's selectedNameComponent whenever it
+   * is collapsed, so that render has nothing left to draw.
    */
   get dropdownOptions() {
-    return {
-      showFullTitle: !this.category,
+    const showFullTitle = !this.category;
+
+    const options = {
+      showFullTitle,
       headerAriaLabel: this.args.isRoot
         ? i18n("js.breadcrumb_chain.switch_project")
         : i18n("js.breadcrumb_chain.switch_category", {
             categoryName: this.category.displayName,
           }),
     };
+
+    if (!showFullTitle) {
+      options.selectedNameComponent = BlankSelectedName;
+    }
+
+    return options;
   }
 
   /**
