@@ -3,8 +3,14 @@
 RSpec.describe CurrentUserSerializer do
   before do
     SiteSetting.projects_enabled = true
+    # These examples assert core's guardian answer. discourse-datashare, when
+    # co-installed, grants category creation to everyone by default, so drop it
+    # back to no groups to keep the outcome the same as a standalone install.
+    if SiteSetting.respond_to?(:datashare_create_category_groups)
+      SiteSetting.datashare_create_category_groups = ""
+    end
   end
-  
+
   describe "#can_create_category" do
 
     describe "with non-admin user" do 

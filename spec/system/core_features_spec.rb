@@ -8,7 +8,7 @@
 # search, search:quick_search, search:full_page
 #
 # For more details, see https://meta.discourse.org/t/-/361381
-RSpec.describe "Core features", type: :system do
+RSpec.describe "Core features" do
   before { enable_current_plugin }
 
   it_behaves_like "having working core features"
