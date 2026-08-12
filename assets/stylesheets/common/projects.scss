@@ -6,13 +6,15 @@
     padding: 0.75rem;
     align-items: center;
     justify-content: space-between;
-
-    @media (width < 1110px) {
-      display: block;
-    }
+    white-space: nowrap;
 
     body &__start > * {
       margin-bottom: 0;
+      width: 100%;
+    }
+
+    &__start {
+      padding-right: 0.75rem;
     }
 
     &__start,
@@ -20,11 +22,7 @@
       display: flex;
       gap: 0.75rem;
       align-items: center;
-
-      @media (width < 990px) {
-        flex-direction: column;
-        align-items: flex-start;
-      }
+      flex-shrink: 1;
     }
 
     &__matches {
