@@ -47,6 +47,12 @@ RSpec.describe BasicCategorySerializer do
       it "has an id matching the parent category" do
         expect(serializer.project.object["id"]).to eq(parent_category.id)
       end
+
+      it "serializes the project when core gives no scope" do
+        serializer = described_class.new(category, scope: nil, root: false)
+
+        expect { MultiJson.dump(serializer.project) }.not_to raise_error
+      end
     end
   end
 end
