@@ -7,7 +7,7 @@ import Project from "../models/Project";
 export default class ProjectsRoute extends DiscourseRoute {
   async model() {
     try {
-      const projects = await Project.findList();
+      const projects = await Project.findAll();
       return { projects };
     } catch (error) {
       popupAjaxError(error);

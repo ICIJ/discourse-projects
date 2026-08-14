@@ -2,7 +2,6 @@ import { tracked } from "@glimmer/tracking";
 import { ajax } from "discourse/lib/ajax";
 import PreloadStore from "discourse/lib/preload-store";
 import Category from "discourse/models/category";
-import CategoryList from "discourse/models/category-list";
 import Site from "discourse/models/site";
 import iteratee from "../helpers/iteratee";
 
@@ -21,13 +20,6 @@ export default class Project {
 
   static loadMembers(name, data) {
     return ajax(`/projects/${name}/members.json`, { data });
-  }
-
-  static async findList() {
-    const projects = await Project.findAll();
-    const list = CategoryList.create();
-    projects.forEach((p) => list.pushObject(p));
-    return list;
   }
 
   static async asyncSearch(filter = "") {
