@@ -4,7 +4,7 @@
       position: sticky;
       left: 0;
       top: var(--header-offset);
-      z-index: 900;
+      z-index: z("timeline") + 1;
     }
   }
 
