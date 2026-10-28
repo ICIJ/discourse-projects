@@ -10,7 +10,9 @@ jobs:
   ci:
     uses: discourse/.github/.github/workflows/discourse-plugin.yml@v1
     with:
-      core_ref: v2026.7.1
+      core_ref: v2026.7.3
+      # Pin the Ruby 3.4 test image: slim moved to Ruby 4, which v2026.7.x can't install on.
+      container: discourse/discourse_test:slim-browsers@sha256:2da24a18bb34116edf6b5ce62da87740805dc2ed02a3a9d6194d38da1400bbe2
 
   bump:
     needs: ci 
