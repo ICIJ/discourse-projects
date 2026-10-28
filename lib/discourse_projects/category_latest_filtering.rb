@@ -27,7 +27,7 @@ module DiscourseProjects
       plugin.add_to_class(:categories_controller, :base_topic_options) do |style|
         opts = { per_page: topics_per_page, no_definitions: true }
         opts.merge!(build_topic_list_options)
-        opts[:order] = "created" if style == "categories_and_latest_topics"
+        opts[:order] = "created" if style == "categories_and_latest_topics_created_date"
         opts
       end
 

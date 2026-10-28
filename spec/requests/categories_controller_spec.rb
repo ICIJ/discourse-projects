@@ -75,6 +75,37 @@ describe CategoriesController do
         expect(topic_ids).to include(topic_in_subcategory.id)
         expect(topic_ids).to include(topic_in_other.id)
       end
+
+      it "brings a topic back to the top when it gets a new reply" do
+        sign_in(user)
+
+        old_topic = Fabricate(:topic, category: parent_category, created_at: 2.days.ago, bumped_at: 2.days.ago)
+        new_topic = Fabricate(:topic, category: parent_category, created_at: 1.day.ago, bumped_at: 1.day.ago)
+        old_topic.update!(bumped_at: Time.zone.now)
+
+        get "/c/#{parent_category.slug}/#{parent_category.id}/subcategories"
+
+        expect(response.status).to eq(200)
+
+        topic_ids = preloaded_topic_list(response)["topics"].map { |t| t["id"] }
+        expect(topic_ids.index(old_topic.id)).to be < topic_ids.index(new_topic.id)
+      end
+
+      it "orders topics by creation date with the created date page style" do
+        SiteSetting.desktop_category_page_style = "categories_and_latest_topics_created_date"
+        sign_in(user)
+
+        old_topic = Fabricate(:topic, category: parent_category, created_at: 2.days.ago, bumped_at: 2.days.ago)
+        new_topic = Fabricate(:topic, category: parent_category, created_at: 1.minute.ago, bumped_at: 1.minute.ago)
+        old_topic.update!(bumped_at: Time.zone.now)
+
+        get "/c/#{parent_category.slug}/#{parent_category.id}/subcategories"
+
+        expect(response.status).to eq(200)
+
+        topic_ids = preloaded_topic_list(response)["topics"].map { |t| t["id"] }
+        expect(topic_ids.index(new_topic.id)).to be < topic_ids.index(old_topic.id)
+      end
     end
 
     context "when projects_limit_latest_to_category is disabled" do
